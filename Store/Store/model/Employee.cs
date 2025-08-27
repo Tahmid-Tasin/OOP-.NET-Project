@@ -9,16 +9,16 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Store
 {
-    public class EmployeeClass
+    public class Employee
     {
         private string Name;
         private int Id;
         private string Mobile;
         private string Password;
         private string Address;
-        public EmployeeClass() { }
+        public Employee() { }
 
-        public EmployeeClass(string a, int b, string c, string d, string e)
+        public Employee(string a, int b, string c, string d, string e)
         {
 
             Name = a;

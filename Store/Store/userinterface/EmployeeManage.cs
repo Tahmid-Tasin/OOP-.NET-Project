@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Store
@@ -19,7 +12,7 @@ namespace Store
 
         private void button1_Click(object sender, EventArgs e)
         {
-            EmployeeClass emp = new EmployeeClass();
+            Employee emp = new Employee();
             emp.NAME = NameBox.Text;
             emp.ID = Convert.ToInt32(IDBox.Text);
             emp.MOBILE = MobileBox.Text;

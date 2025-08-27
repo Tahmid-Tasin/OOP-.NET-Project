@@ -26,7 +26,7 @@ namespace Store
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            Form1 obj = new Form1();
+            LoginForm obj = new LoginForm();
             obj.Show();
             Visible = false;
         }
@@ -118,14 +118,14 @@ namespace Store
                 }
                 else
                 {
-                    AdminClass admin = new AdminClass();
+                    Admin admin = new Admin();
                     admin.FirstName = firstNameBox.Text;
                     admin.LastName = lastnameBox.Text;
                     admin.UserName = UserNameBox.Text;
                     admin.MOBILE = mobileBox.Text;
                     admin.Password = PassBox.Text;
                     admin.ConnectionDB();
-                    Form1 obj = new Form1();
+                    LoginForm obj = new LoginForm();
                     obj.Show();
                     Visible = false;
                 }

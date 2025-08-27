@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Store
 {
-    public class AdminClass
+    public class Admin
     {
         private string Firstname;
         private string Lastname;
@@ -17,9 +12,9 @@ namespace Store
         private string Mobile;
         private string password;
 
-        public AdminClass() { }
+        public Admin() { }
 
-        public AdminClass(string a,string b, string c, string d,string e)
+        public Admin(string a,string b, string c, string d,string e)
         {
             Firstname = a;
             Lastname = b;
