@@ -35,5 +35,12 @@ namespace Store
             emp.ConnectDB();
 
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            AdminView adm = new AdminView();
+            adm.Show();
+            Visible = false;
+        }
     }
 }
