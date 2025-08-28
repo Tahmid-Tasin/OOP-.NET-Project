@@ -1,5 +1,3 @@
-using System;
-using System.Data;
 using System.Data.SqlClient;
 
 namespace Store.Repository
@@ -10,9 +8,9 @@ namespace Store.Repository
 
         public AdminRepository()
         {
-            _factory = new SqlConnectionFactory(); 
+            _factory = new SqlConnectionFactory();
         }
-        
+
         public int Insert(Admin a)
         {
             string sql = @"INSERT INTO dbo.admin_table 
@@ -52,18 +50,18 @@ namespace Store.Repository
             if (rd.Read())
             {
                 admin = new Admin();
-                admin.Id        = (int)rd["id"];
+                admin.Id = (int)rd["id"];
                 admin.FirstName = rd["firstName"].ToString();
-                admin.LastName  = rd["lastName"].ToString();
-                admin.UserName  = rd["userName"].ToString();
-                admin.Mobile    = rd["mobile"].ToString();
-                admin.Password  = rd["password"].ToString();
+                admin.LastName = rd["lastName"].ToString();
+                admin.UserName = rd["userName"].ToString();
+                admin.Mobile = rd["mobile"].ToString();
+                admin.Password = rd["password"].ToString();
             }
 
             con.Close();
             return admin;
         }
-        
+
         public bool Verify(string userName, string password)
         {
             string sql = @"SELECT 1 

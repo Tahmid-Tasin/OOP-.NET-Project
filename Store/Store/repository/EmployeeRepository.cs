@@ -10,7 +10,7 @@ namespace Store.Repository
         {
             _factory = new SqlConnectionFactory();
         }
-        
+
         public int Insert(Employee e)
         {
             string sql = @"INSERT INTO dbo.employee (name, mobile, password, address)
@@ -49,11 +49,11 @@ namespace Store.Repository
             if (rd.Read())
             {
                 emp = new Employee();
-                emp.ID       = (int)rd["id"];
-                emp.NAME     = rd["name"].ToString();
-                emp.MOBILE   = rd["mobile"].ToString();
+                emp.ID = (int)rd["id"];
+                emp.NAME = rd["name"].ToString();
+                emp.MOBILE = rd["mobile"].ToString();
                 emp.PASSWORD = rd["password"].ToString();
-                emp.ADDRESS  = rd["address"].ToString();
+                emp.ADDRESS = rd["address"].ToString();
             }
 
             con.Close();

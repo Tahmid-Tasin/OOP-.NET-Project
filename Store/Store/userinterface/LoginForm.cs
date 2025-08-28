@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using Store.service;
 
 namespace Store
@@ -29,7 +30,7 @@ namespace Store
             AdminCreateForm frm = new AdminCreateForm();
             frm.Show();
             Visible = false;
-            
+
         }
 
         private void LoginBtn_Click(object sender, EventArgs e)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using Store.service;
 
 namespace Store
@@ -17,18 +18,18 @@ namespace Store
         private void button1_Click(object sender, EventArgs e)
         {
             Employee emp = new Employee();
-            emp.NAME     = NameBox.Text;
-            emp.MOBILE   = MobileBox.Text;
+            emp.NAME = NameBox.Text;
+            emp.MOBILE = MobileBox.Text;
             emp.PASSWORD = PassBox.Text;
-            emp.ADDRESS  = Addressbox.Text;
-            
+            emp.ADDRESS = Addressbox.Text;
+
             int rows = _employeeService.Register(emp);
 
             if (rows > 0)
                 MessageBox.Show("Employee Saved Successfully!");
             else
                 MessageBox.Show("Save Failed!");
-            
+
             NameBox.Text = "";
             MobileBox.Text = "";
             PassBox.Text = "";

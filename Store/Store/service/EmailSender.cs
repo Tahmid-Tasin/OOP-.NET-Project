@@ -17,7 +17,7 @@ namespace Store.service
             _smtpHost = "smtp.gmail.com";
             _smtpPort = 587;
             _enableSsl = true;
-            
+
             _from = "kenobangladesh@gmail.com";
             _password = "nhng lqdi qpwh nfec";
         }

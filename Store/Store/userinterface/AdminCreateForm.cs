@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+
 using Store.service;
 
 namespace Store
@@ -33,7 +34,7 @@ namespace Store
             obj.Show();
             this.Hide();
         }
-        
+
         private void SendCodeBtn_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(gmailText.Text))
@@ -66,7 +67,7 @@ namespace Store
                 MessageBox.Show("Failed to send email: " + ex.Message);
             }
         }
-        
+
         private void CreateBtn_Click(object sender, EventArgs e)
         {
             if (!CodeBox.Enabled)
@@ -94,7 +95,7 @@ namespace Store
                 MessageBox.Show("Invalid verification code.");
                 return;
             }
-            
+
             if (string.IsNullOrWhiteSpace(firstNameBox.Text))
             {
                 MessageBox.Show("Enter your first name.");
@@ -135,13 +136,13 @@ namespace Store
                 MessageBox.Show("Passwords do not match.");
                 return;
             }
-            
+
             var admin = new Admin();
             admin.FirstName = firstNameBox.Text.Trim();
-            admin.LastName  = lastnameBox.Text.Trim();
-            admin.UserName  = UserNameBox.Text.Trim();
-            admin.Mobile    = mobileBox.Text.Trim();
-            admin.Password  = PassBox.Text;
+            admin.LastName = lastnameBox.Text.Trim();
+            admin.UserName = UserNameBox.Text.Trim();
+            admin.Mobile = mobileBox.Text.Trim();
+            admin.Password = PassBox.Text;
 
             try
             {
@@ -150,16 +151,16 @@ namespace Store
                 if (rows > 0)
                 {
                     MessageBox.Show("Admin account created successfully.");
-                    
+
                     firstNameBox.Text = "";
-                    lastnameBox.Text  = "";
-                    mobileBox.Text    = "";
-                    gmailText.Text    = "";
-                    UserNameBox.Text  = "";
-                    PassBox.Text      = "";
-                    CoPassBox.Text    = "";
-                    CodeBox.Text      = "";
-                    
+                    lastnameBox.Text = "";
+                    mobileBox.Text = "";
+                    gmailText.Text = "";
+                    UserNameBox.Text = "";
+                    PassBox.Text = "";
+                    CoPassBox.Text = "";
+                    CodeBox.Text = "";
+
                     var login = new LoginForm();
                     login.Show();
                     this.Hide();
@@ -174,7 +175,7 @@ namespace Store
                 MessageBox.Show("Error while creating admin: " + ex.Message);
             }
         }
-        
+
         private void timvcode_Tick(object sender, EventArgs e)
         {
         }
