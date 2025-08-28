@@ -50,6 +50,7 @@
       <HintPath>..\packages\System.CodeDom.9.0.4\lib\net462\System.CodeDom.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
     <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -102,6 +103,12 @@
     <Compile Include="model\Employee.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="repository\AdminRepository.cs" />
+    <Compile Include="repository\EmployeeRepository.cs" />
+    <Compile Include="repository\ISqlConnectionFactory.cs" />
+    <Compile Include="service\AdminService.cs" />
+    <Compile Include="service\EmailSender.cs" />
+    <Compile Include="service\EmployeeService.cs" />
     <Compile Include="userinterface\AdminCreateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,7 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="image\" />
-    <Folder Include="service\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

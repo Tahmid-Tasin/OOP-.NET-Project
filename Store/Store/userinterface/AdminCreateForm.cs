@@ -1,139 +1,182 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net;
-using System.Net.Mail;
+using Store.service;
 
 namespace Store
 {
     public partial class AdminCreateForm : Form
     {
+        private readonly AdminService _adminService;
+        private readonly EmailSender _emailSender;
+
+        private int _verificationCode;
+        private DateTime _codeGeneratedAt;
+        private readonly TimeSpan _codeTtl = TimeSpan.FromMinutes(10);
+        private readonly Random _rng = new Random();
+
         public AdminCreateForm()
         {
             InitializeComponent();
+            _adminService = new AdminService();
+            _emailSender = new EmailSender();
         }
 
         private void AdminCreateForm_Load(object sender, EventArgs e)
         {
-
+            CodeBox.Enabled = false;
+            CreateBtn.Enabled = false;
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            LoginForm obj = new LoginForm();
+            var obj = new LoginForm();
             obj.Show();
-            Visible = false;
+            this.Hide();
         }
-
-        int vCode=1000;
+        
         private void SendCodeBtn_Click(object sender, EventArgs e)
         {
-            timvcode.Stop();
-            string to, from, pass, mail;
-            to = gmailText.Text;
-            from = "kenobangladesh@gmail.com";
-            mail=vCode.ToString();
-            pass = "nhng lqdi qpwh nfec";
-            MailMessage message = new MailMessage();
-            message.To.Add(to);
-            message.From = new MailAddress(from);
-            message.Body = mail;
-            message.Subject = "KENO - Verification Code";
-            SmtpClient smtp = new SmtpClient("smtp.gmail.com");
-            smtp.EnableSsl = true;
-            smtp.Port = 587;
-            smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-            smtp.Credentials = new NetworkCredential(from, pass);
+            if (string.IsNullOrWhiteSpace(gmailText.Text))
+            {
+                MessageBox.Show("Enter your email first.");
+                return;
+            }
 
             try
             {
-                smtp.Send(message);
-                MessageBox.Show("Verification Code Sent. Check Your Email","Information",MessageBoxButtons.OK, MessageBoxIcon.Information);
+                _verificationCode = _rng.Next(1000, 10000);
+                _codeGeneratedAt = DateTime.Now;
+
+                string subject = "KENO - Verification Code";
+                string body = _verificationCode.ToString();
+
+                _emailSender.Send(gmailText.Text.Trim(), subject, body);
+
+                MessageBox.Show(
+                    "Verification code sent. Check your email.",
+                    "Information",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
                 CodeBox.Enabled = true;
                 CreateBtn.Enabled = true;
-
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show("Failed to send email: " + ex.Message);
             }
         }
-
-        private void timvcode_Tick(object sender, EventArgs e)
-        {
-            vCode += 10;
-
-            if(vCode==9999)
-            {
-                vCode = 1000;
-            }
-        }
-
+        
         private void CreateBtn_Click(object sender, EventArgs e)
         {
-            if (CodeBox.Text == vCode.ToString())
+            if (!CodeBox.Enabled)
             {
-                if (firstNameBox.Text == "")
-                {
+                MessageBox.Show("Please request and enter the verification code first.");
+                return;
+            }
 
-                    MessageBox.Show("Enter Your First Name");
-                }
+            if (string.IsNullOrWhiteSpace(CodeBox.Text))
+            {
+                MessageBox.Show("Enter the verification code.");
+                return;
+            }
 
-                else if (lastnameBox.Text == "")
-                {
-                    MessageBox.Show("Enter Your Last Name");
-                }
+            if ((DateTime.Now - _codeGeneratedAt) > _codeTtl)
+            {
+                MessageBox.Show("Verification code expired. Please request a new code.");
+                CodeBox.Enabled = false;
+                CreateBtn.Enabled = false;
+                return;
+            }
 
-                else if (mobileBox.Text == "")
-                {
-                    MessageBox.Show("Enter Your Mobile Number");
-                }
+            if (CodeBox.Text.Trim() != _verificationCode.ToString())
+            {
+                MessageBox.Show("Invalid verification code.");
+                return;
+            }
+            
+            if (string.IsNullOrWhiteSpace(firstNameBox.Text))
+            {
+                MessageBox.Show("Enter your first name.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(lastnameBox.Text))
+            {
+                MessageBox.Show("Enter your last name.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(mobileBox.Text))
+            {
+                MessageBox.Show("Enter your mobile number.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(gmailText.Text))
+            {
+                MessageBox.Show("Enter your email.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(UserNameBox.Text))
+            {
+                MessageBox.Show("Enter a username.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(PassBox.Text))
+            {
+                MessageBox.Show("Set a password.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(CoPassBox.Text))
+            {
+                MessageBox.Show("Confirm your password.");
+                return;
+            }
+            if (PassBox.Text != CoPassBox.Text)
+            {
+                MessageBox.Show("Passwords do not match.");
+                return;
+            }
+            
+            var admin = new Admin();
+            admin.FirstName = firstNameBox.Text.Trim();
+            admin.LastName  = lastnameBox.Text.Trim();
+            admin.UserName  = UserNameBox.Text.Trim();
+            admin.Mobile    = mobileBox.Text.Trim();
+            admin.Password  = PassBox.Text;
 
-                else if (gmailText.Text == "")
-                {
-                    MessageBox.Show("Enter Your Email");
-                }
+            try
+            {
+                int rows = _adminService.Register(admin);
 
-                else if (UserNameBox.Text == "")
+                if (rows > 0)
                 {
-                    MessageBox.Show("Enter User Name");
-                }
-                else if (PassBox.Text == "")
-                {
-                    MessageBox.Show("Set a Password");
-                }
-                else if (CoPassBox.Text == "")
-                {
-                    MessageBox.Show("Confirm your password");
-                }
-                else if (PassBox.Text != CoPassBox.Text)
-                {
-                    MessageBox.Show("Password did not match.");
+                    MessageBox.Show("Admin account created successfully.");
+                    
+                    firstNameBox.Text = "";
+                    lastnameBox.Text  = "";
+                    mobileBox.Text    = "";
+                    gmailText.Text    = "";
+                    UserNameBox.Text  = "";
+                    PassBox.Text      = "";
+                    CoPassBox.Text    = "";
+                    CodeBox.Text      = "";
+                    
+                    var login = new LoginForm();
+                    login.Show();
+                    this.Hide();
                 }
                 else
                 {
-                    Admin admin = new Admin();
-                    admin.FirstName = firstNameBox.Text;
-                    admin.LastName = lastnameBox.Text;
-                    admin.UserName = UserNameBox.Text;
-                    admin.MOBILE = mobileBox.Text;
-                    admin.Password = PassBox.Text;
-                    admin.ConnectionDB();
-                    LoginForm obj = new LoginForm();
-                    obj.Show();
-                    Visible = false;
+                    MessageBox.Show("Failed to create admin account.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Invalid Code");
+                MessageBox.Show("Error while creating admin: " + ex.Message);
             }
+        }
+        
+        private void timvcode_Tick(object sender, EventArgs e)
+        {
         }
     }
 }

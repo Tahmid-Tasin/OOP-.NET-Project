@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Windows.Forms;
+using Store.service;
 
 namespace Store
 {
     public partial class LoginForm : Form
     {
+        private readonly AdminService _adminService;
         public LoginForm()
         {
             InitializeComponent();
+            _adminService = new AdminService();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -33,12 +36,21 @@ namespace Store
         {
             if (UserComboBox.SelectedIndex == 0)
             {
-                Admin admin = new Admin();
-                admin.verify(UserNameBox.Text,pwBox.Text);
-                this.Visible = false;
-                AdminView ad = new AdminView();
-                ad.Show();
-                Visible = false;
+                string user = UserNameBox.Text.Trim();
+                string pass = pwBox.Text;
+
+                bool ok = _adminService.VerifyLogin(user, pass);
+                if (ok)
+                {
+                    MessageBox.Show("Login Successful");
+                    this.Hide();
+                    AdminView ad = new AdminView();
+                    ad.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid username or password");
+                }
             }
         }
     }
