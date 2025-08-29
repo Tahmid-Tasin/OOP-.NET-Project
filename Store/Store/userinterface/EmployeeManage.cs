@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
 using Store.service;
@@ -11,8 +11,9 @@ namespace Store
 
         public EmployeeManage()
         {
-            InitializeComponent();
             _employeeService = new EmployeeService();
+            InitializeComponent();
+            LoadEmployeesIntoGrid();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -26,7 +27,10 @@ namespace Store
             int rows = _employeeService.Register(emp);
 
             if (rows > 0)
+            {
                 MessageBox.Show("Employee Saved Successfully!");
+                LoadEmployeesIntoGrid();
+            }
             else
                 MessageBox.Show("Save Failed!");
 
@@ -42,5 +46,13 @@ namespace Store
             adm.Show();
             Visible = false;
         }
+
+        private void LoadEmployeesIntoGrid()
+        {
+            var list = _employeeService.GetAll();
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = list;
+        }
+
     }
 }

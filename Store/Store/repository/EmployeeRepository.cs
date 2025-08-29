@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Data.SqlClient;
 
 namespace Store.Repository
@@ -78,6 +79,37 @@ namespace Store.Repository
             con.Close();
 
             return ok;
+        }
+
+        public List<Employee> GetAll()
+        {
+            const string sql = @"SELECT id, name, mobile, address
+                                 FROM dbo.employee
+                                 ORDER BY id DESC;";
+
+            var list = new List<Employee>();
+
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
+            {
+                con.Open();
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        list.Add(new Employee
+                        {
+                            ID = (int)rd["id"],
+                            NAME = rd["name"].ToString(),
+                            MOBILE = rd["mobile"].ToString(),
+                            ADDRESS = rd["address"].ToString()
+                            // Do NOT expose password in grid
+                        });
+                    }
+                }
+            }
+
+            return list;
         }
     }
 }

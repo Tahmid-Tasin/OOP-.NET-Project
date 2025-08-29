@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using Store.Repository;
 
 namespace Store.service
@@ -25,5 +27,7 @@ namespace Store.service
         {
             return _repo.Verify(mobile, password);
         }
+
+        public List<Employee> GetAll() => _repo.GetAll();
     }
 }
