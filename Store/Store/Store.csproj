@@ -133,6 +133,12 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\StockView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="userinterface\StockView.Designer.cs">
+      <DependentUpon>StockView.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -153,6 +159,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="userinterface\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="userinterface\StockView.resx">
+      <DependentUpon>StockView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
