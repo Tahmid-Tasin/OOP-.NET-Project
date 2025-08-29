@@ -17,7 +17,8 @@ namespace Store
         private void Form1_Load(object sender, EventArgs e)
         {
             UserComboBox.Items.Add("Admin");
-            UserComboBox.Items.Add("Cashier");
+            UserComboBox.Items.Add("Manager");
+            UserComboBox.Items.Add("Customer");
         }
 
         private void UserComboBox_SelectedIndexChanged(object sender, EventArgs e)
