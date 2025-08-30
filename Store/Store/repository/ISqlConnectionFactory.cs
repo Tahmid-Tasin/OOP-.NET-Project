@@ -8,9 +8,10 @@ namespace Store.Repository
         public SqlConnectionFactory()
         {
             _cs =
-                "Server=localhost\\SQLEXPRESS;" +
+                "Server=192.168.0.113,1433;" +
                 "Database=Keno;" +
-                "Integrated Security=True;" +
+                "User Id=sa;" +
+                "Password=BS@Dhaka;" +
                 "TrustServerCertificate=True;";
         }
 
