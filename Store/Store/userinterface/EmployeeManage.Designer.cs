@@ -9,14 +9,11 @@ namespace Store
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
-
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
@@ -29,9 +26,10 @@ namespace Store
             this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.ActionAddUpdate = new System.Windows.Forms.Button();
+            this.EditResetBtn = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.Addressbox = new System.Windows.Forms.TextBox();
             this.PassBox = new System.Windows.Forms.TextBox();
             this.MobileBox = new System.Windows.Forms.TextBox();
@@ -47,7 +45,6 @@ namespace Store
             this.SearchMobileBox = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
             this.IDBox = new System.Windows.Forms.TextBox();
-            this.EditResetBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -65,42 +62,55 @@ namespace Store
             // 
             // dataGridView1
             // 
-            this.ID_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Name_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Mobile_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Address_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            var headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            headerStyle.BackColor = SystemColors.Control;
+            headerStyle.ForeColor = SystemColors.WindowText;
+            headerStyle.SelectionBackColor = SystemColors.Highlight;
+            headerStyle.SelectionForeColor = SystemColors.HighlightText;
+            headerStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = headerStyle;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            // data columns
+
+            var cellStyle = new System.Windows.Forms.DataGridViewCellStyle();
+            cellStyle.ForeColor = Color.Black;
+            cellStyle.SelectionForeColor = Color.Black;
+            this.dataGridView1.DefaultCellStyle = cellStyle;
+
+            // columns (actions at RIGHT side)
             this.ID_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ID_Coloumn.HeaderText = "ID";
             this.ID_Coloumn.Name = "ID_Coloumn";
             this.ID_Coloumn.ReadOnly = true;
+
             this.Name_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Name_Coloumn.HeaderText = "Name";
             this.Name_Coloumn.Name = "Name_Coloumn";
             this.Name_Coloumn.ReadOnly = true;
+
             this.Mobile_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Mobile_Coloumn.HeaderText = "Mobile";
             this.Mobile_Coloumn.Name = "Mobile_Coloumn";
             this.Mobile_Coloumn.ReadOnly = true;
+
             this.Address_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Address_Coloumn.HeaderText = "Address";
             this.Address_Coloumn.Name = "Address_Coloumn";
             this.Address_Coloumn.ReadOnly = true;
-            // action buttons (RIGHT SIDE)
+
             this.View_Col.HeaderText = "View";
             this.View_Col.Name = "View_Col";
             this.View_Col.Text = "View";
             this.View_Col.UseColumnTextForButtonValue = true;
             this.View_Col.Width = 60;
+
             this.Edit_Col.HeaderText = "Edit";
             this.Edit_Col.Name = "Edit_Col";
             this.Edit_Col.Text = "Edit";
             this.Edit_Col.UseColumnTextForButtonValue = true;
             this.Edit_Col.Width = 60;
+
             this.Delete_Col.HeaderText = "Delete";
             this.Delete_Col.Name = "Delete_Col";
             this.Delete_Col.Text = "Delete";
@@ -108,13 +118,14 @@ namespace Store
             this.Delete_Col.Width = 60;
 
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.ID_Coloumn,
-            this.Name_Coloumn,
-            this.Mobile_Coloumn,
-            this.Address_Coloumn,
-            this.View_Col,
-            this.Edit_Col,
-            this.Delete_Col});
+                this.ID_Coloumn,
+                this.Name_Coloumn,
+                this.Mobile_Coloumn,
+                this.Address_Coloumn,
+                this.View_Col,
+                this.Edit_Col,
+                this.Delete_Col
+            });
             this.dataGridView1.Location = new System.Drawing.Point(0, 60);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(680, 615);
@@ -124,10 +135,10 @@ namespace Store
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.panel2.Controls.Add(this.ActionAddUpdate);
             this.panel2.Controls.Add(this.EditResetBtn);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.Addressbox);
             this.panel2.Controls.Add(this.PassBox);
             this.panel2.Controls.Add(this.MobileBox);
@@ -148,6 +159,33 @@ namespace Store
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(670, 729);
             this.panel2.TabIndex = 1;
+            // 
+            // ActionAddUpdate
+            // 
+            this.ActionAddUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
+            this.ActionAddUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.ActionAddUpdate.ForeColor = System.Drawing.Color.White;
+            this.ActionAddUpdate.Location = new System.Drawing.Point(445, 314);
+            this.ActionAddUpdate.Name = "ActionAddUpdate";
+            this.ActionAddUpdate.Size = new System.Drawing.Size(114, 39);
+            this.ActionAddUpdate.TabIndex = 25;
+            this.ActionAddUpdate.Text = "Add";
+            this.ActionAddUpdate.UseVisualStyleBackColor = false;
+            this.ActionAddUpdate.Click += new System.EventHandler(this.ActionAddUpdate_Click);
+            // 
+            // EditResetBtn
+            // 
+            this.EditResetBtn.BackColor = System.Drawing.Color.Gainsboro;
+            this.EditResetBtn.Enabled = false;
+            this.EditResetBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.EditResetBtn.ForeColor = System.Drawing.Color.Black;
+            this.EditResetBtn.Location = new System.Drawing.Point(325, 314);
+            this.EditResetBtn.Name = "EditResetBtn";
+            this.EditResetBtn.Size = new System.Drawing.Size(114, 39);
+            this.EditResetBtn.TabIndex = 24;
+            this.EditResetBtn.Text = "Reset";
+            this.EditResetBtn.UseVisualStyleBackColor = false;
+            this.EditResetBtn.Click += new System.EventHandler(this.EditResetBtn_Click);
             // 
             // button4
             // 
@@ -172,19 +210,6 @@ namespace Store
             this.button3.Text = "Search";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.button1.Location = new System.Drawing.Point(445, 314);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(114, 39);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Addressbox
             // 
@@ -333,20 +358,6 @@ namespace Store
             this.IDBox.TabIndex = 23;
             this.IDBox.Visible = false;
             // 
-            // EditResetBtn
-            // 
-            this.EditResetBtn.BackColor = System.Drawing.Color.Gainsboro;
-            this.EditResetBtn.Enabled = false;
-            this.EditResetBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.EditResetBtn.ForeColor = System.Drawing.Color.Black;
-            this.EditResetBtn.Location = new System.Drawing.Point(325, 314);
-            this.EditResetBtn.Name = "EditResetBtn";
-            this.EditResetBtn.Size = new System.Drawing.Size(114, 39);
-            this.EditResetBtn.TabIndex = 24;
-            this.EditResetBtn.Text = "Reset";
-            this.EditResetBtn.UseVisualStyleBackColor = false;
-            this.EditResetBtn.Click += new System.EventHandler(this.EditResetBtn_Click);
-            // 
             // EmployeeManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -361,24 +372,17 @@ namespace Store
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
             this.ResumeLayout(false);
-
         }
-
         #endregion
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox Addressbox;
         private System.Windows.Forms.TextBox PassBox;
         private System.Windows.Forms.TextBox MobileBox;
         private System.Windows.Forms.TextBox NameBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label8;
@@ -387,7 +391,12 @@ namespace Store
         private System.Windows.Forms.TextBox SearchMobileBox;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.TextBox IDBox;
+        private System.Windows.Forms.Button ActionAddUpdate;
         private System.Windows.Forms.Button EditResetBtn;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Mobile_Coloumn;

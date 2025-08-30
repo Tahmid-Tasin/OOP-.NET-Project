@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+
 using Store.service;
 
 namespace Store
@@ -19,7 +20,7 @@ namespace Store
             Mobile_Coloumn.DataPropertyName = "MOBILE";
             Address_Coloumn.DataPropertyName = "ADDRESS";
 
-            button1.Text = "Add";
+            ActionAddUpdate.Text = "Add";
             EditResetBtn.Enabled = false;
             PassBox.Enabled = true;
 
@@ -28,9 +29,8 @@ namespace Store
 
         private void LoadEmployeesIntoGrid()
         {
-            var list = _employeeService.GetAll();
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = list;
+            dataGridView1.DataSource = _employeeService.GetAll();
         }
 
         private void ResetEditForm()
@@ -41,23 +41,23 @@ namespace Store
             PassBox.Text = "";
             Addressbox.Text = "";
             PassBox.Enabled = true;
-            button1.Text = "Add";
+            ActionAddUpdate.Text = "Add";
             EditResetBtn.Enabled = false;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ActionAddUpdate_Click(object sender, EventArgs e)
         {
-            if (button1.Text == "Add")
+            if (ActionAddUpdate.Text == "Add")
             {
                 var emp = new Employee
                 {
-                    NAME = NameBox.Text,
-                    MOBILE = MobileBox.Text,
-                    PASSWORD = PassBox.Text,
-                    ADDRESS = Addressbox.Text
+                    NAME = NameBox.Text?.Trim(),
+                    MOBILE = MobileBox.Text?.Trim(),
+                    PASSWORD = PassBox.Text ?? "",
+                    ADDRESS = Addressbox.Text?.Trim()
                 };
 
-                int rows = _employeeService.Register(emp);
+                var rows = _employeeService.Register(emp);
                 if (rows > 0)
                 {
                     MessageBox.Show("Employee Saved Successfully!");
@@ -65,13 +65,11 @@ namespace Store
                     ResetEditForm();
                 }
                 else
-                {
                     MessageBox.Show("Save Failed!");
-                }
             }
-            else // Update
+            else
             {
-                if (!int.TryParse(IDBox.Text, out int id))
+                if (!int.TryParse(IDBox.Text, out var id))
                 {
                     MessageBox.Show("No record selected to update.");
                     return;
@@ -83,10 +81,9 @@ namespace Store
                     NAME = NameBox.Text?.Trim(),
                     MOBILE = MobileBox.Text?.Trim(),
                     ADDRESS = Addressbox.Text?.Trim()
-                    // password intentionally not updated here
                 };
 
-                int rows = _employeeService.Update(emp);
+                var rows = _employeeService.Update(emp);
                 if (rows > 0)
                 {
                     MessageBox.Show("Employee updated.");
@@ -94,9 +91,7 @@ namespace Store
                     ResetEditForm();
                 }
                 else
-                {
                     MessageBox.Show("Update failed.");
-                }
             }
         }
 
@@ -116,9 +111,8 @@ namespace Store
                 return;
             }
 
-            var list = _employeeService.Search(name, mobile);
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = list;
+            dataGridView1.DataSource = _employeeService.Search(name, mobile);
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -130,26 +124,31 @@ namespace Store
 
         private void button4_Click(object sender, EventArgs e)
         {
-            AdminView adm = new AdminView();
+            var adm = new AdminView();
             adm.Show();
             Visible = false;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+            if (e.RowIndex < 0 || e.ColumnIndex < 0)
+                return;
 
-            var colName = dataGridView1.Columns[e.ColumnIndex].Name;
-            if (colName != "View_Col" && colName != "Edit_Col" && colName != "Delete_Col") return;
+            var col = dataGridView1.Columns[e.ColumnIndex].Name;
+            if (col != "View_Col" && col != "Edit_Col" && col != "Delete_Col")
+                return;
 
             var emp = dataGridView1.Rows[e.RowIndex].DataBoundItem as Employee;
-            if (emp == null) return;
+            if (emp == null)
+                return;
 
-            if (colName == "View_Col")
+            if (col == "View_Col")
             {
-                MessageBox.Show($"ID: {emp.ID}\nName: {emp.NAME}\nMobile: {emp.MOBILE}\nAddress: {emp.ADDRESS}", "Employee");
+                MessageBox.Show(
+                    $"ID: {emp.ID}\nName: {emp.NAME}\nMobile: {emp.MOBILE}\nAddress: {emp.ADDRESS}",
+                    "Employee");
             }
-            else if (colName == "Edit_Col")
+            else if (col == "Edit_Col")
             {
                 var fresh = _employeeService.GetById(emp.ID);
                 if (fresh != null)
@@ -161,16 +160,18 @@ namespace Store
 
                     PassBox.Text = "";
                     PassBox.Enabled = false;
-                    button1.Text = "Update";
+
+                    ActionAddUpdate.Text = "Update";
                     EditResetBtn.Enabled = true;
                 }
             }
-            else if (colName == "Delete_Col")
+            else if (col == "Delete_Col")
             {
-                if (MessageBox.Show($"Delete employee #{emp.ID} ?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
+                if (MessageBox.Show($"Delete employee #{emp.ID}?", "Confirm",
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes)
                     return;
 
-                int rows = _employeeService.Delete(emp.ID);
+                var rows = _employeeService.Delete(emp.ID);
                 if (rows > 0)
                 {
                     LoadEmployeesIntoGrid();
@@ -178,9 +179,7 @@ namespace Store
                         ResetEditForm();
                 }
                 else
-                {
                     MessageBox.Show("Delete failed.");
-                }
             }
         }
     }
