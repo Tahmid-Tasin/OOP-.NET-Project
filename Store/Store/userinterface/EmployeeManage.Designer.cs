@@ -376,8 +376,6 @@ namespace Store
         private System.Windows.Forms.DataGridViewTextBoxColumn Mobile_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Address_Coloumn;
         private System.Windows.Forms.Button button5;
-
-        // NEW fields
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox SearchNameBox;
         private System.Windows.Forms.Label label9;
