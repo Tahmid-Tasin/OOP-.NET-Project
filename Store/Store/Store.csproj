@@ -182,6 +182,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".editorconfig" />
+    <Content Include="documents\admin_table.png" />
+    <Content Include="documents\schema.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
