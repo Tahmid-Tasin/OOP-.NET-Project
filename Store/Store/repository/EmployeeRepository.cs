@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace Store.Repository
 {
@@ -26,13 +27,12 @@ namespace Store.Repository
             cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
 
             con.Open();
-            int rows = cmd.ExecuteNonQuery(); // should be 1
+            int rows = cmd.ExecuteNonQuery();
             con.Close();
 
             return rows;
         }
 
-        // Get employee by id
         public Employee Get(int id)
         {
             string sql = @"SELECT TOP 1 id, name, mobile, password, address
@@ -49,19 +49,20 @@ namespace Store.Repository
             Employee emp = null;
             if (rd.Read())
             {
-                emp = new Employee();
-                emp.ID = (int)rd["id"];
-                emp.NAME = rd["name"].ToString();
-                emp.MOBILE = rd["mobile"].ToString();
-                emp.PASSWORD = rd["password"].ToString();
-                emp.ADDRESS = rd["address"].ToString();
+                emp = new Employee
+                {
+                    ID = (int)rd["id"],
+                    NAME = rd["name"].ToString(),
+                    MOBILE = rd["mobile"].ToString(),
+                    PASSWORD = rd["password"].ToString(),
+                    ADDRESS = rd["address"].ToString()
+                };
             }
 
             con.Close();
             return emp;
         }
 
-        // Verify login by mobile + password
         public bool Verify(string mobile, string password)
         {
             string sql = @"SELECT 1
@@ -103,13 +104,59 @@ namespace Store.Repository
                             NAME = rd["name"].ToString(),
                             MOBILE = rd["mobile"].ToString(),
                             ADDRESS = rd["address"].ToString()
-                            // Do NOT expose password in grid
                         });
                     }
                 }
             }
 
             return list;
+        }
+
+        public List<Employee> Search(string namePart, string mobilePart)
+        {
+            var results = new List<Employee>();
+            var sb = new StringBuilder();
+            sb.Append(@"SELECT id, name, mobile, address
+                        FROM dbo.employee
+                        WHERE 1=1 ");
+
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = con;
+
+                if (!string.IsNullOrWhiteSpace(namePart))
+                {
+                    sb.Append(" AND name LIKE @nm ");
+                    cmd.Parameters.AddWithValue("@nm", "%" + namePart + "%");
+                }
+
+                if (!string.IsNullOrWhiteSpace(mobilePart))
+                {
+                    sb.Append(" AND mobile LIKE @mo ");
+                    cmd.Parameters.AddWithValue("@mo", "%" + mobilePart + "%");
+                }
+
+                sb.Append(" ORDER BY id DESC;");
+                cmd.CommandText = sb.ToString();
+
+                con.Open();
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        results.Add(new Employee
+                        {
+                            ID = (int)rd["id"],
+                            NAME = rd["name"].ToString(),
+                            MOBILE = rd["mobile"].ToString(),
+                            ADDRESS = rd["address"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return results;
         }
     }
 }

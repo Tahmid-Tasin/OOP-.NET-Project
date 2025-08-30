@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-
 using Store.service;
 
 namespace Store
@@ -54,5 +54,30 @@ namespace Store
             dataGridView1.DataSource = list;
         }
 
+        // --- New: Search click (by Name and/or Mobile) ---
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string name = (SearchNameBox.Text ?? "").Trim();
+            string mobile = (SearchMobileBox.Text ?? "").Trim();
+
+            // If both filters empty -> behave like reset
+            if (string.IsNullOrWhiteSpace(name) && string.IsNullOrWhiteSpace(mobile))
+            {
+                LoadEmployeesIntoGrid();
+                return;
+            }
+
+            var list = _employeeService.Search(name, mobile);
+            dataGridView1.DataSource = null;
+            dataGridView1.DataSource = list;
+        }
+
+        // --- New: Reset click (also assigned to Show All) ---
+        private void button7_Click(object sender, EventArgs e)
+        {
+            SearchNameBox.Text = "";
+            SearchMobileBox.Text = "";
+            LoadEmployeesIntoGrid();
+        }
     }
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 using Store.Repository;
 
 namespace Store.service
@@ -13,21 +12,15 @@ namespace Store.service
             _repo = new EmployeeRepository();
         }
 
-        public int Register(Employee e)
-        {
-            return _repo.Insert(e);
-        }
+        public int Register(Employee e) => _repo.Insert(e);
 
-        public Employee GetById(int id)
-        {
-            return _repo.Get(id);
-        }
+        public Employee GetById(int id) => _repo.Get(id);
 
-        public bool VerifyLogin(string mobile, string password)
-        {
-            return _repo.Verify(mobile, password);
-        }
+        public bool VerifyLogin(string mobile, string password) => _repo.Verify(mobile, password);
 
         public List<Employee> GetAll() => _repo.GetAll();
+
+        // NEW
+        public List<Employee> Search(string name, string mobile) => _repo.Search(name, mobile);
     }
 }
