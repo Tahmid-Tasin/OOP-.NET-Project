@@ -158,5 +158,38 @@ namespace Store.Repository
 
             return results;
         }
+        
+        public int UpdateNoPassword(Employee e)
+        {
+            const string sql = @"
+                UPDATE dbo.employee
+                SET name = @nm, mobile = @mo, address = @ad
+                WHERE id = @id;";
+
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@nm", e.NAME ?? "");
+                cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
+                cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
+                cmd.Parameters.AddWithValue("@id", e.ID);
+
+                con.Open();
+                return cmd.ExecuteNonQuery();
+            }
+        }
+
+        public int Delete(int id)
+        {
+            const string sql = @"DELETE FROM dbo.employee WHERE id = @id;";
+
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+                return cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

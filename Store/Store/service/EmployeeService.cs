@@ -19,8 +19,17 @@ namespace Store.service
         public bool VerifyLogin(string mobile, string password) => _repo.Verify(mobile, password);
 
         public List<Employee> GetAll() => _repo.GetAll();
-
-        // NEW
+        
         public List<Employee> Search(string name, string mobile) => _repo.Search(name, mobile);
+        
+        public int Update(Employee e)
+        {
+            return _repo.UpdateNoPassword(e);
+        }
+
+        public int Delete(int id)
+        {
+            return _repo.Delete(id);
+        }
     }
 }

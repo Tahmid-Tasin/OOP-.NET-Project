@@ -1,16 +1,11 @@
+using System.Drawing;
+
 namespace Store
 {
     partial class EmployeeManage
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -22,14 +17,13 @@ namespace Store
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ID_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Name_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Mobile_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,6 +48,7 @@ namespace Store
             this.label9 = new System.Windows.Forms.Label();
             this.SearchMobileBox = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
+            this.IDBox = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -71,8 +66,54 @@ namespace Store
             // 
             // dataGridView1
             // 
+            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.ID_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Name_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Mobile_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Address_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            // View
+            this.View_Col.HeaderText = "View";
+            this.View_Col.Name = "View_Col";
+            this.View_Col.Text = "View";
+            this.View_Col.UseColumnTextForButtonValue = true;
+            this.View_Col.Width = 60;
+            // Edit
+            this.Edit_Col.HeaderText = "Edit";
+            this.Edit_Col.Name = "Edit_Col";
+            this.Edit_Col.Text = "Edit";
+            this.Edit_Col.UseColumnTextForButtonValue = true;
+            this.Edit_Col.Width = 60;
+            // Delete
+            this.Delete_Col.HeaderText = "Delete";
+            this.Delete_Col.Name = "Delete_Col";
+            this.Delete_Col.Text = "Delete";
+            this.Delete_Col.UseColumnTextForButtonValue = true;
+            this.Delete_Col.Width = 60;
+            // text columns
+            this.ID_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.ID_Coloumn.HeaderText = "ID";
+            this.ID_Coloumn.Name = "ID_Coloumn";
+            this.ID_Coloumn.ReadOnly = true;
+            this.Name_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Name_Coloumn.HeaderText = "Name";
+            this.Name_Coloumn.Name = "Name_Coloumn";
+            this.Name_Coloumn.ReadOnly = true;
+            this.Mobile_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Mobile_Coloumn.HeaderText = "Mobile";
+            this.Mobile_Coloumn.Name = "Mobile_Coloumn";
+            this.Mobile_Coloumn.ReadOnly = true;
+            this.Address_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Address_Coloumn.HeaderText = "Address";
+            this.Address_Coloumn.Name = "Address_Coloumn";
+            this.Address_Coloumn.ReadOnly = true;
+
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.View_Col,
+            this.Edit_Col,
+            this.Delete_Col,
             this.ID_Coloumn,
             this.Name_Coloumn,
             this.Mobile_Coloumn,
@@ -81,34 +122,7 @@ namespace Store
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(680, 615);
             this.dataGridView1.TabIndex = 0;
-            // 
-            // ID_Coloumn
-            // 
-            this.ID_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.ID_Coloumn.HeaderText = "ID";
-            this.ID_Coloumn.Name = "ID_Coloumn";
-            this.ID_Coloumn.ReadOnly = true;
-            // 
-            // Name_Coloumn
-            // 
-            this.Name_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Name_Coloumn.HeaderText = "Name";
-            this.Name_Coloumn.Name = "Name_Coloumn";
-            this.Name_Coloumn.ReadOnly = true;
-            // 
-            // Mobile_Coloumn
-            // 
-            this.Mobile_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Mobile_Coloumn.HeaderText = "Mobile";
-            this.Mobile_Coloumn.Name = "Mobile_Coloumn";
-            this.Mobile_Coloumn.ReadOnly = true;
-            // 
-            // Address_Coloumn
-            // 
-            this.Address_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Address_Coloumn.HeaderText = "Address";
-            this.Address_Coloumn.Name = "Address_Coloumn";
-            this.Address_Coloumn.ReadOnly = true;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // panel2
             // 
@@ -132,6 +146,7 @@ namespace Store
             this.panel2.Controls.Add(this.label9);
             this.panel2.Controls.Add(this.SearchMobileBox);
             this.panel2.Controls.Add(this.button7);
+            this.panel2.Controls.Add(this.IDBox);
             this.panel2.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.panel2.Location = new System.Drawing.Point(679, 0);
             this.panel2.Name = "panel2";
@@ -141,7 +156,7 @@ namespace Store
             // button5
             // 
             this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.button5.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.button5.Location = new System.Drawing.Point(205, 314);
             this.button5.Name = "button5";
@@ -149,10 +164,11 @@ namespace Store
             this.button5.TabIndex = 17;
             this.button5.Text = "Update";
             this.button5.UseVisualStyleBackColor = false;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
             this.button4.Location = new System.Drawing.Point(472, 671);
             this.button4.Name = "button4";
@@ -165,7 +181,7 @@ namespace Store
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.button3.Location = new System.Drawing.Point(444, 530);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(114, 39);
@@ -177,7 +193,7 @@ namespace Store
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.button2.ForeColor = System.Drawing.Color.White;
             this.button2.Location = new System.Drawing.Point(325, 314);
             this.button2.Name = "button2";
@@ -185,11 +201,12 @@ namespace Store
             this.button2.TabIndex = 12;
             this.button2.Text = "Delete";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
             this.button1.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.button1.Location = new System.Drawing.Point(445, 314);
             this.button1.Name = "button1";
@@ -201,7 +218,7 @@ namespace Store
             // 
             // Addressbox
             // 
-            this.Addressbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Addressbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.Addressbox.Location = new System.Drawing.Point(237, 271);
             this.Addressbox.Multiline = true;
             this.Addressbox.Name = "Addressbox";
@@ -210,7 +227,7 @@ namespace Store
             // 
             // PassBox
             // 
-            this.PassBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PassBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.PassBox.Location = new System.Drawing.Point(237, 223);
             this.PassBox.Multiline = true;
             this.PassBox.Name = "PassBox";
@@ -219,7 +236,7 @@ namespace Store
             // 
             // MobileBox
             // 
-            this.MobileBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MobileBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.MobileBox.Location = new System.Drawing.Point(237, 177);
             this.MobileBox.Multiline = true;
             this.MobileBox.Name = "MobileBox";
@@ -228,7 +245,7 @@ namespace Store
             // 
             // NameBox
             // 
-            this.NameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.NameBox.Location = new System.Drawing.Point(237, 131);
             this.NameBox.Multiline = true;
             this.NameBox.Name = "NameBox";
@@ -237,7 +254,7 @@ namespace Store
             // 
             // label6
             // 
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.label6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label6.Location = new System.Drawing.Point(85, 271);
             this.label6.Name = "label6";
@@ -247,7 +264,7 @@ namespace Store
             // 
             // label5
             // 
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.label5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label5.Location = new System.Drawing.Point(85, 223);
             this.label5.Name = "label5";
@@ -257,7 +274,7 @@ namespace Store
             // 
             // label4
             // 
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label4.Location = new System.Drawing.Point(85, 177);
             this.label4.Name = "label4";
@@ -267,7 +284,7 @@ namespace Store
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.label2.Location = new System.Drawing.Point(85, 131);
             this.label2.Name = "label2";
@@ -277,7 +294,7 @@ namespace Store
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
             this.label1.Location = new System.Drawing.Point(160, 27);
             this.label1.Name = "label1";
@@ -336,6 +353,16 @@ namespace Store
             this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
+            // IDBox
+            // 
+            this.IDBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.IDBox.Location = new System.Drawing.Point(237, 90);
+            this.IDBox.Multiline = true;
+            this.IDBox.Name = "IDBox";
+            this.IDBox.Size = new System.Drawing.Size(320, 33);
+            this.IDBox.TabIndex = 23;
+            this.IDBox.Visible = false;
+            // 
             // EmployeeManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,15 +398,19 @@ namespace Store
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ID_Coloumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name_Coloumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Mobile_Coloumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Address_Coloumn;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox SearchNameBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox SearchMobileBox;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.TextBox IDBox;
+        private System.Windows.Forms.DataGridViewButtonColumn View_Col;
+        private System.Windows.Forms.DataGridViewButtonColumn Edit_Col;
+        private System.Windows.Forms.DataGridViewButtonColumn Delete_Col;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID_Coloumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Name_Coloumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Mobile_Coloumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Address_Coloumn;
     }
 }
