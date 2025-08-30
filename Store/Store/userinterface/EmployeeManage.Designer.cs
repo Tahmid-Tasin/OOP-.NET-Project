@@ -21,18 +21,16 @@ namespace Store
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ID_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Name_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Mobile_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Address_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.Addressbox = new System.Windows.Forms.TextBox();
             this.PassBox = new System.Windows.Forms.TextBox();
@@ -49,6 +47,7 @@ namespace Store
             this.SearchMobileBox = new System.Windows.Forms.TextBox();
             this.button7 = new System.Windows.Forms.Button();
             this.IDBox = new System.Windows.Forms.TextBox();
+            this.EditResetBtn = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panel2.SuspendLayout();
@@ -66,33 +65,15 @@ namespace Store
             // 
             // dataGridView1
             // 
-            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ID_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Name_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Mobile_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Address_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            // View
-            this.View_Col.HeaderText = "View";
-            this.View_Col.Name = "View_Col";
-            this.View_Col.Text = "View";
-            this.View_Col.UseColumnTextForButtonValue = true;
-            this.View_Col.Width = 60;
-            // Edit
-            this.Edit_Col.HeaderText = "Edit";
-            this.Edit_Col.Name = "Edit_Col";
-            this.Edit_Col.Text = "Edit";
-            this.Edit_Col.UseColumnTextForButtonValue = true;
-            this.Edit_Col.Width = 60;
-            // Delete
-            this.Delete_Col.HeaderText = "Delete";
-            this.Delete_Col.Name = "Delete_Col";
-            this.Delete_Col.Text = "Delete";
-            this.Delete_Col.UseColumnTextForButtonValue = true;
-            this.Delete_Col.Width = 60;
-            // text columns
+            // data columns
             this.ID_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.ID_Coloumn.HeaderText = "ID";
             this.ID_Coloumn.Name = "ID_Coloumn";
@@ -109,15 +90,31 @@ namespace Store
             this.Address_Coloumn.HeaderText = "Address";
             this.Address_Coloumn.Name = "Address_Coloumn";
             this.Address_Coloumn.ReadOnly = true;
+            // action buttons (RIGHT SIDE)
+            this.View_Col.HeaderText = "View";
+            this.View_Col.Name = "View_Col";
+            this.View_Col.Text = "View";
+            this.View_Col.UseColumnTextForButtonValue = true;
+            this.View_Col.Width = 60;
+            this.Edit_Col.HeaderText = "Edit";
+            this.Edit_Col.Name = "Edit_Col";
+            this.Edit_Col.Text = "Edit";
+            this.Edit_Col.UseColumnTextForButtonValue = true;
+            this.Edit_Col.Width = 60;
+            this.Delete_Col.HeaderText = "Delete";
+            this.Delete_Col.Name = "Delete_Col";
+            this.Delete_Col.Text = "Delete";
+            this.Delete_Col.UseColumnTextForButtonValue = true;
+            this.Delete_Col.Width = 60;
 
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.View_Col,
-            this.Edit_Col,
-            this.Delete_Col,
             this.ID_Coloumn,
             this.Name_Coloumn,
             this.Mobile_Coloumn,
-            this.Address_Coloumn});
+            this.Address_Coloumn,
+            this.View_Col,
+            this.Edit_Col,
+            this.Delete_Col});
             this.dataGridView1.Location = new System.Drawing.Point(0, 60);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(680, 615);
@@ -127,10 +124,9 @@ namespace Store
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panel2.Controls.Add(this.button5);
+            this.panel2.Controls.Add(this.EditResetBtn);
             this.panel2.Controls.Add(this.button4);
             this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.button2);
             this.panel2.Controls.Add(this.button1);
             this.panel2.Controls.Add(this.Addressbox);
             this.panel2.Controls.Add(this.PassBox);
@@ -152,19 +148,6 @@ namespace Store
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(670, 729);
             this.panel2.TabIndex = 1;
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button5.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.button5.Location = new System.Drawing.Point(205, 314);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(114, 39);
-            this.button5.TabIndex = 17;
-            this.button5.Text = "Update";
-            this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button4
             // 
@@ -189,19 +172,6 @@ namespace Store
             this.button3.Text = "Search";
             this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(325, 314);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(114, 39);
-            this.button2.TabIndex = 12;
-            this.button2.Text = "Delete";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -363,6 +333,20 @@ namespace Store
             this.IDBox.TabIndex = 23;
             this.IDBox.Visible = false;
             // 
+            // EditResetBtn
+            // 
+            this.EditResetBtn.BackColor = System.Drawing.Color.Gainsboro;
+            this.EditResetBtn.Enabled = false;
+            this.EditResetBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
+            this.EditResetBtn.ForeColor = System.Drawing.Color.Black;
+            this.EditResetBtn.Location = new System.Drawing.Point(325, 314);
+            this.EditResetBtn.Name = "EditResetBtn";
+            this.EditResetBtn.Size = new System.Drawing.Size(114, 39);
+            this.EditResetBtn.TabIndex = 24;
+            this.EditResetBtn.Text = "Reset";
+            this.EditResetBtn.UseVisualStyleBackColor = false;
+            this.EditResetBtn.Click += new System.EventHandler(this.EditResetBtn_Click);
+            // 
             // EmployeeManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -397,20 +381,19 @@ namespace Store
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox SearchNameBox;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox SearchMobileBox;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.TextBox IDBox;
-        private System.Windows.Forms.DataGridViewButtonColumn View_Col;
-        private System.Windows.Forms.DataGridViewButtonColumn Edit_Col;
-        private System.Windows.Forms.DataGridViewButtonColumn Delete_Col;
+        private System.Windows.Forms.Button EditResetBtn;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Mobile_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Address_Coloumn;
+        private System.Windows.Forms.DataGridViewButtonColumn View_Col;
+        private System.Windows.Forms.DataGridViewButtonColumn Edit_Col;
+        private System.Windows.Forms.DataGridViewButtonColumn Delete_Col;
     }
 }
