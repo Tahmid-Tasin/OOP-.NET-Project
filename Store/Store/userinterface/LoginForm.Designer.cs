@@ -1,4 +1,4 @@
-﻿namespace Store
+namespace Store
 {
     partial class LoginForm
     {
@@ -71,13 +71,14 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(466, 481);
             this.panel2.TabIndex = 1;
+            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
             // CreateAccountBtn
             // 
             this.CreateAccountBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(59)))), ((int)(((byte)(122)))));
             this.CreateAccountBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CreateAccountBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.CreateAccountBtn.Font = new System.Drawing.Font("Noto Sans HK", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CreateAccountBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CreateAccountBtn.ForeColor = System.Drawing.SystemColors.MenuBar;
             this.CreateAccountBtn.Location = new System.Drawing.Point(3, 435);
             this.CreateAccountBtn.Name = "CreateAccountBtn";
@@ -91,7 +92,7 @@
             // 
             this.LoginBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(59)))), ((int)(((byte)(122)))));
             this.LoginBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.LoginBtn.Font = new System.Drawing.Font("Noto Sans HK", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoginBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoginBtn.ForeColor = System.Drawing.SystemColors.Menu;
             this.LoginBtn.Location = new System.Drawing.Point(241, 435);
             this.LoginBtn.Name = "LoginBtn";
@@ -103,7 +104,7 @@
             // 
             // pwBox
             // 
-            this.pwBox.Font = new System.Drawing.Font("Noto Sans HK Medium", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.pwBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pwBox.Location = new System.Drawing.Point(183, 363);
             this.pwBox.Multiline = true;
             this.pwBox.Name = "pwBox";
@@ -112,7 +113,7 @@
             // 
             // label4
             // 
-            this.label4.Font = new System.Drawing.Font("Noto Sans HK", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(61, 363);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(117, 23);
@@ -121,7 +122,7 @@
             // 
             // UserNameBox
             // 
-            this.UserNameBox.Font = new System.Drawing.Font("Noto Sans HK Medium", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UserNameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UserNameBox.Location = new System.Drawing.Point(183, 298);
             this.UserNameBox.Multiline = true;
             this.UserNameBox.Name = "UserNameBox";
@@ -130,17 +131,17 @@
             // 
             // UserComboBox
             // 
-            this.UserComboBox.Font = new System.Drawing.Font("Noto Sans HK Medium", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UserComboBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UserComboBox.FormattingEnabled = true;
             this.UserComboBox.Location = new System.Drawing.Point(183, 232);
             this.UserComboBox.Name = "UserComboBox";
-            this.UserComboBox.Size = new System.Drawing.Size(145, 32);
+            this.UserComboBox.Size = new System.Drawing.Size(145, 28);
             this.UserComboBox.TabIndex = 4;
             this.UserComboBox.SelectedIndexChanged += new System.EventHandler(this.UserComboBox_SelectedIndexChanged);
             // 
             // label3
             // 
-            this.label3.Font = new System.Drawing.Font("Noto Sans HK", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(61, 230);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(130, 23);
@@ -149,7 +150,7 @@
             // 
             // label2
             // 
-            this.label2.Font = new System.Drawing.Font("Noto Sans HK", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(61, 298);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 23);
@@ -158,7 +159,7 @@
             // 
             // label1
             // 
-            this.label1.Font = new System.Drawing.Font("Noto Sans HK Black", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.label1.Location = new System.Drawing.Point(175, 164);
             this.label1.Name = "label1";
@@ -175,7 +176,7 @@
             this.panel3.Size = new System.Drawing.Size(130, 123);
             this.panel3.TabIndex = 0;
             // 
-            // Form1
+            // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

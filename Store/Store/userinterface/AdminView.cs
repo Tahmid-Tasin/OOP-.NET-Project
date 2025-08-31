@@ -1,6 +1,8 @@
 using System;
 using System.Windows.Forms;
 
+using Store.userinterface;
+
 namespace Store
 {
     public partial class AdminView : Form
@@ -47,6 +49,13 @@ namespace Store
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var st = new SuperShopList();
+            st.Show();
+            Visible = false;
         }
     }
 }
