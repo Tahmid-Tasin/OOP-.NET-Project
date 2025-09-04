@@ -138,8 +138,8 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="userinterface\ProductManage.cs" />
-    <Compile Include="userinterface\ProductManage.Designer.cs" />
+    <Compile Include="userinterface\ProductManageView.cs" />
+    <Compile Include="userinterface\ProductManageView.Designer.cs" />
     <Compile Include="userinterface\StockView.cs">
       <SubType>Form</SubType>
     </Compile>

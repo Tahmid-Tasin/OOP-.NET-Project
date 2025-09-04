@@ -7,13 +7,13 @@ using Store.Repository;
 
 namespace Store.userinterface
 {
-    public partial class ProductManage : Form
+    public partial class ProductManageView : Form
     {
         private readonly ProductService _productService;
         private readonly CategoryRepository _categoryRepo;
         private string imagePath = null;
 
-        public ProductManage()
+        public ProductManageView()
         {
             InitializeComponent();
             _productService = new ProductService();

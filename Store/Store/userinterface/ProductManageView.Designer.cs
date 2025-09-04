@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace Store.userinterface
 {
-    partial class ProductManage
+    partial class ProductManageView
     {
         private System.ComponentModel.IContainer components = null;
 

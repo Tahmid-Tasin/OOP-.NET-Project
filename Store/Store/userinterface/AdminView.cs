@@ -1,6 +1,8 @@
 using System;
 using System.Windows.Forms;
 
+using Store.userinterface;
+
 namespace Store
 {
     public partial class AdminView : Form
@@ -17,7 +19,9 @@ namespace Store
 
         private void button7_Click(object sender, EventArgs e)
         {
-
+            var productView = new ProductManageView();
+            productView.Show();
+            Visible = false;
         }
 
         private void button6_Click(object sender, EventArgs e)
