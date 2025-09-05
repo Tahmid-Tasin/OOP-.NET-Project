@@ -222,5 +222,12 @@ namespace Store.userinterface
             SearchBarcodeBox.Text = "";
             LoadProducts();
         }
+
+        private void backToHomePage(object sender, EventArgs e)
+        {
+            var adm = new AdminView();
+            adm.Show();
+            Visible = false;
+        }
     }
 }
