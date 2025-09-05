@@ -5,9 +5,9 @@ using Store.service;
 
 namespace Store
 {
-    public partial class AdminCreateForm : Form
+    public partial class CustomerCreateForm : Form
     {
-        private readonly AdminService _adminService;
+        private readonly CustomerService _customerService;
         private readonly EmailSender _emailSender;
 
         private int _verificationCode;
@@ -15,10 +15,10 @@ namespace Store
         private readonly TimeSpan _codeTtl = TimeSpan.FromMinutes(10);
         private readonly Random _rng = new Random();
 
-        public AdminCreateForm()
+        public CustomerCreateForm()
         {
             InitializeComponent();
-            _adminService = new AdminService();
+            _customerService = new CustomerService();
             _emailSender = new EmailSender();
         }
 
@@ -96,16 +96,16 @@ namespace Store
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(firstNameBox.Text))
+            if (string.IsNullOrWhiteSpace(FullNameBox.Text))
             {
-                MessageBox.Show("Enter your first name.");
+                MessageBox.Show("Enter your Full name.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(lastnameBox.Text))
-            {
-                MessageBox.Show("Enter your last name.");
-                return;
-            }
+          //  if (string.IsNullOrWhiteSpace(lastnameBox.Text))
+           // {
+              //  MessageBox.Show("Enter your last name.");
+               // return;
+           // }
             if (string.IsNullOrWhiteSpace(mobileBox.Text))
             {
                 MessageBox.Show("Enter your mobile number.");
@@ -116,9 +116,9 @@ namespace Store
                 MessageBox.Show("Enter your email.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(UserNameBox.Text))
+            if (string.IsNullOrWhiteSpace(AddressBox.Text))
             {
-                MessageBox.Show("Enter a username.");
+                MessageBox.Show("Enter your address.");
                 return;
             }
             if (string.IsNullOrWhiteSpace(PassBox.Text))
@@ -137,26 +137,26 @@ namespace Store
                 return;
             }
 
-            var admin = new Admin();
-            admin.FirstName = firstNameBox.Text.Trim();
-            admin.LastName = lastnameBox.Text.Trim();
-            admin.UserName = UserNameBox.Text.Trim();
-            admin.Mobile = mobileBox.Text.Trim();
-            admin.Password = PassBox.Text;
+            var customer = new Customer();
+            customer.FullName = FullNameBox.Text.Trim();
+            customer.Address = AddressBox.Text.Trim();
+            customer.Email = gmailText.Text.Trim();
+            customer.Mobile = mobileBox.Text.Trim();
+            customer.Password = PassBox.Text;
 
             try
             {
-                int rows = _adminService.Register(admin);
+                int rows = _customerService.Register(customer);
 
                 if (rows > 0)
                 {
-                    MessageBox.Show("Admin account created successfully.");
+                    MessageBox.Show("Customer account created successfully.");
 
-                    firstNameBox.Text = "";
-                    lastnameBox.Text = "";
+                    FullNameBox.Text = "";
+                  
                     mobileBox.Text = "";
                     gmailText.Text = "";
-                    UserNameBox.Text = "";
+                    AddressBox.Text = "";
                     PassBox.Text = "";
                     CoPassBox.Text = "";
                     CodeBox.Text = "";
@@ -167,17 +167,32 @@ namespace Store
                 }
                 else
                 {
-                    MessageBox.Show("Failed to create admin account.");
+                    MessageBox.Show("Failed to create Customer account.");
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error while creating admin: " + ex.Message);
+                MessageBox.Show("Error while creating Customer: " + ex.Message);
             }
         }
 
         private void timvcode_Tick(object sender, EventArgs e)
         {
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void firstNameBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gmailText_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

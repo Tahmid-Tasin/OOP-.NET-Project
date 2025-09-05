@@ -2,15 +2,18 @@ using System;
 using System.Windows.Forms;
 
 using Store.service;
+using Store.userinterface;
 
 namespace Store
 {
     public partial class LoginForm : Form
     {
+        private readonly CustomerService _customerService;
         private readonly AdminService _adminService;
         public LoginForm()
         {
             InitializeComponent();
+            _customerService = new CustomerService();
             _adminService = new AdminService();
         }
 
@@ -28,7 +31,7 @@ namespace Store
 
         private void CreateAccountBtn_Click(object sender, EventArgs e)
         {
-            AdminCreateForm frm = new AdminCreateForm();
+            CustomerCreateForm frm = new CustomerCreateForm();
             frm.Show();
             Visible = false;
 
@@ -36,23 +39,46 @@ namespace Store
 
         private void LoginBtn_Click(object sender, EventArgs e)
         {
-            if (UserComboBox.SelectedIndex == 0)
+            if (UserComboBox.Text == "Customer")
             {
                 string user = UserNameBox.Text.Trim();
                 string pass = pwBox.Text;
 
-                bool ok = _adminService.VerifyLogin(user, pass);
+                bool ok = _customerService.VerifyLogin(user, pass);
                 if (ok)
                 {
                     MessageBox.Show("Login Successful");
                     this.Hide();
-                    AdminView ad = new AdminView();
+                    CustomerView ad = new CustomerView();
                     ad.Show();
                 }
                 else
                 {
                     MessageBox.Show("Invalid username or password");
                 }
+            }
+
+            else if (UserComboBox.Text == "Admin")
+            {
+                string us = UserNameBox.Text.Trim();
+                string pa = pwBox.Text;
+                bool ok = _adminService.VerifyLogin(us, pa);
+                if (ok)
+                {
+                    MessageBox.Show("Login Successful");
+                    this.Hide();
+                    AdminView cs = new AdminView();
+                    cs.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Invalid username or password");
+                }
+            }
+
+            else
+            {
+                MessageBox.Show("Please select an user type");
             }
         }
     }
