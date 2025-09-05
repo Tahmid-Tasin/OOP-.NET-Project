@@ -130,6 +130,69 @@ namespace Store.Repository
                 IS_ACTIVE = (bool)rd["is_active"]
             };
         }
+        
+        public List<Product> Search(string name, string brand, string barcode, 
+            decimal? minPrice, decimal? maxPrice, int? categoryId)
+        {
+            var results = new List<Product>();
+            var sb = new System.Text.StringBuilder("SELECT * FROM dbo.product WHERE 1=1 ");
+            var cmd = new SqlCommand();
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                sb.Append(" AND name LIKE @nm ");
+                cmd.Parameters.AddWithValue("@nm", "%" + name + "%");
+            }
+
+            if (!string.IsNullOrWhiteSpace(brand))
+            {
+                sb.Append(" AND brand LIKE @br ");
+                cmd.Parameters.AddWithValue("@br", "%" + brand + "%");
+            }
+
+            if (!string.IsNullOrWhiteSpace(barcode))
+            {
+                sb.Append(" AND barcode = @bc ");
+                cmd.Parameters.AddWithValue("@bc", barcode);
+            }
+
+            if (minPrice.HasValue)
+            {
+                sb.Append(" AND price >= @min ");
+                cmd.Parameters.AddWithValue("@min", minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                sb.Append(" AND price <= @max ");
+                cmd.Parameters.AddWithValue("@max", maxPrice.Value);
+            }
+
+            if (categoryId.HasValue)
+            {
+                sb.Append(" AND category_id = @cat ");
+                cmd.Parameters.AddWithValue("@cat", categoryId.Value);
+            }
+
+            sb.Append(" ORDER BY id DESC;");
+            cmd.CommandText = sb.ToString();
+
+            using (SqlConnection con = _factory.Create())
+            {
+                cmd.Connection = con;
+                con.Open();
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    while (rd.Read())
+                    {
+                        results.Add(Map(rd));
+                    }
+                }
+            }
+
+            return results;
+        }
+
     }
 }
 

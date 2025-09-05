@@ -120,22 +120,18 @@ namespace Store.userinterface
                 string dir = Path.Combine(appData, "SuperShop", "Images");
                 Directory.CreateDirectory(dir);
 
-                // Use unique name (avoid overwriting same filename)
                 string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(ofd.FileName);
                 string destPath = Path.Combine(dir, newFileName);
 
-                // Copy the file (safe, not locked)
                 File.Copy(ofd.FileName, destPath, true);
                 imagePath = destPath;
 
-                // Load into PictureBox without locking
                 using (var fs = new FileStream(destPath, FileMode.Open, FileAccess.Read))
                 {
                     ProductPicture.Image = new Bitmap(fs);
                 }
             }
         }
-
 
         private void SaveProductBtn_Click(object sender, EventArgs e)
         {
@@ -192,6 +188,39 @@ namespace Store.userinterface
             imagePath = null;
             ProductPicture.Image = null;
             SaveProductBtn.Text = "Save";
+        }
+
+        private void ResetBtn_Click(object sender, EventArgs e)
+        {
+            ResetForm();
+        }
+
+        private void SearchBtn_Click(object sender, EventArgs e)
+        {
+            string name = SearchNameBox.Text.Trim();
+            string brand = SearchBrandBox.Text.Trim();
+            string barcode = SearchBarcodeBox.Text.Trim();
+
+            var list = _productService.Search(
+                string.IsNullOrEmpty(name) ? null : name,
+                string.IsNullOrEmpty(brand) ? null : brand,
+                string.IsNullOrEmpty(barcode) ? null : barcode,
+                null, null, null
+            );
+
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var p in list)
+            {
+                flowLayoutPanel1.Controls.Add(CreateCard(p));
+            }
+        }
+
+        private void SearchResetBtn_Click(object sender, EventArgs e)
+        {
+            SearchNameBox.Text = "";
+            SearchBrandBox.Text = "";
+            SearchBarcodeBox.Text = "";
+            LoadProducts();
         }
     }
 }

@@ -23,6 +23,13 @@ namespace Store.service
         public Product GetById(int id) => _repo.Get(id);
 
         public List<Product> GetAll() => _repo.GetAll();
+        
+        public List<Product> Search(string name, string brand, string barcode, 
+            decimal? minPrice, decimal? maxPrice, int? categoryId)
+        {
+            return _repo.Search(name, brand, barcode, minPrice, maxPrice, categoryId);
+        }
+
     }
 }
 

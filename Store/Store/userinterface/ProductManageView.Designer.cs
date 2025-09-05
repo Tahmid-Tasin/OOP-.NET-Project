@@ -142,7 +142,7 @@ namespace Store.userinterface
             this.ResetBtn.BackColor = Color.LightGray;
             this.ResetBtn.ForeColor = Color.Black;
             this.ResetBtn.Location = new Point(320, 490);
-            this.ResetBtn.Click += (s, e) => ResetForm();
+            this.ResetBtn.Click += new System.EventHandler(this.ResetBtn_Click);
 
             // Search Name
             this.labelSearchName.Text = "Search Name";
@@ -166,11 +166,13 @@ namespace Store.userinterface
             this.SearchBtn.BackColor = Color.FromArgb(175, 76, 15);
             this.SearchBtn.ForeColor = Color.White;
             this.SearchBtn.Location = new Point(200, 680);
+            this.SearchBtn.Click += new System.EventHandler(this.SearchBtn_Click);
 
             this.SearchResetBtn.Text = "Reset";
             this.SearchResetBtn.BackColor = Color.Gray;
             this.SearchResetBtn.ForeColor = Color.White;
             this.SearchResetBtn.Location = new Point(320, 680);
+            this.SearchResetBtn.Click += new System.EventHandler(this.SearchResetBtn_Click);
 
             // hidden IDBox
             this.IDBox.Visible = false;
