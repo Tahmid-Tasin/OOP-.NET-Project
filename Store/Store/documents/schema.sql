@@ -35,17 +35,6 @@ create table dbo.customer
 )
 go
 
-create table dbo.cart
-(
-    id          int identity
-        primary key,
-    customer_id int                                not null
-        unique
-        references dbo.customer,
-    created_at  datetime2 default sysutcdatetime() not null
-)
-go
-
 create table dbo.employee
 (
     id       int identity
@@ -94,95 +83,19 @@ create table dbo.product
 (
     id          int identity
         primary key,
-    category_id int            not null
+    category_id int                                not null
         references dbo.category,
-    name        varchar(120)   not null,
-    price       decimal(12, 2) not null
+    name        varchar(120)                       not null,
+    brand       varchar(100),
+    description varchar(500),
+    price       decimal(12, 2)                     not null
         check ([price] >= 0),
-    stock_qty   int default 0  not null
-        check ([stock_qty] >= 0),
-    is_active   bit default 1  not null
-)
-go
-
-create table dbo.cart_item
-(
-    id         int identity
-        primary key,
-    cart_id    int not null
-        references dbo.cart
-            on delete cascade,
-    product_id int not null
-        references dbo.product,
-    quantity   int not null
-        check ([quantity] > 0)
-)
-go
-
-create table dbo.offer
-(
-    id               int identity
-        primary key,
-    name             varchar(120)  not null,
-    discount_percent decimal(5, 2) not null
-        check ([discount_percent] >= 0 AND [discount_percent] <= 100),
-    start_date       date          not null,
-    end_date         date          not null,
-    category_id      int
-        references dbo.category,
-    product_id       int
-        references dbo.product,
-    is_active        bit default 1 not null
-)
-go
-
-create table dbo.order_item
-(
-    id         int identity
-        primary key,
-    order_id   int            not null
-        references dbo.[order]
-            on delete cascade,
-    product_id int            not null
-        references dbo.product,
-    quantity   int            not null
-        check ([quantity] > 0),
-    unit_price decimal(12, 2) not null
-        check ([unit_price] >= 0),
-    line_total decimal(12, 2) not null
-        check ([line_total] >= 0)
-)
-go
-
-create table dbo.restock_request
-(
-    id                 int identity
-        primary key,
-    product_id         int                           not null
-        references dbo.product,
-    requested_by_mgr   int                           not null
-        references dbo.employee,
-    quantity_requested int                           not null
-        check ([quantity_requested] > 0),
-    status             varchar(20) default 'PENDING' not null,
-    admin_action_by    int
-        references dbo.admin_table,
-    admin_action_at    datetime2
-)
-go
-
-create table dbo.review
-(
-    id          int identity
-        primary key,
-    customer_id int                                not null
-        references dbo.customer,
-    product_id  int
-        references dbo.product,
-    rating      int
-        check ([rating] >= 1 AND [rating] <= 5),
-    comment     varchar(600),
-    created_at  datetime2 default sysutcdatetime() not null
+    barcode     varchar(50)
+        unique,
+    image_path  varchar(300),
+    is_active   bit       default 1                not null,
+    created_at  datetime2 default sysutcdatetime() not null,
+    updated_at  datetime2
 )
 go
 
