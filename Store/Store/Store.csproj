@@ -100,22 +100,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="model\Admin.cs" />
+    <Compile Include="model\Branch.cs" />
     <Compile Include="model\Category.cs" />
     <Compile Include="model\Customer.cs" />
     <Compile Include="model\Employee.cs" />
+    <Compile Include="model\Outlet.cs" />
     <Compile Include="model\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="repository\AdminRepository.cs" />
+    <Compile Include="repository\BranchRepository.cs" />
     <Compile Include="repository\CategoryRepository.cs" />
     <Compile Include="repository\CustomerRepository.cs" />
     <Compile Include="repository\EmployeeRepository.cs" />
     <Compile Include="repository\ISqlConnectionFactory.cs" />
+    <Compile Include="repository\OutletRepository.cs" />
     <Compile Include="repository\ProductRepository.cs" />
     <Compile Include="service\AdminService.cs" />
     <Compile Include="service\CustomerService.cs" />
+    <Compile Include="service\BranchService.cs" />
     <Compile Include="service\EmailSender.cs" />
     <Compile Include="service\EmployeeService.cs" />
+    <Compile Include="service\OutletService.cs" />
     <Compile Include="service\ProductService.cs" />
     <Compile Include="userinterface\CustomerCreateForm.cs">
       <SubType>Form</SubType>
@@ -147,6 +153,10 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\OutletDetailsView.cs" />
+    <Compile Include="userinterface\OutletDetailsView.Designer.cs" />
+    <Compile Include="userinterface\OutletManageView.cs" />
+    <Compile Include="userinterface\OutletManageView.Designer.cs" />
     <Compile Include="userinterface\ProductManageView.cs">
       <SubType>Form</SubType>
     </Compile>
