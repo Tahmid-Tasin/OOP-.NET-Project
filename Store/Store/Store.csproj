@@ -153,9 +153,13 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="userinterface\OutletDetailsView.cs" />
+    <Compile Include="userinterface\OutletDetailsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="userinterface\OutletDetailsView.Designer.cs" />
-    <Compile Include="userinterface\OutletManageView.cs" />
+    <Compile Include="userinterface\OutletManageView.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="userinterface\OutletManageView.Designer.cs" />
     <Compile Include="userinterface\ProductManageView.cs">
       <SubType>Form</SubType>

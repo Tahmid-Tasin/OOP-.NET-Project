@@ -50,7 +50,13 @@ namespace Store
 
         private void label1_Click(object sender, EventArgs e)
         {
-
+        }
+        
+        private void OutletBtn_Click(object sender, EventArgs e)
+        {
+            var outlet = new OutletManageView();
+            outlet.Show();
+            this.Visible = false;
         }
     }
 }
