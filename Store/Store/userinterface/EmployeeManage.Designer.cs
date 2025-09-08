@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace Store
+namespace Store.userinterface
 {
     partial class EmployeeManage
     {
@@ -8,15 +8,23 @@ namespace Store
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-                components.Dispose();
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.btnAddNew = new System.Windows.Forms.Button();
+            this.btnToggleSearch = new System.Windows.Forms.Button();
+            this.searchPanel = new System.Windows.Forms.Panel();
+            this.lblName = new System.Windows.Forms.Label();
+            this.txtSearchName = new System.Windows.Forms.TextBox();
+            this.lblMobile = new System.Windows.Forms.Label();
+            this.txtSearchMobile = new System.Windows.Forms.TextBox();
+            this.btnDoSearch = new System.Windows.Forms.Button();
+            this.btnResetSearch = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.ID_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Name_Coloumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -25,378 +33,212 @@ namespace Store
             this.View_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Edit_Col = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Delete_Col = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.ActionAddUpdate = new System.Windows.Forms.Button();
-            this.EditResetBtn = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.Addressbox = new System.Windows.Forms.TextBox();
-            this.PassBox = new System.Windows.Forms.TextBox();
-            this.MobileBox = new System.Windows.Forms.TextBox();
-            this.NameBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.SearchNameBox = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.SearchMobileBox = new System.Windows.Forms.TextBox();
-            this.button7 = new System.Windows.Forms.Button();
-            this.IDBox = new System.Windows.Forms.TextBox();
-            this.panel1.SuspendLayout();
+            this.panelTop.SuspendLayout();
+            this.searchPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // panel1
+            // panelTop
             // 
-            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.panel1.Controls.Add(this.dataGridView1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(683, 729);
-            this.panel1.TabIndex = 0;
+            this.panelTop.BackColor = System.Drawing.Color.Gainsboro;
+            this.panelTop.Controls.Add(this.btnAddNew);
+            this.panelTop.Controls.Add(this.btnToggleSearch);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(1350, 50);
+            this.panelTop.TabIndex = 0;
+            // 
+            // btnAddNew
+            // 
+            this.btnAddNew.Anchor = (System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right);
+            this.btnAddNew.Location = new System.Drawing.Point(1240, 10);
+            this.btnAddNew.Name = "btnAddNew";
+            this.btnAddNew.Size = new System.Drawing.Size(100, 30);
+            this.btnAddNew.TabIndex = 1;
+            this.btnAddNew.Text = "Add New";
+            this.btnAddNew.UseVisualStyleBackColor = true;
+            this.btnAddNew.Click += new System.EventHandler(this.btnAddNew_Click);
+            // 
+            // btnToggleSearch
+            // 
+            this.btnToggleSearch.Location = new System.Drawing.Point(10, 10);
+            this.btnToggleSearch.Name = "btnToggleSearch";
+            this.btnToggleSearch.Size = new System.Drawing.Size(100, 30);
+            this.btnToggleSearch.TabIndex = 0;
+            this.btnToggleSearch.Text = "Search";
+            this.btnToggleSearch.UseVisualStyleBackColor = true;
+            this.btnToggleSearch.Click += new System.EventHandler(this.btnToggleSearch_Click);
+            // 
+            // searchPanel
+            // 
+            this.searchPanel.BackColor = System.Drawing.Color.Silver;
+            this.searchPanel.Controls.Add(this.lblName);
+            this.searchPanel.Controls.Add(this.txtSearchName);
+            this.searchPanel.Controls.Add(this.lblMobile);
+            this.searchPanel.Controls.Add(this.txtSearchMobile);
+            this.searchPanel.Controls.Add(this.btnDoSearch);
+            this.searchPanel.Controls.Add(this.btnResetSearch);
+            this.searchPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.searchPanel.Location = new System.Drawing.Point(0, 50);
+            this.searchPanel.Name = "searchPanel";
+            this.searchPanel.Size = new System.Drawing.Size(1350, 60);
+            this.searchPanel.TabIndex = 1;
+            this.searchPanel.Visible = false;
+            // 
+            // lblName
+            // 
+            this.lblName.Location = new System.Drawing.Point(130, 20);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(50, 20);
+            this.lblName.TabIndex = 0;
+            this.lblName.Text = "Name:";
+            this.lblName.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtSearchName
+            // 
+            this.txtSearchName.Location = new System.Drawing.Point(185, 19);
+            this.txtSearchName.Name = "txtSearchName";
+            this.txtSearchName.Size = new System.Drawing.Size(180, 20);
+            this.txtSearchName.TabIndex = 1;
+            // 
+            // lblMobile
+            // 
+            this.lblMobile.Location = new System.Drawing.Point(385, 20);
+            this.lblMobile.Name = "lblMobile";
+            this.lblMobile.Size = new System.Drawing.Size(50, 20);
+            this.lblMobile.TabIndex = 2;
+            this.lblMobile.Text = "Mobile:";
+            this.lblMobile.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // txtSearchMobile
+            // 
+            this.txtSearchMobile.Location = new System.Drawing.Point(440, 19);
+            this.txtSearchMobile.Name = "txtSearchMobile";
+            this.txtSearchMobile.Size = new System.Drawing.Size(180, 20);
+            this.txtSearchMobile.TabIndex = 3;
+            // 
+            // btnDoSearch
+            // 
+            this.btnDoSearch.Location = new System.Drawing.Point(640, 17);
+            this.btnDoSearch.Name = "btnDoSearch";
+            this.btnDoSearch.Size = new System.Drawing.Size(90, 25);
+            this.btnDoSearch.TabIndex = 4;
+            this.btnDoSearch.Text = "Search";
+            this.btnDoSearch.UseVisualStyleBackColor = true;
+            this.btnDoSearch.Click += new System.EventHandler(this.btnDoSearch_Click);
+            // 
+            // btnResetSearch
+            // 
+            this.btnResetSearch.Location = new System.Drawing.Point(740, 17);
+            this.btnResetSearch.Name = "btnResetSearch";
+            this.btnResetSearch.Size = new System.Drawing.Size(90, 25);
+            this.btnResetSearch.TabIndex = 5;
+            this.btnResetSearch.Text = "Reset";
+            this.btnResetSearch.UseVisualStyleBackColor = true;
+            this.btnResetSearch.Visible = false;
+            this.btnResetSearch.Click += new System.EventHandler(this.btnResetSearch_Click);
             // 
             // dataGridView1
             // 
-            var headerStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            headerStyle.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            headerStyle.BackColor = SystemColors.Control;
-            headerStyle.ForeColor = SystemColors.WindowText;
-            headerStyle.SelectionBackColor = SystemColors.Highlight;
-            headerStyle.SelectionForeColor = SystemColors.HighlightText;
-            headerStyle.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = headerStyle;
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView1.BackgroundColor = System.Drawing.Color.White;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-
-            var cellStyle = new System.Windows.Forms.DataGridViewCellStyle();
-            cellStyle.ForeColor = Color.Black;
-            cellStyle.SelectionForeColor = Color.Black;
-            this.dataGridView1.DefaultCellStyle = cellStyle;
-
-            // columns (actions at RIGHT side)
-            this.ID_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID_Coloumn,
+            this.Name_Coloumn,
+            this.Mobile_Coloumn,
+            this.Address_Coloumn,
+            this.View_Col,
+            this.Edit_Col,
+            this.Delete_Col});
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 110);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = true;
+            this.dataGridView1.Size = new System.Drawing.Size(1350, 619);
+            this.dataGridView1.TabIndex = 2;
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // ID_Coloumn
+            // 
             this.ID_Coloumn.HeaderText = "ID";
             this.ID_Coloumn.Name = "ID_Coloumn";
             this.ID_Coloumn.ReadOnly = true;
-
-            this.Name_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            // 
+            // Name_Coloumn
+            // 
             this.Name_Coloumn.HeaderText = "Name";
             this.Name_Coloumn.Name = "Name_Coloumn";
             this.Name_Coloumn.ReadOnly = true;
-
-            this.Mobile_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            // 
+            // Mobile_Coloumn
+            // 
             this.Mobile_Coloumn.HeaderText = "Mobile";
             this.Mobile_Coloumn.Name = "Mobile_Coloumn";
             this.Mobile_Coloumn.ReadOnly = true;
-
-            this.Address_Coloumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            // 
+            // Address_Coloumn
+            // 
             this.Address_Coloumn.HeaderText = "Address";
             this.Address_Coloumn.Name = "Address_Coloumn";
             this.Address_Coloumn.ReadOnly = true;
-
+            // 
+            // View_Col
+            // 
             this.View_Col.HeaderText = "View";
             this.View_Col.Name = "View_Col";
             this.View_Col.Text = "View";
             this.View_Col.UseColumnTextForButtonValue = true;
-            this.View_Col.Width = 60;
-
+            this.View_Col.Width = 70;
+            // 
+            // Edit_Col
+            // 
             this.Edit_Col.HeaderText = "Edit";
             this.Edit_Col.Name = "Edit_Col";
             this.Edit_Col.Text = "Edit";
             this.Edit_Col.UseColumnTextForButtonValue = true;
-            this.Edit_Col.Width = 60;
-
+            this.Edit_Col.Width = 70;
+            // 
+            // Delete_Col
+            // 
             this.Delete_Col.HeaderText = "Delete";
             this.Delete_Col.Name = "Delete_Col";
             this.Delete_Col.Text = "Delete";
             this.Delete_Col.UseColumnTextForButtonValue = true;
-            this.Delete_Col.Width = 60;
-
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-                this.ID_Coloumn,
-                this.Name_Coloumn,
-                this.Mobile_Coloumn,
-                this.Address_Coloumn,
-                this.View_Col,
-                this.Edit_Col,
-                this.Delete_Col
-            });
-            this.dataGridView1.Location = new System.Drawing.Point(0, 60);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(680, 615);
-            this.dataGridView1.TabIndex = 0;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.panel2.Controls.Add(this.ActionAddUpdate);
-            this.panel2.Controls.Add(this.EditResetBtn);
-            this.panel2.Controls.Add(this.button4);
-            this.panel2.Controls.Add(this.button3);
-            this.panel2.Controls.Add(this.Addressbox);
-            this.panel2.Controls.Add(this.PassBox);
-            this.panel2.Controls.Add(this.MobileBox);
-            this.panel2.Controls.Add(this.NameBox);
-            this.panel2.Controls.Add(this.label6);
-            this.panel2.Controls.Add(this.label5);
-            this.panel2.Controls.Add(this.label4);
-            this.panel2.Controls.Add(this.label2);
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.label8);
-            this.panel2.Controls.Add(this.SearchNameBox);
-            this.panel2.Controls.Add(this.label9);
-            this.panel2.Controls.Add(this.SearchMobileBox);
-            this.panel2.Controls.Add(this.button7);
-            this.panel2.Controls.Add(this.IDBox);
-            this.panel2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.panel2.Location = new System.Drawing.Point(679, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(670, 729);
-            this.panel2.TabIndex = 1;
-            // 
-            // ActionAddUpdate
-            // 
-            this.ActionAddUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.ActionAddUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.ActionAddUpdate.ForeColor = System.Drawing.Color.White;
-            this.ActionAddUpdate.Location = new System.Drawing.Point(445, 314);
-            this.ActionAddUpdate.Name = "ActionAddUpdate";
-            this.ActionAddUpdate.Size = new System.Drawing.Size(114, 39);
-            this.ActionAddUpdate.TabIndex = 25;
-            this.ActionAddUpdate.Text = "Add";
-            this.ActionAddUpdate.UseVisualStyleBackColor = false;
-            this.ActionAddUpdate.Click += new System.EventHandler(this.ActionAddUpdate_Click);
-            // 
-            // EditResetBtn
-            // 
-            this.EditResetBtn.BackColor = System.Drawing.Color.Gainsboro;
-            this.EditResetBtn.Enabled = false;
-            this.EditResetBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.EditResetBtn.ForeColor = System.Drawing.Color.Black;
-            this.EditResetBtn.Location = new System.Drawing.Point(325, 314);
-            this.EditResetBtn.Name = "EditResetBtn";
-            this.EditResetBtn.Size = new System.Drawing.Size(114, 39);
-            this.EditResetBtn.TabIndex = 24;
-            this.EditResetBtn.Text = "Reset";
-            this.EditResetBtn.UseVisualStyleBackColor = false;
-            this.EditResetBtn.Click += new System.EventHandler(this.EditResetBtn_Click);
-            // 
-            // button4
-            // 
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button4.Location = new System.Drawing.Point(472, 671);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(198, 58);
-            this.button4.TabIndex = 16;
-            this.button4.Text = "Back";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // button3
-            // 
-            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button3.Location = new System.Drawing.Point(444, 530);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(114, 39);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "Search";
-            this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // Addressbox
-            // 
-            this.Addressbox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.Addressbox.Location = new System.Drawing.Point(237, 271);
-            this.Addressbox.Multiline = true;
-            this.Addressbox.Name = "Addressbox";
-            this.Addressbox.Size = new System.Drawing.Size(320, 33);
-            this.Addressbox.TabIndex = 10;
-            // 
-            // PassBox
-            // 
-            this.PassBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.PassBox.Location = new System.Drawing.Point(237, 223);
-            this.PassBox.Multiline = true;
-            this.PassBox.Name = "PassBox";
-            this.PassBox.Size = new System.Drawing.Size(320, 33);
-            this.PassBox.TabIndex = 9;
-            // 
-            // MobileBox
-            // 
-            this.MobileBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.MobileBox.Location = new System.Drawing.Point(237, 177);
-            this.MobileBox.Multiline = true;
-            this.MobileBox.Name = "MobileBox";
-            this.MobileBox.Size = new System.Drawing.Size(320, 33);
-            this.MobileBox.TabIndex = 8;
-            // 
-            // NameBox
-            // 
-            this.NameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.NameBox.Location = new System.Drawing.Point(237, 131);
-            this.NameBox.Multiline = true;
-            this.NameBox.Name = "NameBox";
-            this.NameBox.Size = new System.Drawing.Size(320, 33);
-            this.NameBox.TabIndex = 6;
-            // 
-            // label6
-            // 
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label6.Location = new System.Drawing.Point(85, 271);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(100, 23);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "Address";
-            // 
-            // label5
-            // 
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label5.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label5.Location = new System.Drawing.Point(85, 223);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(110, 23);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Password";
-            // 
-            // label4
-            // 
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label4.Location = new System.Drawing.Point(85, 177);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(100, 23);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Mobile";
-            // 
-            // label2
-            // 
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label2.Location = new System.Drawing.Point(85, 131);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(100, 23);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Name";
-            // 
-            // label1
-            // 
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.label1.Location = new System.Drawing.Point(160, 27);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(397, 63);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Employee Management";
-            // 
-            // label8
-            // 
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label8.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label8.Location = new System.Drawing.Point(85, 450);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(140, 32);
-            this.label8.TabIndex = 18;
-            this.label8.Text = "Search Name";
-            // 
-            // SearchNameBox
-            // 
-            this.SearchNameBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.SearchNameBox.Location = new System.Drawing.Point(237, 450);
-            this.SearchNameBox.Multiline = true;
-            this.SearchNameBox.Name = "SearchNameBox";
-            this.SearchNameBox.Size = new System.Drawing.Size(320, 33);
-            this.SearchNameBox.TabIndex = 19;
-            // 
-            // label9
-            // 
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label9.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.label9.Location = new System.Drawing.Point(85, 490);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(150, 32);
-            this.label9.TabIndex = 20;
-            this.label9.Text = "Search Mobile";
-            // 
-            // SearchMobileBox
-            // 
-            this.SearchMobileBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.SearchMobileBox.Location = new System.Drawing.Point(237, 490);
-            this.SearchMobileBox.Multiline = true;
-            this.SearchMobileBox.Name = "SearchMobileBox";
-            this.SearchMobileBox.Size = new System.Drawing.Size(320, 33);
-            this.SearchMobileBox.TabIndex = 21;
-            // 
-            // button7
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold);
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(324, 530);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(114, 39);
-            this.button7.TabIndex = 22;
-            this.button7.Text = "Reset";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // IDBox
-            // 
-            this.IDBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.IDBox.Location = new System.Drawing.Point(237, 90);
-            this.IDBox.Multiline = true;
-            this.IDBox.Name = "IDBox";
-            this.IDBox.Size = new System.Drawing.Size(320, 33);
-            this.IDBox.TabIndex = 23;
-            this.IDBox.Visible = false;
+            this.Delete_Col.Width = 70;
             // 
             // EmployeeManage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.searchPanel);
+            this.Controls.Add(this.panelTop);
             this.Name = "EmployeeManage";
             this.Text = "EmployeeManage";
-            this.panel1.ResumeLayout(false);
+            this.panelTop.ResumeLayout(false);
+            this.searchPanel.ResumeLayout(false);
+            this.searchPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.ResumeLayout(false);
+
         }
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelTop;
+        private System.Windows.Forms.Button btnAddNew;
+        private System.Windows.Forms.Button btnToggleSearch;
+        private System.Windows.Forms.Panel searchPanel;
+        private System.Windows.Forms.Label lblName;
+        private System.Windows.Forms.TextBox txtSearchName;
+        private System.Windows.Forms.Label lblMobile;
+        private System.Windows.Forms.TextBox txtSearchMobile;
+        private System.Windows.Forms.Button btnDoSearch;
+        private System.Windows.Forms.Button btnResetSearch;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox Addressbox;
-        private System.Windows.Forms.TextBox PassBox;
-        private System.Windows.Forms.TextBox MobileBox;
-        private System.Windows.Forms.TextBox NameBox;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox SearchNameBox;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox SearchMobileBox;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.TextBox IDBox;
-        private System.Windows.Forms.Button ActionAddUpdate;
-        private System.Windows.Forms.Button EditResetBtn;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Name_Coloumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Mobile_Coloumn;

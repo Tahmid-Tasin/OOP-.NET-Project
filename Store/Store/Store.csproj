@@ -141,6 +141,8 @@
     <Compile Include="userinterface\CustomerView.Designer.cs">
       <DependentUpon>CustomerView.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\EmployeeEditForm.cs" />
+    <Compile Include="userinterface\EmployeeEditForm.Designer.cs" />
     <Compile Include="userinterface\EmployeeManage.cs">
       <SubType>Form</SubType>
     </Compile>
