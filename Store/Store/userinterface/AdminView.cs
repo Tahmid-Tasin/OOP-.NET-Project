@@ -85,7 +85,7 @@ namespace Store
 
         private void OutletBtn_Click(object sender, EventArgs e)
         {
-            // LoadContent(new OutletManageView());
+             LoadContent(new OutletManage());
         }
     }
 }
