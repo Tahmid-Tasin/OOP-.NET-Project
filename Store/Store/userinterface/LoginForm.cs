@@ -65,9 +65,14 @@ namespace Store
                 bool ok = _adminService.VerifyLogin(us, pa);
                 if (ok)
                 {
-                    MessageBox.Show("Login Successful");
+                    // Build a friendly display name if possible
+                    var admin = _adminService.GetByUserName(us);
+                    string displayName = admin != null
+                        ? $"{(admin.FirstName ?? "").Trim()} {(admin.LastName ?? "").Trim()}".Trim()
+                        : us;
+
                     this.Hide();
-                    AdminView cs = new AdminView();
+                    AdminView cs = new AdminView(displayName, "Admin");
                     cs.Show();
                 }
                 else

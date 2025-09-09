@@ -6,15 +6,28 @@ namespace Store
 {
     public partial class AdminView : Form
     {
-        public AdminView()
+        private readonly string _displayName;
+        private readonly string _role;
+
+        // Default (Designer support / fallback)
+        public AdminView() : this("Unknown", "User") { }
+
+        // Preferred: pass who logged in + role
+        public AdminView(string displayName, string role)
         {
+            _displayName = string.IsNullOrWhiteSpace(displayName) ? "Unknown" : displayName;
+            _role = string.IsNullOrWhiteSpace(role) ? "User" : role;
             InitializeComponent();
         }
 
         private void AdminView_Load(object sender, EventArgs e)
         {
-            // Optionally load a default page, e.g. Dashboard
-            LoadContent(new StockView()); 
+            // Header: only name and role, right-aligned
+            lblUserName.Text = _displayName;
+            lblUserRole.Text  = _role;
+
+            // Load a default page in the content panel (change if you like)
+            LoadContent(new StockView());
         }
 
         // Generic loader for child forms inside central panel
@@ -67,11 +80,12 @@ namespace Store
 
         private void label1_Click(object sender, EventArgs e)
         {
+            // Menu title clicked - optional
         }
 
         private void OutletBtn_Click(object sender, EventArgs e)
         {
-            LoadContent(new OutletManageView());
+            // LoadContent(new OutletManageView());
         }
     }
 }

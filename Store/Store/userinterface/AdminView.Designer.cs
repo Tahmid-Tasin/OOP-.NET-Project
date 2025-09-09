@@ -1,3 +1,5 @@
+using System.Drawing;
+
 namespace Store
 {
     partial class AdminView
@@ -24,11 +26,31 @@ namespace Store
             this.button6 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+
+            this.rightContainer = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
+            this.headerPanel = new System.Windows.Forms.Panel();
+
+            // Right header stack (name, role, icon)
+            this.userRightFlow = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblUserName = new System.Windows.Forms.Label();
+            this.lblUserRole = new System.Windows.Forms.Label();
+            this.headerIcon = new System.Windows.Forms.PictureBox();
+
             this.sideMenuPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.rightContainer.SuspendLayout();
+            this.headerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.headerIcon)).BeginInit();
             this.SuspendLayout();
+            // 
+            // AdminView (Form)
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1350, 729);
+            this.Name = "AdminView";
+            this.Text = "AdminView";
+            this.Load += new System.EventHandler(this.AdminView_Load);
             // 
             // sideMenuPanel
             // 
@@ -48,7 +70,7 @@ namespace Store
             this.sideMenuPanel.Size = new System.Drawing.Size(200, 729);
             this.sideMenuPanel.TabIndex = 1;
             // 
-            // label1
+            // label1 (Menu title)
             // 
             this.label1.Font = new System.Drawing.Font("Showcard Gothic", 16F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
@@ -115,41 +137,101 @@ namespace Store
             this.button1.Height = 50;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // pictureBox1
+            // rightContainer
             // 
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(1203, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(145, 113);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.rightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rightContainer.Location = new System.Drawing.Point(200, 0);
+            this.rightContainer.Name = "rightContainer";
+            this.rightContainer.Size = new System.Drawing.Size(1150, 729);
+            this.rightContainer.TabIndex = 2;
+            this.rightContainer.Controls.Add(this.contentPanel);
+            this.rightContainer.Controls.Add(this.headerPanel);
             // 
-            // contentPanel
+            // contentPanel (child-pages area)
             // 
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentPanel.Location = new System.Drawing.Point(200, 0);
+            this.contentPanel.Location = new System.Drawing.Point(0, 60);
             this.contentPanel.Name = "contentPanel";
-            this.contentPanel.Size = new System.Drawing.Size(1150, 729);
-            this.contentPanel.TabIndex = 3;
+            this.contentPanel.Size = new System.Drawing.Size(1150, 669);
+            this.contentPanel.TabIndex = 1;
             // 
-            // AdminView
+            // headerPanel
             // 
-            this.ClientSize = new System.Drawing.Size(1350, 729);
-            this.Controls.Add(this.contentPanel);
-            this.Controls.Add(this.pictureBox1);
+            this.headerPanel.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.headerPanel.Location = new System.Drawing.Point(0, 0);
+            this.headerPanel.Name = "headerPanel";
+            this.headerPanel.Size = new System.Drawing.Size(1150, 60);
+            this.headerPanel.TabIndex = 0;
+            this.headerPanel.Controls.Add(this.userRightFlow);
+            // 
+            // userRightFlow (holds Name, Role, Icon — right aligned)
+            // 
+            this.userRightFlow.AutoSize = true;
+            this.userRightFlow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userRightFlow.Dock = System.Windows.Forms.DockStyle.Right;
+            this.userRightFlow.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
+            this.userRightFlow.WrapContents = false;
+            this.userRightFlow.Padding = new System.Windows.Forms.Padding(0, 16, 12, 0);
+            this.userRightFlow.Location = new System.Drawing.Point(650, 0); // auto when docked
+            this.userRightFlow.Name = "userRightFlow";
+            this.userRightFlow.TabIndex = 0;
+            this.userRightFlow.Controls.Add(this.lblUserName);
+            this.userRightFlow.Controls.Add(this.lblUserRole);
+            this.userRightFlow.Controls.Add(this.headerIcon);
+            // 
+            // lblUserName (bold, right side)
+            // 
+            this.lblUserName.AutoSize = true;
+            this.lblUserName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblUserName.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            this.lblUserName.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.lblUserName.Name = "lblUserName";
+            this.lblUserName.Text = "Unknown";
+            // 
+            // lblUserRole (to the RIGHT of name)
+            // 
+            this.lblUserRole.AutoSize = true;
+            this.lblUserRole.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular);
+            this.lblUserRole.ForeColor = System.Drawing.Color.DimGray;
+            this.lblUserRole.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
+            this.lblUserRole.Name = "lblUserRole";
+            this.lblUserRole.Text = "User";
+            // 
+            // headerIcon (far right)
+            // 
+            this.headerIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.headerIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.headerIcon.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.headerIcon.Name = "headerIcon";
+            this.headerIcon.Size = new System.Drawing.Size(36, 36);
+            this.headerIcon.TabIndex = 1;
+            this.headerIcon.TabStop = false;
+            // 
+            // AdminView - add to Form
+            // 
+            this.Controls.Add(this.rightContainer);
             this.Controls.Add(this.sideMenuPanel);
-            this.Name = "AdminView";
-            this.Text = "AdminView";
-            this.Load += new System.EventHandler(this.AdminView_Load);
             this.sideMenuPanel.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.rightContainer.ResumeLayout(false);
+            this.headerPanel.ResumeLayout(false);
+            this.headerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.headerIcon)).EndInit();
             this.ResumeLayout(false);
         }
         #endregion
 
         private System.Windows.Forms.Panel sideMenuPanel;
+
+        private System.Windows.Forms.Panel rightContainer;
+        private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Panel contentPanel;
+
+        private System.Windows.Forms.FlowLayoutPanel userRightFlow;
+        private System.Windows.Forms.Label lblUserName;
+        private System.Windows.Forms.Label lblUserRole;
+        private System.Windows.Forms.PictureBox headerIcon;
+
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
@@ -158,7 +240,6 @@ namespace Store
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button OutletBtn;
     }
 }
