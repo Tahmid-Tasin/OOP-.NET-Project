@@ -3,94 +3,123 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Store.service;
-using Store.Repository;
+// using Store.Repository; // not needed here
 
 namespace Store.userinterface
 {
     public partial class ProductManageView : Form
     {
         private readonly ProductService _productService;
-        private readonly CategoryRepository _categoryRepo;
-        private string imagePath = null;
 
         public ProductManageView()
         {
             InitializeComponent();
             _productService = new ProductService();
-            _categoryRepo = new CategoryRepository();
 
-            LoadCategories();
+            // Top combo defaults to "Hide Filters"
+            cbFilterToggle.SelectedIndex = 0;
+
             LoadProducts();
-        }
-
-        private void LoadCategories()
-        {
-            var cats = _categoryRepo.GetAll();
-            CategoryBox.DataSource = cats;
-            CategoryBox.DisplayMember = "NAME";
-            CategoryBox.ValueMember = "ID";
         }
 
         private void LoadProducts()
         {
+            flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.Controls.Clear();
+
             var products = _productService.GetAll();
             foreach (var p in products)
             {
                 flowLayoutPanel1.Controls.Add(CreateCard(p));
             }
+            flowLayoutPanel1.ResumeLayout();
+            btnResetSearch.Visible = false; // only shows after searching
         }
 
-        private Panel CreateCard(Product p)
+        private Control CreateCard(Product p)
         {
             var card = new Panel
             {
-                Width = 200,
-                Height = 300,
+                Width = 220,
+                Height = 320,
                 BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(10)
+                Margin = new Padding(10),
+                BackColor = Color.White
             };
 
-            PictureBox pic = new PictureBox
+            var pic = new PictureBox
             {
-                Width = 180,
-                Height = 150,
-                Image = File.Exists(p.IMAGE_PATH) ? Image.FromFile(p.IMAGE_PATH) : null,
+                Width = 200,
+                Height = 160,
                 SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(10, 10)
+                Location = new Point(10, 10),
+                BorderStyle = BorderStyle.FixedSingle
             };
 
-            Label name = new Label
+            if (!string.IsNullOrWhiteSpace(p.IMAGE_PATH) && File.Exists(p.IMAGE_PATH))
+            {
+                // Load without locking source file
+                try
+                {
+                    using (var fs = new FileStream(p.IMAGE_PATH, FileMode.Open, FileAccess.Read))
+                    {
+                        pic.Image = new Bitmap(fs);
+                    }
+                }
+                catch
+                {
+                    pic.Image = null;
+                }
+            }
+
+            var name = new Label
             {
                 Text = p.NAME,
                 AutoSize = false,
-                Width = 180,
-                Height = 25,
+                Width = 200,
+                Height = 24,
                 TextAlign = ContentAlignment.MiddleCenter,
-                Location = new Point(10, 170)
+                Location = new Point(10, 180),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
             };
 
-            Label price = new Label
+            var price = new Label
             {
                 Text = $"৳ {p.PRICE}",
                 AutoSize = false,
-                Width = 180,
-                Height = 25,
-                ForeColor = Color.Green,
-                Font = new Font("Arial", 10, FontStyle.Bold),
+                Width = 200,
+                Height = 22,
+                ForeColor = Color.ForestGreen,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 TextAlign = ContentAlignment.MiddleCenter,
-                Location = new Point(10, 200)
+                Location = new Point(10, 206)
             };
 
-            Button viewBtn = new Button { Text = "View", Location = new Point(10, 240), Width = 55 };
-            Button editBtn = new Button { Text = "Edit", Location = new Point(70, 240), Width = 55 };
-            Button delBtn = new Button { Text = "Delete", Location = new Point(130, 240), Width = 55 };
+            var viewBtn = new Button { Text = "View", Location = new Point(10, 245), Width = 60 };
+            var editBtn = new Button { Text = "Edit", Location = new Point(80, 245), Width = 60 };
+            var delBtn  = new Button { Text = "Delete", Location = new Point(150, 245), Width = 60 };
 
-            viewBtn.Click += (s, e) => MessageBox.Show($"{p.NAME}\n৳{p.PRICE}\nBrand: {p.BRAND}");
-            editBtn.Click += (s, e) => EditProduct(p);
+            viewBtn.Click += (s, e) =>
+            {
+                MessageBox.Show($"{p.NAME}\n৳{p.PRICE}\nBrand: {p.BRAND}", "Product");
+            };
+
+            // EDIT → open ProductEditForm with existing product
+            editBtn.Click += (s, e) =>
+            {
+                using (var dlg = new ProductEditForm(p))
+                {
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        LoadProducts();
+                    }
+                }
+            };
+
             delBtn.Click += (s, e) =>
             {
-                if (MessageBox.Show("Delete this product?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Delete this product?", "Confirm",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     _productService.Delete(p.ID);
                     LoadProducts();
@@ -107,100 +136,20 @@ namespace Store.userinterface
             return card;
         }
 
-        private void UploadImageBtn_Click(object sender, EventArgs e)
+        private void cbFilterToggle_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var ofd = new OpenFileDialog
-            {
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif"
-            };
-
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string dir = Path.Combine(appData, "SuperShop", "Images");
-                Directory.CreateDirectory(dir);
-
-                string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(ofd.FileName);
-                string destPath = Path.Combine(dir, newFileName);
-
-                File.Copy(ofd.FileName, destPath, true);
-                imagePath = destPath;
-
-                using (var fs = new FileStream(destPath, FileMode.Open, FileAccess.Read))
-                {
-                    ProductPicture.Image = new Bitmap(fs);
-                }
-            }
+            // 0 = Hide Filters, 1 = Show Filters
+            bool show = cbFilterToggle.SelectedIndex == 1;
+            filterPanel.Visible = show;
         }
 
-        private void SaveProductBtn_Click(object sender, EventArgs e)
+        private void btnSearch_Click(object sender, EventArgs e)
         {
-            var p = new Product
-            {
-                NAME = NameBox.Text,
-                CATEGORY_ID = Convert.ToInt32(CategoryBox.SelectedValue),
-                BRAND = BrandBox.Text,
-                DESCRIPTION = DescriptionBox.Text,
-                PRICE = decimal.Parse(PriceBox.Text),
-                BARCODE = BarcodeBox.Text,
-                IMAGE_PATH = imagePath,
-                IS_ACTIVE = true
-            };
+            string name = txtSearchName.Text.Trim();
+            string brand = txtSearchBrand.Text.Trim();
+            string barcode = txtSearchBarcode.Text.Trim();
 
-            if (string.IsNullOrEmpty(IDBox.Text))
-            {
-                _productService.Register(p);
-            }
-            else
-            {
-                p.ID = int.Parse(IDBox.Text);
-                _productService.Update(p);
-            }
-
-            LoadProducts();
-            ResetForm();
-        }
-
-        private void EditProduct(Product p)
-        {
-            IDBox.Text = p.ID.ToString();
-            NameBox.Text = p.NAME;
-            BrandBox.Text = p.BRAND;
-            DescriptionBox.Text = p.DESCRIPTION;
-            PriceBox.Text = p.PRICE.ToString();
-            BarcodeBox.Text = p.BARCODE;
-            imagePath = p.IMAGE_PATH;
-
-            if (File.Exists(p.IMAGE_PATH))
-                ProductPicture.Image = Image.FromFile(p.IMAGE_PATH);
-
-            SaveProductBtn.Text = "Update";
-        }
-
-        private void ResetForm()
-        {
-            IDBox.Text = "";
-            NameBox.Text = "";
-            BrandBox.Text = "";
-            DescriptionBox.Text = "";
-            PriceBox.Text = "";
-            BarcodeBox.Text = "";
-            imagePath = null;
-            ProductPicture.Image = null;
-            SaveProductBtn.Text = "Save";
-        }
-
-        private void ResetBtn_Click(object sender, EventArgs e)
-        {
-            ResetForm();
-        }
-
-        private void SearchBtn_Click(object sender, EventArgs e)
-        {
-            string name = SearchNameBox.Text.Trim();
-            string brand = SearchBrandBox.Text.Trim();
-            string barcode = SearchBarcodeBox.Text.Trim();
-
+            // Run search (null for empty to let service ignore)
             var list = _productService.Search(
                 string.IsNullOrEmpty(name) ? null : name,
                 string.IsNullOrEmpty(brand) ? null : brand,
@@ -208,26 +157,42 @@ namespace Store.userinterface
                 null, null, null
             );
 
+            flowLayoutPanel1.SuspendLayout();
             flowLayoutPanel1.Controls.Clear();
             foreach (var p in list)
             {
                 flowLayoutPanel1.Controls.Add(CreateCard(p));
             }
+            flowLayoutPanel1.ResumeLayout();
+
+            btnResetSearch.Visible = true;
         }
 
-        private void SearchResetBtn_Click(object sender, EventArgs e)
+        private void btnResetSearch_Click(object sender, EventArgs e)
         {
-            SearchNameBox.Text = "";
-            SearchBrandBox.Text = "";
-            SearchBarcodeBox.Text = "";
+            txtSearchName.Text = "";
+            txtSearchBrand.Text = "";
+            txtSearchBarcode.Text = "";
             LoadProducts();
+        }
+
+        private void btnAddNew_Click(object sender, EventArgs e)
+        {
+            // ADD → open empty ProductEditForm
+            using (var dlg = new ProductEditForm())
+            {
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadProducts();
+                }
+            }
         }
 
         private void backToHomePage(object sender, EventArgs e)
         {
             var adm = new AdminView();
             adm.Show();
-            Visible = false;
+            this.Visible = false;
         }
     }
 }

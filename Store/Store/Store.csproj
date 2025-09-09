@@ -163,6 +163,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="userinterface\OutletManageView.Designer.cs" />
+    <Compile Include="userinterface\ProductEditForm.cs" />
+    <Compile Include="userinterface\ProductEditForm.Designer.cs" />
     <Compile Include="userinterface\ProductManageView.cs">
       <SubType>Form</SubType>
     </Compile>
