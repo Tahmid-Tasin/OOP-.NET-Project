@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text;
@@ -13,80 +14,101 @@ namespace Store.Repository
             _factory = new SqlConnectionFactory();
         }
 
+        // ✅ Insert new employee
         public int Insert(Employee e)
         {
-            string sql = @"INSERT INTO dbo.employee (name, mobile, password, address)
-                           VALUES (@nm, @mo, @pw, @ad);";
+            string sql = @"INSERT INTO dbo.employee (name, mobile, email, password, address, outlet_id)
+                           VALUES (@nm, @mo, @em, @pw, @ad, @outletId);";
 
-            SqlConnection con = _factory.Create();
-            SqlCommand cmd = new SqlCommand(sql, con);
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@nm", e.NAME ?? "");
+                cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
+                cmd.Parameters.AddWithValue("@em", e.EMAIL ?? "");
+                cmd.Parameters.AddWithValue("@pw", e.PASSWORD ?? "");
+                cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
+                cmd.Parameters.AddWithValue("@outletId", (object)e.OutletId ?? DBNull.Value);
 
-            cmd.Parameters.AddWithValue("@nm", e.NAME ?? "");
-            cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
-            cmd.Parameters.AddWithValue("@pw", e.PASSWORD ?? "");
-            cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
-
-            con.Open();
-            int rows = cmd.ExecuteNonQuery();
-            con.Close();
-
-            return rows;
+                con.Open();
+                return cmd.ExecuteNonQuery();
+            }
         }
 
+        // ✅ Get single employee by ID
         public Employee Get(int id)
         {
-            string sql = @"SELECT TOP 1 id, name, mobile, password, address
-                           FROM dbo.employee
-                           WHERE id = @id;";
+            string sql = @"
+                SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.outlet_id,
+                       o.id AS OutletId, o.name AS OutletName, o.address_line1, o.city
+                FROM dbo.employee e
+                LEFT JOIN dbo.outlet o ON e.outlet_id = o.id
+                WHERE e.id = @id;";
 
-            SqlConnection con = _factory.Create();
-            SqlCommand cmd = new SqlCommand(sql, con);
-            cmd.Parameters.AddWithValue("@id", id);
-
-            con.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-
-            Employee emp = null;
-            if (rd.Read())
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
             {
-                emp = new Employee
+                cmd.Parameters.AddWithValue("@id", id);
+                con.Open();
+
+                using (SqlDataReader rd = cmd.ExecuteReader())
                 {
-                    ID = (int)rd["id"],
-                    NAME = rd["name"].ToString(),
-                    MOBILE = rd["mobile"].ToString(),
-                    PASSWORD = rd["password"].ToString(),
-                    ADDRESS = rd["address"].ToString()
-                };
+                    if (rd.Read())
+                    {
+                        return new Employee
+                        {
+                            ID = (int)rd["id"],
+                            NAME = rd["name"].ToString(),
+                            MOBILE = rd["mobile"].ToString(),
+                            EMAIL = rd["email"].ToString(),
+                            PASSWORD = rd["password"].ToString(),
+                            ADDRESS = rd["address"].ToString(),
+                            OutletId = rd["outlet_id"] as int?,
+                            Outlet = rd["OutletId"] != DBNull.Value ? new Outlet
+                            {
+                                Id = (int)rd["OutletId"],
+                                Name = rd["OutletName"].ToString(),
+                                AddressLine1 = rd["address_line1"].ToString(),
+                                City = rd["city"].ToString()
+                            } : null
+                        };
+                    }
+                }
             }
 
-            con.Close();
-            return emp;
+            return null;
         }
 
-        public bool Verify(string mobile, string password)
+        // ✅ Verify login (email + password)
+        public bool Verify(string email, string password)
         {
             string sql = @"SELECT 1
                            FROM dbo.employee
-                           WHERE mobile = @mo AND password = @pw;";
+                           WHERE email = @em AND password = @pw;";
 
-            SqlConnection con = _factory.Create();
-            SqlCommand cmd = new SqlCommand(sql, con);
-            cmd.Parameters.AddWithValue("@mo", mobile);
-            cmd.Parameters.AddWithValue("@pw", password);
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@em", email);
+                cmd.Parameters.AddWithValue("@pw", password);
 
-            con.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-            bool ok = rd.Read();
-            con.Close();
-
-            return ok;
+                con.Open();
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    return rd.Read();
+                }
+            }
         }
 
+        // ✅ Get all employees
         public List<Employee> GetAll()
         {
-            const string sql = @"SELECT id, name, mobile, address
-                                 FROM dbo.employee
-                                 ORDER BY id DESC;";
+            const string sql = @"
+                SELECT e.id, e.name, e.mobile, e.email, e.address, e.outlet_id,
+                       o.id AS OutletId, o.name AS OutletName, o.address_line1, o.city
+                FROM dbo.employee e
+                LEFT JOIN dbo.outlet o ON e.outlet_id = o.id
+                ORDER BY e.id DESC;";
 
             var list = new List<Employee>();
 
@@ -103,7 +125,16 @@ namespace Store.Repository
                             ID = (int)rd["id"],
                             NAME = rd["name"].ToString(),
                             MOBILE = rd["mobile"].ToString(),
-                            ADDRESS = rd["address"].ToString()
+                            EMAIL = rd["email"].ToString(),
+                            ADDRESS = rd["address"].ToString(),
+                            OutletId = rd["outlet_id"] as int?,
+                            Outlet = rd["OutletId"] != DBNull.Value ? new Outlet
+                            {
+                                Id = (int)rd["OutletId"],
+                                Name = rd["OutletName"].ToString(),
+                                AddressLine1 = rd["address_line1"].ToString(),
+                                City = rd["city"].ToString()
+                            } : null
                         });
                     }
                 }
@@ -112,13 +143,17 @@ namespace Store.Repository
             return list;
         }
 
-        public List<Employee> Search(string namePart, string mobilePart)
+        // ✅ Search employees by name, mobile, or outlet
+        public List<Employee> Search(string namePart, string mobilePart, int? outletId = null)
         {
             var results = new List<Employee>();
             var sb = new StringBuilder();
-            sb.Append(@"SELECT id, name, mobile, address
-                        FROM dbo.employee
-                        WHERE 1=1 ");
+            sb.Append(@"
+                SELECT e.id, e.name, e.mobile, e.email, e.address, e.outlet_id,
+                       o.id AS OutletId, o.name AS OutletName, o.address_line1, o.city
+                FROM dbo.employee e
+                LEFT JOIN dbo.outlet o ON e.outlet_id = o.id
+                WHERE 1=1 ");
 
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand())
@@ -127,17 +162,23 @@ namespace Store.Repository
 
                 if (!string.IsNullOrWhiteSpace(namePart))
                 {
-                    sb.Append(" AND name LIKE @nm ");
+                    sb.Append(" AND e.name LIKE @nm ");
                     cmd.Parameters.AddWithValue("@nm", "%" + namePart + "%");
                 }
 
                 if (!string.IsNullOrWhiteSpace(mobilePart))
                 {
-                    sb.Append(" AND mobile LIKE @mo ");
+                    sb.Append(" AND e.mobile LIKE @mo ");
                     cmd.Parameters.AddWithValue("@mo", "%" + mobilePart + "%");
                 }
 
-                sb.Append(" ORDER BY id DESC;");
+                if (outletId.HasValue)
+                {
+                    sb.Append(" AND e.outlet_id = @outletId ");
+                    cmd.Parameters.AddWithValue("@outletId", outletId.Value);
+                }
+
+                sb.Append(" ORDER BY e.id DESC;");
                 cmd.CommandText = sb.ToString();
 
                 con.Open();
@@ -150,7 +191,16 @@ namespace Store.Repository
                             ID = (int)rd["id"],
                             NAME = rd["name"].ToString(),
                             MOBILE = rd["mobile"].ToString(),
-                            ADDRESS = rd["address"].ToString()
+                            EMAIL = rd["email"].ToString(),
+                            ADDRESS = rd["address"].ToString(),
+                            OutletId = rd["outlet_id"] as int?,
+                            Outlet = rd["OutletId"] != DBNull.Value ? new Outlet
+                            {
+                                Id = (int)rd["OutletId"],
+                                Name = rd["OutletName"].ToString(),
+                                AddressLine1 = rd["address_line1"].ToString(),
+                                City = rd["city"].ToString()
+                            } : null
                         });
                     }
                 }
@@ -158,12 +208,13 @@ namespace Store.Repository
 
             return results;
         }
-        
+
+        // ✅ Update employee (without changing password)
         public int UpdateNoPassword(Employee e)
         {
             const string sql = @"
                 UPDATE dbo.employee
-                SET name = @nm, mobile = @mo, address = @ad
+                SET name = @nm, mobile = @mo, email = @em, address = @ad, outlet_id = @outletId
                 WHERE id = @id;";
 
             using (SqlConnection con = _factory.Create())
@@ -171,7 +222,9 @@ namespace Store.Repository
             {
                 cmd.Parameters.AddWithValue("@nm", e.NAME ?? "");
                 cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
+                cmd.Parameters.AddWithValue("@em", e.EMAIL ?? "");
                 cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
+                cmd.Parameters.AddWithValue("@outletId", (object)e.OutletId ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@id", e.ID);
 
                 con.Open();
@@ -179,6 +232,7 @@ namespace Store.Repository
             }
         }
 
+        // ✅ Delete employee
         public int Delete(int id)
         {
             const string sql = @"DELETE FROM dbo.employee WHERE id = @id;";

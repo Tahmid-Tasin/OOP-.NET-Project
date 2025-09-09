@@ -1,13 +1,16 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using Store.service; // assumes Employee & EmployeeService live here
+using Store.service;
 
 namespace Store.userinterface
 {
     public partial class EmployeeEditForm : Form
     {
-        private readonly EmployeeService _service;
+        private readonly EmployeeService _employeeService;
+        private readonly OutletService _outletService;
+        private readonly EmailSender _emailSender;
+
         private readonly bool _isEdit;
         private readonly int _editId;
 
@@ -18,45 +21,81 @@ namespace Store.userinterface
         public EmployeeEditForm(Employee existing)
         {
             InitializeComponent();
-            _service = new EmployeeService();
+
+            _employeeService = new EmployeeService();
+            _outletService   = new OutletService();
+            _emailSender     = new EmailSender();
+
+            // Load outlets immediately
+            LoadOutlets();
 
             if (existing == null)
             {
                 _isEdit = false;
                 lblTitle.Text = "Add Employee";
-                btnSave.Text = "Save";
-                PassBox.Enabled = true; // required in Add
+                btnSave.Text  = "Save";
+                PassBox.Enabled = true;
             }
             else
             {
                 _isEdit = true;
                 _editId = existing.ID;
                 lblTitle.Text = "Edit Employee";
-                btnSave.Text = "Update";
+                btnSave.Text  = "Update";
 
-                NameBox.Text = existing.NAME;
+                NameBox.Text   = existing.NAME;
                 MobileBox.Text = existing.MOBILE;
+                EmailBox.Text  = existing.EMAIL;
                 AddressBox.Text = existing.ADDRESS;
 
+                if (existing.OutletId.HasValue)
+                    OutletCombo.SelectedValue = existing.OutletId.Value;
+
                 PassBox.Text = "";
-                PassBox.Enabled = false; // password change not handled here
+                PassBox.Enabled = false; // not changing password here
             }
+        }
+
+        private void EmployeeEditForm_Shown(object sender, EventArgs e)
+        {
+            // Make sure nothing is overlaying and first field gets focus
+            NameBox.BringToFront();
+            MobileBox.BringToFront();
+            EmailBox.BringToFront();
+            PassBox.BringToFront();
+            AddressBox.BringToFront();
+            OutletCombo.BringToFront();
+            btnSave.BringToFront();
+            btnCancel.BringToFront();
+
+            ActiveControl = NameBox;
+            NameBox.Focus();
+        }
+
+        private void LoadOutlets()
+        {
+            var outlets = _outletService.GetAll();
+            OutletCombo.DataSource = outlets;
+            OutletCombo.DisplayMember = "Name";
+            OutletCombo.ValueMember   = "Id";
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            var name = (NameBox.Text ?? "").Trim();
-            var mobile = (MobileBox.Text ?? "").Trim();
+            var name     = (NameBox.Text   ?? "").Trim();
+            var mobile   = (MobileBox.Text ?? "").Trim();
+            var email    = (EmailBox.Text  ?? "").Trim();
             var password = PassBox.Text ?? "";
-            var address = (AddressBox.Text ?? "").Trim();
+            var address  = (AddressBox.Text ?? "").Trim();
+            var outletId = (int?)OutletCombo.SelectedValue;
 
-            if (!ValidateInputs(name, mobile, password, out string err))
+            if (!ValidateInputs(name, mobile, email, password, out string err))
             {
                 MessageBox.Show(err, "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -68,15 +107,40 @@ namespace Store.userinterface
                 {
                     NAME = name,
                     MOBILE = mobile,
+                    EMAIL = email,
                     PASSWORD = password,
-                    ADDRESS = address
+                    ADDRESS = address,
+                    OutletId = outletId
                 };
 
-                var rows = _service.Register(emp);
+                var rows = _employeeService.Register(emp);
                 if (rows > 0)
                 {
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    try
+                    {
+                        var subject = "Welcome to KENO Bangladesh";
+                        var body =
+$@"Dear {name},
+
+Your employee account has been created.
+
+Email   : {email}
+Password: {password}
+
+Please keep your credentials safe.
+
+Regards,
+KENO Team";
+                        _emailSender.Send(email, subject, body);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Employee created, but failed to send email: " + ex.Message,
+                                        "Email Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
                 else
                 {
@@ -90,14 +154,16 @@ namespace Store.userinterface
                     ID = _editId,
                     NAME = name,
                     MOBILE = mobile,
-                    ADDRESS = address
+                    EMAIL = email,
+                    ADDRESS = address,
+                    OutletId = outletId
                 };
 
-                var rows = _service.Update(emp);
+                var rows = _employeeService.Update(emp);
                 if (rows > 0)
                 {
-                    this.DialogResult = DialogResult.OK;
-                    this.Close();
+                    DialogResult = DialogResult.OK;
+                    Close();
                 }
                 else
                 {
@@ -106,34 +172,39 @@ namespace Store.userinterface
             }
         }
 
-        private bool ValidateInputs(string name, string mobile, string password, out string error)
+        private bool ValidateInputs(string name, string mobile, string email, string password, out string error)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                error = "Name is required.";
-                return false;
+                error = "Name is required."; return false;
             }
 
             if (string.IsNullOrWhiteSpace(mobile))
             {
-                error = "Mobile is required.";
-                return false;
+                error = "Mobile is required."; return false;
             }
 
-            // Only digits, 6–15 long (tweak as you wish)
             if (!Regex.IsMatch(mobile, @"^\d{6,15}$"))
             {
-                error = "Mobile must be 6–15 digits.";
-                return false;
+                error = "Mobile must be 6–15 digits."; return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                error = "Valid email is required."; return false;
             }
 
             if (!_isEdit)
             {
                 if (string.IsNullOrWhiteSpace(password) || password.Length < 4)
                 {
-                    error = "Password is required for new employee (min 4 characters).";
-                    return false;
+                    error = "Password is required for new employee (min 4 characters)."; return false;
                 }
+            }
+
+            if (OutletCombo.SelectedValue == null)
+            {
+                error = "Please select an outlet."; return false;
             }
 
             error = null;

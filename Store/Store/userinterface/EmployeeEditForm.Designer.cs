@@ -1,10 +1,35 @@
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Store.userinterface
 {
     partial class EmployeeEditForm
     {
         private System.ComponentModel.IContainer components = null;
+
+        private Panel contentPanel;
+        private Label lblTitle;
+
+        private Label labelName;
+        private TextBox NameBox;
+
+        private Label labelMobile;
+        private TextBox MobileBox;
+
+        private Label labelEmail;
+        private TextBox EmailBox;
+
+        private Label labelPassword;
+        private TextBox PassBox;
+
+        private Label labelAddress;
+        private TextBox AddressBox;
+
+        private Label labelOutlet;
+        private ComboBox OutletCombo;
+
+        private Button btnSave;
+        private Button btnCancel;
 
         protected override void Dispose(bool disposing)
         {
@@ -15,138 +40,171 @@ namespace Store.userinterface
         #region Windows Form Designer generated code
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+
+            this.contentPanel = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+
+            this.labelName = new System.Windows.Forms.Label();
             this.NameBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+
+            this.labelMobile = new System.Windows.Forms.Label();
             this.MobileBox = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+
+            this.labelEmail = new System.Windows.Forms.Label();
+            this.EmailBox = new System.Windows.Forms.TextBox();
+
+            this.labelPassword = new System.Windows.Forms.Label();
             this.PassBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+
+            this.labelAddress = new System.Windows.Forms.Label();
             this.AddressBox = new System.Windows.Forms.TextBox();
+
+            this.labelOutlet = new System.Windows.Forms.Label();
+            this.OutletCombo = new System.Windows.Forms.ComboBox();
+
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
 
             this.SuspendLayout();
             // 
-            // EmployeeEditForm (Form)
+            // contentPanel (single focusable container to avoid overlays)
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(520, 360);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximizeBox = false;
-            this.MinimizeBox = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Employee";
+            this.contentPanel.BackColor = Color.WhiteSmoke;
+            this.contentPanel.Location = new Point(0, 0);
+            this.contentPanel.Name = "contentPanel";
+            this.contentPanel.Size = new Size(540, 400);
+            this.contentPanel.TabIndex = 0;
+            this.contentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
             // 
             // lblTitle
             // 
-            this.lblTitle.Text = "Employee";
+            this.lblTitle.Text = "Add Employee";
             this.lblTitle.Font = new Font("Microsoft Sans Serif", 18F, FontStyle.Bold);
             this.lblTitle.ForeColor = Color.FromArgb(175, 76, 15);
-            this.lblTitle.Location = new Point(20, 15);
+            this.lblTitle.Location = new Point(20, 18);
             this.lblTitle.AutoSize = true;
+            this.lblTitle.TabIndex = 0;
             // 
-            // label2 (Name)
+            // Name
             // 
-            this.label2.Text = "Name";
-            this.label2.Location = new Point(22, 70);
-            this.label2.Size = new Size(80, 20);
+            this.labelName.Text = "Name";
+            this.labelName.Location = new Point(24, 70);
+            this.labelName.Size = new Size(80, 18);
+            this.labelName.TabIndex = 1;
+
+            this.NameBox.Location = new Point(120, 68);
+            this.NameBox.Size = new Size(380, 22);
+            this.NameBox.TabIndex = 2;
             // 
-            // NameBox
+            // Mobile
             // 
-            this.NameBox.Location = new Point(110, 68);
-            this.NameBox.Size = new Size(370, 22);
-            this.NameBox.TabIndex = 0;
+            this.labelMobile.Text = "Mobile";
+            this.labelMobile.Location = new Point(24, 102);
+            this.labelMobile.Size = new Size(80, 18);
+            this.labelMobile.TabIndex = 3;
+
+            this.MobileBox.Location = new Point(120, 100);
+            this.MobileBox.Size = new Size(380, 22);
+            this.MobileBox.TabIndex = 4;
             // 
-            // label4 (Mobile)
+            // Email
             // 
-            this.label4.Text = "Mobile";
-            this.label4.Location = new Point(22, 105);
-            this.label4.Size = new Size(80, 20);
+            this.labelEmail.Text = "Email";
+            this.labelEmail.Location = new Point(24, 134);
+            this.labelEmail.Size = new Size(80, 18);
+            this.labelEmail.TabIndex = 5;
+
+            this.EmailBox.Location = new Point(120, 132);
+            this.EmailBox.Size = new Size(380, 22);
+            this.EmailBox.TabIndex = 6;
             // 
-            // MobileBox
+            // Password
             // 
-            this.MobileBox.Location = new Point(110, 103);
-            this.MobileBox.Size = new Size(370, 22);
-            this.MobileBox.TabIndex = 1;
-            // 
-            // label5 (Password)
-            // 
-            this.label5.Text = "Password";
-            this.label5.Location = new Point(22, 140);
-            this.label5.Size = new Size(80, 20);
-            // 
-            // PassBox
-            // 
-            this.PassBox.Location = new Point(110, 138);
-            this.PassBox.Size = new Size(370, 22);
-            this.PassBox.TabIndex = 2;
+            this.labelPassword.Text = "Password";
+            this.labelPassword.Location = new Point(24, 166);
+            this.labelPassword.Size = new Size(80, 18);
+            this.labelPassword.TabIndex = 7;
+
+            this.PassBox.Location = new Point(120, 164);
+            this.PassBox.Size = new Size(380, 22);
             this.PassBox.UseSystemPasswordChar = true;
+            this.PassBox.TabIndex = 8;
             // 
-            // label6 (Address)
+            // Address
             // 
-            this.label6.Text = "Address";
-            this.label6.Location = new Point(22, 175);
-            this.label6.Size = new Size(80, 20);
-            // 
-            // AddressBox
-            // 
-            this.AddressBox.Location = new Point(110, 173);
-            this.AddressBox.Size = new Size(370, 60);
+            this.labelAddress.Text = "Address";
+            this.labelAddress.Location = new Point(24, 198);
+            this.labelAddress.Size = new Size(80, 18);
+            this.labelAddress.TabIndex = 9;
+
+            this.AddressBox.Location = new Point(120, 196);
+            this.AddressBox.Size = new Size(380, 60);
             this.AddressBox.Multiline = true;
-            this.AddressBox.TabIndex = 3;
+            this.AddressBox.TabIndex = 10;
             // 
-            // btnSave
+            // Outlet
+            // 
+            this.labelOutlet.Text = "Outlet";
+            this.labelOutlet.Location = new Point(24, 266);
+            this.labelOutlet.Size = new Size(80, 18);
+            this.labelOutlet.TabIndex = 11;
+
+            this.OutletCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.OutletCombo.Location = new Point(120, 264);
+            this.OutletCombo.Size = new Size(380, 24);
+            this.OutletCombo.TabIndex = 12;
+            // 
+            // Buttons
             // 
             this.btnSave.Text = "Save";
-            this.btnSave.Location = new Point(290, 260);
+            this.btnSave.Location = new Point(310, 310);
             this.btnSave.Size = new Size(90, 30);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 13;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnCancel
-            // 
+
             this.btnCancel.Text = "Cancel";
-            this.btnCancel.Location = new Point(390, 260);
+            this.btnCancel.Location = new Point(410, 310);
             this.btnCancel.Size = new Size(90, 30);
-            this.btnCancel.TabIndex = 5;
+            this.btnCancel.TabIndex = 14;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
 
-            // Add controls
-            this.Controls.Add(this.lblTitle);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.NameBox);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.MobileBox);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.PassBox);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.AddressBox);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.btnCancel);
+            // Add controls to contentPanel (ensures correct z-order)
+            this.contentPanel.Controls.Add(this.lblTitle);
+            this.contentPanel.Controls.Add(this.labelName);
+            this.contentPanel.Controls.Add(this.NameBox);
+            this.contentPanel.Controls.Add(this.labelMobile);
+            this.contentPanel.Controls.Add(this.MobileBox);
+            this.contentPanel.Controls.Add(this.labelEmail);
+            this.contentPanel.Controls.Add(this.EmailBox);
+            this.contentPanel.Controls.Add(this.labelPassword);
+            this.contentPanel.Controls.Add(this.PassBox);
+            this.contentPanel.Controls.Add(this.labelAddress);
+            this.contentPanel.Controls.Add(this.AddressBox);
+            this.contentPanel.Controls.Add(this.labelOutlet);
+            this.contentPanel.Controls.Add(this.OutletCombo);
+            this.contentPanel.Controls.Add(this.btnSave);
+            this.contentPanel.Controls.Add(this.btnCancel);
 
-            // Must be set after buttons exist
+            // Form
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = AutoScaleMode.Font;
+            this.BackColor = Color.White;
+            this.ClientSize = new Size(540, 400);
+            this.Controls.Add(this.contentPanel);
+            this.FormBorderStyle = FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.StartPosition = FormStartPosition.CenterParent;
+            this.Text = "Employee";
+            this.Shown += new System.EventHandler(this.EmployeeEditForm_Shown);
+
+            // make Enter submit, Esc cancel
             this.AcceptButton = this.btnSave;
             this.CancelButton = this.btnCancel;
 
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
         #endregion
-
-        private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox NameBox;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox MobileBox;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox PassBox;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox AddressBox;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.Button btnCancel;
     }
 }
