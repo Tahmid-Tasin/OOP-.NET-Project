@@ -9,16 +9,18 @@ namespace Store
         private readonly string _displayName;
         private readonly string _role;
         private readonly string _companyName;
+        private readonly int _companyId;   // 👈 link to manager's company
 
         // Default fallback
-        public AdminView() : this("Unknown", "User", "") { }
+        public AdminView() : this("Unknown", "User", "", 0) { }
 
-        // Pass: display name, role, company
-        public AdminView(string displayName, string role, string companyName = "")
+        // Pass: display name, role, company name, company id
+        public AdminView(string displayName, string role, string companyName = "", int companyId = 0)
         {
             _displayName = string.IsNullOrWhiteSpace(displayName) ? "Unknown" : displayName;
             _role = string.IsNullOrWhiteSpace(role) ? "User" : role;
             _companyName = companyName ?? "";
+            _companyId = companyId;
 
             InitializeComponent();
         }
@@ -43,22 +45,24 @@ namespace Store
                 EmployeeBtn.Visible = true;  // Managers
                 button7.Visible = true;      // Products
 
-                // Hide Stock + Review
-                button5.Visible = false;     // Stock
-                button6.Visible = false;     // Review
+                // Hide Stock + Review + Branch
+                button5.Visible = false;
+                button6.Visible = false;
+                BranchBtn.Visible = false;
 
-                // Default page for admin → Dashboard
-                button4.PerformClick();
+                button4.PerformClick(); // Default → Dashboard
             }
             else if (_role == "Company Manager")
             {
-                // Company Managers only see Stock
+                // Company Managers see Stock + Branch
                 button4.Visible = false;
                 CompanyBtn.Visible = false;
                 EmployeeBtn.Visible = false;
                 button7.Visible = false;
                 button6.Visible = false;
-                button5.Visible = true;      // Stock only
+
+                button5.Visible = true;      // Stock
+                BranchBtn.Visible = true;    // Branches
 
                 button5.PerformClick(); // Default → Stock
             }
@@ -70,8 +74,9 @@ namespace Store
                 EmployeeBtn.Visible = false;
                 button7.Visible = false;
                 button6.Visible = false;
-                button5.Visible = true;
+                BranchBtn.Visible = false;
 
+                button5.Visible = true;
                 button5.PerformClick();
             }
         }
@@ -92,6 +97,12 @@ namespace Store
         private void button5_Click(object sender, EventArgs e) => LoadContent(new StockView());
         private void button4_Click(object sender, EventArgs e) => MessageBox.Show("Dashboard placeholder.");
         private void button2_Click(object sender, EventArgs e) => MessageBox.Show("VIP Customers module not implemented yet.");
+
+        private void BranchBtn_Click(object sender, EventArgs e)
+        {
+            // Pass companyId into BranchManage
+            LoadContent(new BranchManage(_companyId));
+        }
 
         private void button1_Click(object sender, EventArgs e) // Logout
         {

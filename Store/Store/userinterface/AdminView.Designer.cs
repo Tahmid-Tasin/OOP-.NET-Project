@@ -26,6 +26,7 @@ namespace Store
             this.button6 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.BranchBtn = new System.Windows.Forms.Button();
 
             this.rightContainer = new System.Windows.Forms.Panel();
             this.contentPanel = new System.Windows.Forms.Panel();
@@ -65,6 +66,7 @@ namespace Store
             this.sideMenuPanel.Controls.Add(this.CompanyBtn);
             this.sideMenuPanel.Controls.Add(this.button7);
             this.sideMenuPanel.Controls.Add(this.button6);
+            this.sideMenuPanel.Controls.Add(this.BranchBtn);
             this.sideMenuPanel.Controls.Add(this.button2);
             this.sideMenuPanel.Controls.Add(this.button1);
             this.sideMenuPanel.Dock = System.Windows.Forms.DockStyle.Left;
@@ -83,8 +85,8 @@ namespace Store
             this.label1.TabIndex = 7;
             this.label1.Text = "MENU BAR";
             this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // Dashboard button
+
+            // Dashboard
             this.button4.Dock = System.Windows.Forms.DockStyle.Top;
             this.button4.Text = "Dashboard";
             this.button4.Height = 50;
@@ -119,6 +121,12 @@ namespace Store
             this.button6.Text = "Review";
             this.button6.Height = 50;
             this.button6.Click += new System.EventHandler(this.button6_Click);
+
+            // Branch
+            this.BranchBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BranchBtn.Text = "Branches";
+            this.BranchBtn.Height = 50;
+            this.BranchBtn.Click += new System.EventHandler(this.BranchBtn_Click);
 
             // VIP Customers
             this.button2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -158,7 +166,7 @@ namespace Store
             this.headerPanel.Controls.Add(this.userRightFlow);
             this.headerPanel.Controls.Add(this.lblCompanyName);
 
-            // lblCompanyName (left header)
+            // lblCompanyName
             this.lblCompanyName.AutoSize = true;
             this.lblCompanyName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.lblCompanyName.ForeColor = System.Drawing.Color.Black;
@@ -229,5 +237,6 @@ namespace Store
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button CompanyBtn;
         private System.Windows.Forms.Label lblCompanyName;
+        private System.Windows.Forms.Button BranchBtn;
     }
 }

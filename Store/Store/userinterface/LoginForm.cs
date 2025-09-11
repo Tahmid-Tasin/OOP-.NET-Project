@@ -10,20 +10,20 @@ namespace Store
     {
         private readonly CustomerService _customerService;
         private readonly AdminService _adminService;
-        private readonly EmployeeService _employeeService;  // 👈
+        private readonly EmployeeService _employeeService;
 
         public LoginForm()
         {
             InitializeComponent();
             _customerService = new CustomerService();
             _adminService = new AdminService();
-            _employeeService = new EmployeeService();        // 👈
+            _employeeService = new EmployeeService(); 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             UserComboBox.Items.Add("Admin");
-            UserComboBox.Items.Add("Company Manager");   // Employee
+            UserComboBox.Items.Add("Company Manager");
             UserComboBox.Items.Add("Customer");
         }
 
@@ -70,22 +70,27 @@ namespace Store
                 }
                 else MessageBox.Show("Invalid username or password");
             }
-            else if (UserComboBox.Text == "Company Manager") // Employee
+            else if (UserComboBox.Text == "Company Manager")
             {
-                // Your repo verifies by EMAIL + PASSWORD
                 bool ok = _employeeService.VerifyLogin(user, pass);
                 if (ok)
                 {
                     var emp = _employeeService.GetByEmail(user);
-                    string displayName = emp?.NAME ?? user;
-                    string companyName = emp?.Company?.Name ?? "Company";
+
+                    string displayName  = emp?.NAME ?? user;
+                    string companyName  = emp?.Company?.Name ?? "Company";
+                    int companyId       = emp?.CompanyId ?? 0;
 
                     this.Hide();
-                    // Role MUST be "Company Manager" as requested
-                    new AdminView(displayName, "Company Manager", companyName).Show();
+                    // Pass companyId into AdminView
+                    new AdminView(displayName, "Company Manager", companyName, companyId).Show();
                 }
-                else MessageBox.Show("Invalid email or password");
+                else
+                {
+                    MessageBox.Show("Invalid email or password");
+                }
             }
+
             else
             {
                 MessageBox.Show("Please select a user type");
