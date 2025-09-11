@@ -105,6 +105,7 @@
     <Compile Include="model\Customer.cs" />
     <Compile Include="model\Employee.cs" />
     <Compile Include="model\Company.cs" />
+    <Compile Include="model\Inventory.cs" />
     <Compile Include="model\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="repository\CategoryRepository.cs" />
     <Compile Include="repository\CustomerRepository.cs" />
     <Compile Include="repository\EmployeeRepository.cs" />
+    <Compile Include="repository\InventoryRepository.cs" />
     <Compile Include="repository\ISqlConnectionFactory.cs" />
     <Compile Include="repository\CompanyRepository.cs" />
     <Compile Include="repository\ProductRepository.cs" />
@@ -122,6 +124,7 @@
     <Compile Include="service\EmailSender.cs" />
     <Compile Include="service\EmployeeService.cs" />
     <Compile Include="service\CompanyService.cs" />
+    <Compile Include="service\InventoryService.cs" />
     <Compile Include="service\ProductService.cs" />
     <Compile Include="userinterface\BranchEditForm.cs" />
     <Compile Include="userinterface\BranchEditForm.Designer.cs" />
@@ -153,6 +156,12 @@
     <Compile Include="userinterface\EmployeeManage.Designer.cs">
       <DependentUpon>EmployeeManage.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\InventoryEditForm.cs" />
+    <Compile Include="userinterface\InventoryEditForm.Designer.cs" />
+    <Compile Include="userinterface\InventoryManage.cs" />
+    <Compile Include="userinterface\InventoryManage.Designer.cs" />
+    <Compile Include="userinterface\InventoryViewForm.cs" />
+    <Compile Include="userinterface\InventoryViewForm.Designer.cs" />
     <Compile Include="userinterface\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -204,6 +204,12 @@ namespace Store
             this.headerIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.headerIcon.Size = new System.Drawing.Size(36, 36);
             this.headerIcon.TabStop = false;
+            
+            // Inside sideMenuPanel
+            this.button5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button5.Text = "Inventory";
+            this.button5.Height = 50;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
 
             // AdminView - add to Form
             this.Controls.Add(this.rightContainer);
