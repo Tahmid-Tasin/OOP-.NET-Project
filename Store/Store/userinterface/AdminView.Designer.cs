@@ -31,11 +31,14 @@ namespace Store
             this.contentPanel = new System.Windows.Forms.Panel();
             this.headerPanel = new System.Windows.Forms.Panel();
 
-            // Right header stack (name, role, icon)
+            // Header stack
             this.userRightFlow = new System.Windows.Forms.FlowLayoutPanel();
             this.lblUserName = new System.Windows.Forms.Label();
             this.lblUserRole = new System.Windows.Forms.Label();
             this.headerIcon = new System.Windows.Forms.PictureBox();
+
+            // Left header (company name)
+            this.lblCompanyName = new System.Windows.Forms.Label();
 
             this.sideMenuPanel.SuspendLayout();
             this.rightContainer.SuspendLayout();
@@ -54,7 +57,7 @@ namespace Store
             // 
             // sideMenuPanel
             // 
-            this.sideMenuPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
+            this.sideMenuPanel.BackColor = System.Drawing.Color.FromArgb(175, 76, 15);
             this.sideMenuPanel.Controls.Add(this.label1);
             this.sideMenuPanel.Controls.Add(this.button4);
             this.sideMenuPanel.Controls.Add(this.EmployeeBtn);
@@ -81,64 +84,55 @@ namespace Store
             this.label1.Text = "MENU BAR";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // button4 (Dashboard)
-            // 
+            // Dashboard button
             this.button4.Dock = System.Windows.Forms.DockStyle.Top;
             this.button4.Text = "Dashboard";
             this.button4.Height = 50;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // EmployeeBtn
-            // 
+
+            // Managers
             this.EmployeeBtn.Dock = System.Windows.Forms.DockStyle.Top;
             this.EmployeeBtn.Text = "Company Managers";
             this.EmployeeBtn.Height = 50;
             this.EmployeeBtn.Click += new System.EventHandler(this.EmployeeBtn_Click);
-            // 
-            // button5 (Stock)
-            // 
+
+            // Stock
             this.button5.Dock = System.Windows.Forms.DockStyle.Top;
             this.button5.Text = "Stock";
             this.button5.Height = 50;
             this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // CompanyBtn
-            // 
+
+            // Company
             this.CompanyBtn.Dock = System.Windows.Forms.DockStyle.Top;
             this.CompanyBtn.Text = "Company";
             this.CompanyBtn.Height = 50;
             this.CompanyBtn.Click += new System.EventHandler(this.CompanyBtn_Click);
-            // 
-            // button7 (Products)
-            // 
+
+            // Products
             this.button7.Dock = System.Windows.Forms.DockStyle.Top;
             this.button7.Text = "Products";
             this.button7.Height = 50;
             this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button6 (Review)
-            // 
+
+            // Review
             this.button6.Dock = System.Windows.Forms.DockStyle.Top;
             this.button6.Text = "Review";
             this.button6.Height = 50;
             this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button2 (VIP Customers)
-            // 
+
+            // VIP Customers
             this.button2.Dock = System.Windows.Forms.DockStyle.Top;
             this.button2.Text = "VIP Customers";
             this.button2.Height = 50;
             this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button1 (Logout)
-            // 
+
+            // Logout
             this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.button1.Text = "Logout";
             this.button1.Height = 50;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
+
             // rightContainer
-            // 
             this.rightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rightContainer.Location = new System.Drawing.Point(200, 0);
             this.rightContainer.Name = "rightContainer";
@@ -146,17 +140,15 @@ namespace Store
             this.rightContainer.TabIndex = 2;
             this.rightContainer.Controls.Add(this.contentPanel);
             this.rightContainer.Controls.Add(this.headerPanel);
-            // 
-            // contentPanel (child-pages area)
-            // 
+
+            // contentPanel
             this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentPanel.Location = new System.Drawing.Point(0, 60);
             this.contentPanel.Name = "contentPanel";
             this.contentPanel.Size = new System.Drawing.Size(1150, 669);
             this.contentPanel.TabIndex = 1;
-            // 
+
             // headerPanel
-            // 
             this.headerPanel.BackColor = System.Drawing.Color.WhiteSmoke;
             this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.headerPanel.Location = new System.Drawing.Point(0, 0);
@@ -164,52 +156,48 @@ namespace Store
             this.headerPanel.Size = new System.Drawing.Size(1150, 60);
             this.headerPanel.TabIndex = 0;
             this.headerPanel.Controls.Add(this.userRightFlow);
-            // 
-            // userRightFlow (holds Name, Role, Icon — right aligned)
-            // 
+            this.headerPanel.Controls.Add(this.lblCompanyName);
+
+            // lblCompanyName (left header)
+            this.lblCompanyName.AutoSize = true;
+            this.lblCompanyName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblCompanyName.ForeColor = System.Drawing.Color.Black;
+            this.lblCompanyName.Location = new System.Drawing.Point(12, 20);
+            this.lblCompanyName.Name = "lblCompanyName";
+            this.lblCompanyName.Text = "Company Name";
+
+            // userRightFlow
             this.userRightFlow.AutoSize = true;
             this.userRightFlow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.userRightFlow.Dock = System.Windows.Forms.DockStyle.Right;
             this.userRightFlow.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
             this.userRightFlow.WrapContents = false;
             this.userRightFlow.Padding = new System.Windows.Forms.Padding(0, 16, 12, 0);
-            this.userRightFlow.Location = new System.Drawing.Point(650, 0); // auto when docked
-            this.userRightFlow.Name = "userRightFlow";
-            this.userRightFlow.TabIndex = 0;
             this.userRightFlow.Controls.Add(this.lblUserName);
             this.userRightFlow.Controls.Add(this.lblUserRole);
             this.userRightFlow.Controls.Add(this.headerIcon);
-            // 
-            // lblUserName (bold, right side)
-            // 
+
+            // lblUserName
             this.lblUserName.AutoSize = true;
             this.lblUserName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblUserName.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
             this.lblUserName.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
-            this.lblUserName.Name = "lblUserName";
             this.lblUserName.Text = "Unknown";
-            // 
-            // lblUserRole (to the RIGHT of name)
-            // 
+
+            // lblUserRole
             this.lblUserRole.AutoSize = true;
-            this.lblUserRole.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular);
+            this.lblUserRole.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.lblUserRole.ForeColor = System.Drawing.Color.DimGray;
             this.lblUserRole.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
-            this.lblUserRole.Name = "lblUserRole";
             this.lblUserRole.Text = "User";
-            // 
-            // headerIcon (far right)
-            // 
+
+            // headerIcon
             this.headerIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
             this.headerIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.headerIcon.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
-            this.headerIcon.Name = "headerIcon";
             this.headerIcon.Size = new System.Drawing.Size(36, 36);
-            this.headerIcon.TabIndex = 1;
             this.headerIcon.TabStop = false;
-            // 
+
             // AdminView - add to Form
-            // 
             this.Controls.Add(this.rightContainer);
             this.Controls.Add(this.sideMenuPanel);
             this.sideMenuPanel.ResumeLayout(false);
@@ -222,7 +210,6 @@ namespace Store
         #endregion
 
         private System.Windows.Forms.Panel sideMenuPanel;
-
         private System.Windows.Forms.Panel rightContainer;
         private System.Windows.Forms.Panel headerPanel;
         private System.Windows.Forms.Panel contentPanel;
@@ -241,5 +228,6 @@ namespace Store
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button CompanyBtn;
+        private System.Windows.Forms.Label lblCompanyName;
     }
 }

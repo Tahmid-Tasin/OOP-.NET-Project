@@ -79,6 +79,50 @@ namespace Store.Repository
             return null;
         }
 
+        // ✅ NEW: Get employee by Email (for login → header + company name)
+        public Employee GetByEmail(string email)
+        {
+            string sql = @"
+                SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.company_id,
+                       c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
+                FROM dbo.employee e
+                LEFT JOIN dbo.company c ON e.company_id = c.id
+                WHERE e.email = @em;";
+
+            using (SqlConnection con = _factory.Create())
+            using (SqlCommand cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@em", email);
+                con.Open();
+
+                using (SqlDataReader rd = cmd.ExecuteReader())
+                {
+                    if (rd.Read())
+                    {
+                        return new Employee
+                        {
+                            ID = (int)rd["id"],
+                            NAME = rd["name"].ToString(),
+                            MOBILE = rd["mobile"].ToString(),
+                            EMAIL = rd["email"].ToString(),
+                            PASSWORD = rd["password"].ToString(),
+                            ADDRESS = rd["address"].ToString(),
+                            CompanyId = rd["company_id"] as int?,
+                            Company = rd["CompanyId"] != DBNull.Value ? new Company
+                            {
+                                Id = (int)rd["CompanyId"],
+                                Name = rd["CompanyName"].ToString(),
+                                AddressLine1 = rd["address_line1"].ToString(),
+                                City = rd["city"].ToString()
+                            } : null
+                        };
+                    }
+                }
+            }
+
+            return null;
+        }
+
         // ✅ Verify login (email + password)
         public bool Verify(string email, string password)
         {
