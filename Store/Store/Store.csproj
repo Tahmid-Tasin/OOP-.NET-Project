@@ -103,7 +103,7 @@
     <Compile Include="model\Category.cs" />
     <Compile Include="model\Customer.cs" />
     <Compile Include="model\Employee.cs" />
-    <Compile Include="model\Outlet.cs" />
+    <Compile Include="model\Company.cs" />
     <Compile Include="model\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -112,13 +112,13 @@
     <Compile Include="repository\CustomerRepository.cs" />
     <Compile Include="repository\EmployeeRepository.cs" />
     <Compile Include="repository\ISqlConnectionFactory.cs" />
-    <Compile Include="repository\OutletRepository.cs" />
+    <Compile Include="repository\CompanyRepository.cs" />
     <Compile Include="repository\ProductRepository.cs" />
     <Compile Include="service\AdminService.cs" />
     <Compile Include="service\CustomerService.cs" />
     <Compile Include="service\EmailSender.cs" />
     <Compile Include="service\EmployeeService.cs" />
-    <Compile Include="service\OutletService.cs" />
+    <Compile Include="service\CompanyService.cs" />
     <Compile Include="service\ProductService.cs" />
     <Compile Include="userinterface\CustomerCreateForm.cs">
       <SubType>Form</SubType>
@@ -152,10 +152,10 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="userinterface\OutletEditForm.cs" />
-    <Compile Include="userinterface\OutletEditForm.Designer.cs" />
-    <Compile Include="userinterface\OutletManage.cs" />
-    <Compile Include="userinterface\OutletManage.Designer.cs" />
+    <Compile Include="userinterface\CompanyEditForm.cs" />
+    <Compile Include="userinterface\CompanyEditForm.Designer.cs" />
+    <Compile Include="userinterface\CompanyManage.cs" />
+    <Compile Include="userinterface\CompanyManage.Designer.cs" />
     <Compile Include="userinterface\ProductEditForm.cs" />
     <Compile Include="userinterface\ProductEditForm.Designer.cs" />
     <Compile Include="userinterface\ProductManageView.cs">

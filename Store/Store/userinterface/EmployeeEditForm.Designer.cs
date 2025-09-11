@@ -25,8 +25,8 @@ namespace Store.userinterface
         private Label labelAddress;
         private TextBox AddressBox;
 
-        private Label labelOutlet;
-        private ComboBox OutletCombo;
+        private Label labelCompany;
+        private ComboBox CompanyCombo;
 
         private Button btnSave;
         private Button btnCancel;
@@ -60,8 +60,8 @@ namespace Store.userinterface
             this.labelAddress = new System.Windows.Forms.Label();
             this.AddressBox = new System.Windows.Forms.TextBox();
 
-            this.labelOutlet = new System.Windows.Forms.Label();
-            this.OutletCombo = new System.Windows.Forms.ComboBox();
+            this.labelCompany = new System.Windows.Forms.Label();
+            this.CompanyCombo = new System.Windows.Forms.ComboBox();
 
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -143,17 +143,17 @@ namespace Store.userinterface
             this.AddressBox.Multiline = true;
             this.AddressBox.TabIndex = 10;
             // 
-            // Outlet
+            // Company
             // 
-            this.labelOutlet.Text = "Outlet";
-            this.labelOutlet.Location = new Point(24, 266);
-            this.labelOutlet.Size = new Size(80, 18);
-            this.labelOutlet.TabIndex = 11;
+            this.labelCompany.Text = "Company";
+            this.labelCompany.Location = new Point(24, 266);
+            this.labelCompany.Size = new Size(80, 18);
+            this.labelCompany.TabIndex = 11;
 
-            this.OutletCombo.DropDownStyle = ComboBoxStyle.DropDownList;
-            this.OutletCombo.Location = new Point(120, 264);
-            this.OutletCombo.Size = new Size(380, 24);
-            this.OutletCombo.TabIndex = 12;
+            this.CompanyCombo.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.CompanyCombo.Location = new Point(120, 264);
+            this.CompanyCombo.Size = new Size(380, 24);
+            this.CompanyCombo.TabIndex = 12;
             // 
             // Buttons
             // 
@@ -181,8 +181,8 @@ namespace Store.userinterface
             this.contentPanel.Controls.Add(this.PassBox);
             this.contentPanel.Controls.Add(this.labelAddress);
             this.contentPanel.Controls.Add(this.AddressBox);
-            this.contentPanel.Controls.Add(this.labelOutlet);
-            this.contentPanel.Controls.Add(this.OutletCombo);
+            this.contentPanel.Controls.Add(this.labelCompany);
+            this.contentPanel.Controls.Add(this.CompanyCombo);
             this.contentPanel.Controls.Add(this.btnSave);
             this.contentPanel.Controls.Add(this.btnCancel);
 

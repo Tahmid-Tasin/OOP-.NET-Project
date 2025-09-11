@@ -20,8 +20,8 @@ namespace Store.service
 
         public List<Employee> GetAll() => _repo.GetAll();
         
-        public List<Employee> Search(string name, string mobile, int? outletId = null) 
-            => _repo.Search(name, mobile, outletId);
+        public List<Employee> Search(string name, string mobile, int? companyId = null) 
+            => _repo.Search(name, mobile, companyId);
 
         public int Update(Employee e) => _repo.UpdateNoPassword(e);
 

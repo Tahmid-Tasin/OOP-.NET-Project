@@ -3,7 +3,7 @@ using System.Drawing;
 
 namespace Store.userinterface
 {
-    partial class OutletEditForm
+    partial class CompanyEditForm
     {
         private System.ComponentModel.IContainer components = null;
         protected override void Dispose(bool disposing)
@@ -32,18 +32,18 @@ namespace Store.userinterface
 
             this.SuspendLayout();
             // 
-            // OutletEditForm
+            // ComapnyEditForm
             // 
             this.ClientSize = new System.Drawing.Size(500, 520);
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Text = "Outlet";
+            this.Text = "Company";
             // 
             // lblTitle
             // 
-            this.lblTitle.Text = "Outlet";
+            this.lblTitle.Text = "Company";
             this.lblTitle.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             this.lblTitle.ForeColor = Color.FromArgb(175, 76, 15);
             this.lblTitle.Location = new Point(20, 15);

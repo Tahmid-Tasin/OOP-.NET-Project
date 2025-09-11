@@ -21,7 +21,7 @@ namespace Store
             this.button4 = new System.Windows.Forms.Button();
             this.EmployeeBtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.OutletBtn = new System.Windows.Forms.Button();
+            this.CompanyBtn = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -59,7 +59,7 @@ namespace Store
             this.sideMenuPanel.Controls.Add(this.button4);
             this.sideMenuPanel.Controls.Add(this.EmployeeBtn);
             this.sideMenuPanel.Controls.Add(this.button5);
-            this.sideMenuPanel.Controls.Add(this.OutletBtn);
+            this.sideMenuPanel.Controls.Add(this.CompanyBtn);
             this.sideMenuPanel.Controls.Add(this.button7);
             this.sideMenuPanel.Controls.Add(this.button6);
             this.sideMenuPanel.Controls.Add(this.button2);
@@ -91,7 +91,7 @@ namespace Store
             // EmployeeBtn
             // 
             this.EmployeeBtn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.EmployeeBtn.Text = "Employee";
+            this.EmployeeBtn.Text = "Company Managers";
             this.EmployeeBtn.Height = 50;
             this.EmployeeBtn.Click += new System.EventHandler(this.EmployeeBtn_Click);
             // 
@@ -102,12 +102,12 @@ namespace Store
             this.button5.Height = 50;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
-            // OutletBtn
+            // CompanyBtn
             // 
-            this.OutletBtn.Dock = System.Windows.Forms.DockStyle.Top;
-            this.OutletBtn.Text = "Outlet";
-            this.OutletBtn.Height = 50;
-            this.OutletBtn.Click += new System.EventHandler(this.OutletBtn_Click);
+            this.CompanyBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CompanyBtn.Text = "Company";
+            this.CompanyBtn.Height = 50;
+            this.CompanyBtn.Click += new System.EventHandler(this.CompanyBtn_Click);
             // 
             // button7 (Products)
             // 
@@ -240,6 +240,6 @@ namespace Store
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button OutletBtn;
+        private System.Windows.Forms.Button CompanyBtn;
     }
 }

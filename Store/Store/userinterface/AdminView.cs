@@ -83,9 +83,9 @@ namespace Store
             // Menu title clicked - optional
         }
 
-        private void OutletBtn_Click(object sender, EventArgs e)
+        private void CompanyBtn_Click(object sender, EventArgs e)
         {
-             LoadContent(new OutletManage());
+             LoadContent(new CompanyManage());
         }
     }
 }

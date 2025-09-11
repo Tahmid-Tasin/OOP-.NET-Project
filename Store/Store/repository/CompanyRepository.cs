@@ -5,20 +5,20 @@ using System.Text;
 
 namespace Store.Repository
 {
-    public class OutletRepository
+    public class CompanyRepository
     {
         private readonly SqlConnectionFactory _factory;
 
-        public OutletRepository()
+        public CompanyRepository()
         {
             _factory = new SqlConnectionFactory();
         }
 
-        // Insert new outlet
-        public int Insert(Outlet o)
+        // Insert new company
+        public int Insert(Company c)
         {
             string sql = @"
-                INSERT INTO dbo.outlet 
+                INSERT INTO dbo.company 
                 (name, address_line1, address_line2, city, state, postal_code, country,
                  phone, contact_name, contact_email, is_active)
                 VALUES (@nm, @ad1, @ad2, @ct, @st, @pc, @cntry, 
@@ -27,17 +27,17 @@ namespace Store.Repository
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
             {
-                cmd.Parameters.AddWithValue("@nm", o.Name ?? "");
-                cmd.Parameters.AddWithValue("@ad1", o.AddressLine1 ?? "");
-                cmd.Parameters.AddWithValue("@ad2", (object)o.AddressLine2 ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ct", o.City ?? "");
-                cmd.Parameters.AddWithValue("@st", (object)o.State ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@pc", (object)o.PostalCode ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@cntry", (object)o.Country ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ph", (object)o.Phone ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@cname", (object)o.ContactName ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@cemail", (object)o.ContactEmail ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@active", o.IsActive);
+                cmd.Parameters.AddWithValue("@nm", c.Name ?? "");
+                cmd.Parameters.AddWithValue("@ad1", c.AddressLine1 ?? "");
+                cmd.Parameters.AddWithValue("@ad2", (object)c.AddressLine2 ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ct", c.City ?? "");
+                cmd.Parameters.AddWithValue("@st", (object)c.State ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@pc", (object)c.PostalCode ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cntry", (object)c.Country ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ph", (object)c.Phone ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cname", (object)c.ContactName ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cemail", (object)c.ContactEmail ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@active", c.IsActive);
 
                 con.Open();
                 return cmd.ExecuteNonQuery();
@@ -45,12 +45,12 @@ namespace Store.Repository
         }
 
         // Get by ID
-        public Outlet Get(int id)
+        public Company Get(int id)
         {
             const string sql = @"
                 SELECT id, name, address_line1, address_line2, city, state, postal_code, country,
                        phone, contact_name, contact_email, is_active, created_at, updated_at
-                FROM dbo.outlet WHERE id = @id;";
+                FROM dbo.company WHERE id = @id;";
 
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -60,21 +60,21 @@ namespace Store.Repository
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
                     if (rd.Read())
-                        return MapOutlet(rd);
+                        return MapCompany(rd);
                 }
             }
             return null;
         }
 
-        // Get all outlets
-        public List<Outlet> GetAll()
+        // Get all companies
+        public List<Company> GetAll()
         {
             const string sql = @"
                 SELECT id, name, address_line1, address_line2, city, state, postal_code, country,
                        phone, contact_name, contact_email, is_active, created_at, updated_at
-                FROM dbo.outlet ORDER BY id DESC;";
+                FROM dbo.company ORDER BY id DESC;";
 
-            var list = new List<Outlet>();
+            var list = new List<Company>();
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
             {
@@ -82,20 +82,20 @@ namespace Store.Repository
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
-                        list.Add(MapOutlet(rd));
+                        list.Add(MapCompany(rd));
                 }
             }
             return list;
         }
 
         // Search with multiple optional filters
-        public List<Outlet> Search(string name, string phone, string address, string city, string postalCode, string contactName)
+        public List<Company> Search(string name, string phone, string address, string city, string postalCode, string contactName)
         {
-            var results = new List<Outlet>();
+            var results = new List<Company>();
             var sb = new StringBuilder(@"
                 SELECT id, name, address_line1, address_line2, city, state, postal_code, country,
                        phone, contact_name, contact_email, is_active, created_at, updated_at
-                FROM dbo.outlet
+                FROM dbo.company
                 WHERE 1=1 ");
 
             using (SqlConnection con = _factory.Create())
@@ -146,7 +146,7 @@ namespace Store.Repository
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
-                        results.Add(MapOutlet(rd));
+                        results.Add(MapCompany(rd));
                 }
             }
 
@@ -154,10 +154,10 @@ namespace Store.Repository
         }
 
         // Update
-        public int Update(Outlet o)
+        public int Update(Company c)
         {
             const string sql = @"
-                UPDATE dbo.outlet
+                UPDATE dbo.company
                 SET name = @nm,
                     address_line1 = @ad1,
                     address_line2 = @ad2,
@@ -174,18 +174,18 @@ namespace Store.Repository
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
             {
-                cmd.Parameters.AddWithValue("@nm", o.Name ?? "");
-                cmd.Parameters.AddWithValue("@ad1", o.AddressLine1 ?? "");
-                cmd.Parameters.AddWithValue("@ad2", (object)o.AddressLine2 ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ct", o.City ?? "");
-                cmd.Parameters.AddWithValue("@st", (object)o.State ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@pc", (object)o.PostalCode ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@cntry", (object)o.Country ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ph", (object)o.Phone ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@cname", (object)o.ContactName ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@cemail", (object)o.ContactEmail ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@active", o.IsActive);
-                cmd.Parameters.AddWithValue("@id", o.Id);
+                cmd.Parameters.AddWithValue("@nm", c.Name ?? "");
+                cmd.Parameters.AddWithValue("@ad1", c.AddressLine1 ?? "");
+                cmd.Parameters.AddWithValue("@ad2", (object)c.AddressLine2 ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ct", c.City ?? "");
+                cmd.Parameters.AddWithValue("@st", (object)c.State ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@pc", (object)c.PostalCode ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cntry", (object)c.Country ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@ph", (object)c.Phone ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cname", (object)c.ContactName ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@cemail", (object)c.ContactEmail ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@active", c.IsActive);
+                cmd.Parameters.AddWithValue("@id", c.Id);
 
                 con.Open();
                 return cmd.ExecuteNonQuery();
@@ -195,7 +195,7 @@ namespace Store.Repository
         // Delete
         public int Delete(int id)
         {
-            const string sql = @"DELETE FROM dbo.outlet WHERE id = @id;";
+            const string sql = @"DELETE FROM dbo.company WHERE id = @id;";
 
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -207,9 +207,9 @@ namespace Store.Repository
         }
 
         // Helper mapper
-        private Outlet MapOutlet(SqlDataReader rd)
+        private Company MapCompany(SqlDataReader rd)
         {
-            return new Outlet
+            return new Company
             {
                 Id = (int)rd["id"],
                 Name = rd["name"].ToString(),

@@ -1,6 +1,6 @@
 namespace Store
 {
-    public class Outlet
+    public class Company
     {
         public int Id { get; set; }
 

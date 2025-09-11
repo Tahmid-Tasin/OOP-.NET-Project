@@ -8,7 +8,7 @@ namespace Store.userinterface
     public partial class EmployeeEditForm : Form
     {
         private readonly EmployeeService _employeeService;
-        private readonly OutletService _outletService;
+        private readonly CompanyService _companyService;
         private readonly EmailSender _emailSender;
 
         private readonly bool _isEdit;
@@ -23,11 +23,11 @@ namespace Store.userinterface
             InitializeComponent();
 
             _employeeService = new EmployeeService();
-            _outletService   = new OutletService();
+            _companyService   = new CompanyService();
             _emailSender     = new EmailSender();
 
-            // Load outlets immediately
-            LoadOutlets();
+            // Load companies immediately
+            loadCompanies();
 
             if (existing == null)
             {
@@ -48,8 +48,8 @@ namespace Store.userinterface
                 EmailBox.Text  = existing.EMAIL;
                 AddressBox.Text = existing.ADDRESS;
 
-                if (existing.OutletId.HasValue)
-                    OutletCombo.SelectedValue = existing.OutletId.Value;
+                if (existing.CompanyId.HasValue)
+                    CompanyCombo.SelectedValue = existing.CompanyId.Value;
 
                 PassBox.Text = "";
                 PassBox.Enabled = false; // not changing password here
@@ -64,7 +64,7 @@ namespace Store.userinterface
             EmailBox.BringToFront();
             PassBox.BringToFront();
             AddressBox.BringToFront();
-            OutletCombo.BringToFront();
+            CompanyCombo.BringToFront();
             btnSave.BringToFront();
             btnCancel.BringToFront();
 
@@ -72,12 +72,12 @@ namespace Store.userinterface
             NameBox.Focus();
         }
 
-        private void LoadOutlets()
+        private void loadCompanies()
         {
-            var outlets = _outletService.GetAll();
-            OutletCombo.DataSource = outlets;
-            OutletCombo.DisplayMember = "Name";
-            OutletCombo.ValueMember   = "Id";
+            var companies = _companyService.GetAll();
+            CompanyCombo.DataSource = companies;
+            CompanyCombo.DisplayMember = "Name";
+            CompanyCombo.ValueMember   = "Id";
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -93,7 +93,7 @@ namespace Store.userinterface
             var email    = (EmailBox.Text  ?? "").Trim();
             var password = PassBox.Text ?? "";
             var address  = (AddressBox.Text ?? "").Trim();
-            var outletId = (int?)OutletCombo.SelectedValue;
+            var companyId = (int?)CompanyCombo.SelectedValue;
 
             if (!ValidateInputs(name, mobile, email, password, out string err))
             {
@@ -110,7 +110,7 @@ namespace Store.userinterface
                     EMAIL = email,
                     PASSWORD = password,
                     ADDRESS = address,
-                    OutletId = outletId
+                    CompanyId = companyId
                 };
 
                 var rows = _employeeService.Register(emp);
@@ -156,7 +156,7 @@ KENO Team";
                     MOBILE = mobile,
                     EMAIL = email,
                     ADDRESS = address,
-                    OutletId = outletId
+                    CompanyId = companyId
                 };
 
                 var rows = _employeeService.Update(emp);
@@ -202,9 +202,9 @@ KENO Team";
                 }
             }
 
-            if (OutletCombo.SelectedValue == null)
+            if (CompanyCombo.SelectedValue == null)
             {
-                error = "Please select an outlet."; return false;
+                error = "Please select an Company."; return false;
             }
 
             error = null;

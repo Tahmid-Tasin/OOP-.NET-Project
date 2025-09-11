@@ -2,7 +2,7 @@ using System.Drawing;
 
 namespace Store.userinterface
 {
-    partial class OutletManage
+    partial class CompanyManage
     {
         private System.ComponentModel.IContainer components = null;
         protected override void Dispose(bool disposing)
@@ -44,7 +44,7 @@ namespace Store.userinterface
 
             // ===== Form =====
             this.ClientSize = new System.Drawing.Size(1100, 650);
-            this.Text = "Outlet Management";
+            this.Text = "Company Management";
 
             // ===== topPanel =====
             this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;

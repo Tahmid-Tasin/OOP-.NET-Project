@@ -5,30 +5,30 @@ using Store.service;
 
 namespace Store.userinterface
 {
-    public partial class OutletEditForm : Form
+    public partial class CompanyEditForm : Form
     {
-        private readonly OutletService _service;
+        private readonly CompanyService _service;
         private readonly bool _isEdit;
         private readonly int _editId;
 
         // For Create
-        public OutletEditForm()
+        public CompanyEditForm()
         {
             InitializeComponent();
-            _service = new OutletService();
+            _service = new CompanyService();
             _isEdit = false;
             lblTitle.Text = "Add Outlet";
             btnSave.Text = "Save";
         }
 
         // For Edit
-        public OutletEditForm(Outlet existing) : this()
+        public CompanyEditForm(Company existing) : this()
         {
             if (existing != null)
             {
                 _isEdit = true;
                 _editId = existing.Id;
-                lblTitle.Text = "Edit Outlet";
+                lblTitle.Text = "Edit Company";
                 btnSave.Text = "Update";
 
                 NameBox.Text       = existing.Name;
@@ -65,7 +65,7 @@ namespace Store.userinterface
                 return;
             }
 
-            var outlet = new Outlet
+            var company = new Company
             {
                 Name = name,
                 AddressLine1 = addr1,
@@ -83,12 +83,12 @@ namespace Store.userinterface
             int rows;
             if (_isEdit)
             {
-                outlet.Id = _editId;
-                rows = _service.Update(outlet);
+                company.Id = _editId;
+                rows = _service.Update(company);
             }
             else
             {
-                rows = _service.Register(outlet);
+                rows = _service.Register(company);
             }
 
             if (rows > 0)

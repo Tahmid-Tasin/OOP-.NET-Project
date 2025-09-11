@@ -17,8 +17,8 @@ namespace Store.Repository
         // ✅ Insert new employee
         public int Insert(Employee e)
         {
-            string sql = @"INSERT INTO dbo.employee (name, mobile, email, password, address, outlet_id)
-                           VALUES (@nm, @mo, @em, @pw, @ad, @outletId);";
+            string sql = @"INSERT INTO dbo.employee (name, mobile, email, password, address, company_id)
+                           VALUES (@nm, @mo, @em, @pw, @ad, @companyId);";
 
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -28,7 +28,7 @@ namespace Store.Repository
                 cmd.Parameters.AddWithValue("@em", e.EMAIL ?? "");
                 cmd.Parameters.AddWithValue("@pw", e.PASSWORD ?? "");
                 cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
-                cmd.Parameters.AddWithValue("@outletId", (object)e.OutletId ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@companyId", (object)e.CompanyId ?? DBNull.Value);
 
                 con.Open();
                 return cmd.ExecuteNonQuery();
@@ -39,10 +39,10 @@ namespace Store.Repository
         public Employee Get(int id)
         {
             string sql = @"
-                SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.outlet_id,
-                       o.id AS OutletId, o.name AS OutletName, o.address_line1, o.city
+                SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.company_id,
+                       c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
                 FROM dbo.employee e
-                LEFT JOIN dbo.outlet o ON e.outlet_id = o.id
+                LEFT JOIN dbo.company c ON e.company_id = c.id
                 WHERE e.id = @id;";
 
             using (SqlConnection con = _factory.Create())
@@ -63,11 +63,11 @@ namespace Store.Repository
                             EMAIL = rd["email"].ToString(),
                             PASSWORD = rd["password"].ToString(),
                             ADDRESS = rd["address"].ToString(),
-                            OutletId = rd["outlet_id"] as int?,
-                            Outlet = rd["OutletId"] != DBNull.Value ? new Outlet
+                            CompanyId = rd["company_id"] as int?,
+                            Company = rd["CompanyId"] != DBNull.Value ? new Company
                             {
-                                Id = (int)rd["OutletId"],
-                                Name = rd["OutletName"].ToString(),
+                                Id = (int)rd["CompanyId"],
+                                Name = rd["CompanyName"].ToString(),
                                 AddressLine1 = rd["address_line1"].ToString(),
                                 City = rd["city"].ToString()
                             } : null
@@ -104,10 +104,10 @@ namespace Store.Repository
         public List<Employee> GetAll()
         {
             const string sql = @"
-                SELECT e.id, e.name, e.mobile, e.email, e.address, e.outlet_id,
-                       o.id AS OutletId, o.name AS OutletName, o.address_line1, o.city
+                SELECT e.id, e.name, e.mobile, e.email, e.address, e.company_id,
+                       c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
                 FROM dbo.employee e
-                LEFT JOIN dbo.outlet o ON e.outlet_id = o.id
+                LEFT JOIN dbo.company c ON e.company_id = c.id
                 ORDER BY e.id DESC;";
 
             var list = new List<Employee>();
@@ -127,11 +127,11 @@ namespace Store.Repository
                             MOBILE = rd["mobile"].ToString(),
                             EMAIL = rd["email"].ToString(),
                             ADDRESS = rd["address"].ToString(),
-                            OutletId = rd["outlet_id"] as int?,
-                            Outlet = rd["OutletId"] != DBNull.Value ? new Outlet
+                            CompanyId = rd["company_id"] as int?,
+                            Company = rd["CompanyId"] != DBNull.Value ? new Company
                             {
-                                Id = (int)rd["OutletId"],
-                                Name = rd["OutletName"].ToString(),
+                                Id = (int)rd["CompanyId"],
+                                Name = rd["CompanyName"].ToString(),
                                 AddressLine1 = rd["address_line1"].ToString(),
                                 City = rd["city"].ToString()
                             } : null
@@ -143,16 +143,16 @@ namespace Store.Repository
             return list;
         }
 
-        // ✅ Search employees by name, mobile, or outlet
-        public List<Employee> Search(string namePart, string mobilePart, int? outletId = null)
+        // ✅ Search employees by name, mobile, or company
+        public List<Employee> Search(string namePart, string mobilePart, int? companyId = null)
         {
             var results = new List<Employee>();
             var sb = new StringBuilder();
             sb.Append(@"
-                SELECT e.id, e.name, e.mobile, e.email, e.address, e.outlet_id,
-                       o.id AS OutletId, o.name AS OutletName, o.address_line1, o.city
+                SELECT e.id, e.name, e.mobile, e.email, e.address, e.company_id,
+                       c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
                 FROM dbo.employee e
-                LEFT JOIN dbo.outlet o ON e.outlet_id = o.id
+                LEFT JOIN dbo.company c ON e.company_id = c.id
                 WHERE 1=1 ");
 
             using (SqlConnection con = _factory.Create())
@@ -172,10 +172,10 @@ namespace Store.Repository
                     cmd.Parameters.AddWithValue("@mo", "%" + mobilePart + "%");
                 }
 
-                if (outletId.HasValue)
+                if (companyId.HasValue)
                 {
-                    sb.Append(" AND e.outlet_id = @outletId ");
-                    cmd.Parameters.AddWithValue("@outletId", outletId.Value);
+                    sb.Append(" AND e.company_id = @companyId ");
+                    cmd.Parameters.AddWithValue("@companyId", companyId.Value);
                 }
 
                 sb.Append(" ORDER BY e.id DESC;");
@@ -193,11 +193,11 @@ namespace Store.Repository
                             MOBILE = rd["mobile"].ToString(),
                             EMAIL = rd["email"].ToString(),
                             ADDRESS = rd["address"].ToString(),
-                            OutletId = rd["outlet_id"] as int?,
-                            Outlet = rd["OutletId"] != DBNull.Value ? new Outlet
+                            CompanyId = rd["company_id"] as int?,
+                            Company = rd["CompanyId"] != DBNull.Value ? new Company
                             {
-                                Id = (int)rd["OutletId"],
-                                Name = rd["OutletName"].ToString(),
+                                Id = (int)rd["CompanyId"],
+                                Name = rd["CompanyName"].ToString(),
                                 AddressLine1 = rd["address_line1"].ToString(),
                                 City = rd["city"].ToString()
                             } : null
@@ -214,7 +214,7 @@ namespace Store.Repository
         {
             const string sql = @"
                 UPDATE dbo.employee
-                SET name = @nm, mobile = @mo, email = @em, address = @ad, outlet_id = @outletId
+                SET name = @nm, mobile = @mo, email = @em, address = @ad, company_id = @companyId
                 WHERE id = @id;";
 
             using (SqlConnection con = _factory.Create())
@@ -224,7 +224,7 @@ namespace Store.Repository
                 cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
                 cmd.Parameters.AddWithValue("@em", e.EMAIL ?? "");
                 cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
-                cmd.Parameters.AddWithValue("@outletId", (object)e.OutletId ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@companyId", (object)e.CompanyId ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@id", e.ID);
 
                 con.Open();

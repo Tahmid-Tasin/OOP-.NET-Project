@@ -10,9 +10,9 @@ namespace Store
         public string ADDRESS { get; set; }
 
         // Foreign key
-        public int? OutletId { get; set; }
+        public int? CompanyId { get; set; }
 
         // Navigation
-        public Outlet Outlet { get; set; }
+        public Company Company { get; set; }
     }
 }

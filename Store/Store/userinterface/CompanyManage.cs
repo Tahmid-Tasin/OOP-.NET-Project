@@ -5,14 +5,14 @@ using Store.service;
 
 namespace Store.userinterface
 {
-    public partial class OutletManage : Form
+    public partial class CompanyManage : Form
     {
-        private readonly OutletService _outletService;
+        private readonly CompanyService _companyService;
 
-        public OutletManage()
+        public CompanyManage()
         {
             InitializeComponent();
-            _outletService = new OutletService();
+            _companyService = new CompanyService();
 
             // grid binding
             dataGridView1.AutoGenerateColumns = false;
@@ -34,7 +34,7 @@ namespace Store.userinterface
         private void LoadOutlets()
         {
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = _outletService.GetAll();
+            dataGridView1.DataSource = _companyService.GetAll();
         }
 
         // ===== Header events =====
@@ -56,7 +56,7 @@ namespace Store.userinterface
 
         private void btnAddNew_Click(object sender, EventArgs e)
         {
-            using (var dlg = new OutletEditForm())
+            using (var dlg = new CompanyEditForm())
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                     LoadOutlets();
@@ -73,7 +73,7 @@ namespace Store.userinterface
             var postal  = GetValueOrNull(txtSearchPostal);
 
             dataGridView1.DataSource = null;
-            dataGridView1.DataSource = _outletService.Search(name, phone, address, city, postal, null);
+            dataGridView1.DataSource = _companyService.Search(name, phone, address, city, postal, null);
         }
 
         private void btnResetSearch_Click(object sender, EventArgs e)
@@ -90,7 +90,7 @@ namespace Store.userinterface
             var col = dataGridView1.Columns[e.ColumnIndex].Name;
             if (col != "View_Col" && col != "Edit_Col" && col != "Delete_Col") return;
 
-            var outlet = dataGridView1.Rows[e.RowIndex].DataBoundItem as Outlet;
+            var outlet = dataGridView1.Rows[e.RowIndex].DataBoundItem as Company;
             if (outlet == null) return;
 
             if (col == "View_Col")
@@ -105,7 +105,7 @@ namespace Store.userinterface
             }
             else if (col == "Edit_Col")
             {
-                using (var dlg = new OutletEditForm(outlet))
+                using (var dlg = new CompanyEditForm(outlet))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                         LoadOutlets();
@@ -116,7 +116,7 @@ namespace Store.userinterface
                 if (MessageBox.Show($"Delete outlet '{outlet.Name}'?", "Confirm",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
 
-                _outletService.Delete(outlet.Id);
+                _companyService.Delete(outlet.Id);
                 LoadOutlets();
             }
         }
