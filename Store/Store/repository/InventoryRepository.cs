@@ -33,13 +33,12 @@ WHEN MATCHED THEN
     UPDATE SET quantity = @qty,
                updated_at = SYSUTCDATETIME()
 WHEN NOT MATCHED THEN
-    INSERT (id, company_id, branch_id, product_id, quantity, updated_at)
-    VALUES (@id, @company_id, @branch_id, @product_id, @qty, SYSUTCDATETIME());";
+    INSERT (company_id, branch_id, product_id, quantity, updated_at)
+    VALUES (@company_id, @branch_id, @product_id, @qty, SYSUTCDATETIME());";
 
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
             {
-                cmd.Parameters.AddWithValue("@id", inv.Id);
                 cmd.Parameters.AddWithValue("@company_id", inv.CompanyId);
                 cmd.Parameters.AddWithValue("@branch_id", inv.BranchId);
                 cmd.Parameters.AddWithValue("@product_id", inv.ProductId);
@@ -62,9 +61,6 @@ WHEN NOT MATCHED THEN
             }
         }
 
-        /// <summary>
-        /// Eager load Inventory + Company + Branch + Product.
-        /// </summary>
         public Inventory Get(int id)
         {
             const string sql = @"SELECT * FROM dbo.inventory WHERE id = @id;";
@@ -149,9 +145,6 @@ WHEN NOT MATCHED THEN
             return results;
         }
 
-        /// <summary>
-        /// Map Inventory and eager-load related objects via repositories.
-        /// </summary>
         private Inventory MapInventory(SqlDataReader rd)
         {
             var inv = new Inventory
@@ -164,7 +157,6 @@ WHEN NOT MATCHED THEN
                 UpdatedAt = (DateTime)rd["updated_at"]
             };
 
-            // Fetch related entities via their repositories
             inv.Company = _companyRepo.Get(inv.CompanyId);
             inv.Branch = _branchRepo.Get(inv.BranchId);
             inv.Product = _productRepo.Get(inv.ProductId);

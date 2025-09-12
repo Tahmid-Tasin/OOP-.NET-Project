@@ -34,12 +34,13 @@ namespace Store.userinterface
         {
             dataGridView1.AutoGenerateColumns = false;
             ID_Column.DataPropertyName = "Id";
-            Product_Column.DataPropertyName = "Product.Name";
-            Brand_Column.DataPropertyName = "Product.Brand";
-            Branch_Column.DataPropertyName = "Branch.Name";
+            Product_Column.DataPropertyName = "ProductName";
+            Brand_Column.DataPropertyName = "ProductBrand";
+            Branch_Column.DataPropertyName = "BranchName";
             Qty_Column.DataPropertyName = "Quantity";
             Updated_Column.DataPropertyName = "UpdatedAt";
         }
+
 
         private void LoadInventory()
         {
