@@ -11,71 +11,82 @@ namespace Store
         private readonly string _companyName;
         private readonly int _companyId;
 
-        // Default
         public AdminView() : this("Unknown", "User", "", 0) { }
 
-        // Pass display name, role, company name, company id
         public AdminView(string displayName, string role, string companyName = "", int companyId = 0)
         {
             _displayName = string.IsNullOrWhiteSpace(displayName) ? "Unknown" : displayName;
             _role = string.IsNullOrWhiteSpace(role) ? "User" : role;
             _companyName = companyName ?? "";
             _companyId = companyId;
-
             InitializeComponent();
         }
 
         private void AdminView_Load(object sender, EventArgs e)
         {
-            // Header (right)
             lblUserName.Text = _displayName;
             lblUserRole.Text = _role;
 
-            // Header (left)
-            lblCompanyName.Text = string.IsNullOrWhiteSpace(_companyName)
-                ? "No Company"
-                : _companyName;
+            if (_role == "Company Manager")
+            {
+                lblCompanyName.Text = _companyName;
+            }
+            else
+            {
+                lblCompanyName.Visible = false;
+            }
 
-            // Role-based menu
             if (_role == "Admin")
             {
-                button4.Visible = true;      // Dashboard
-                CompanyBtn.Visible = true;   // Companies
-                EmployeeBtn.Visible = true;  // Managers
-                button7.Visible = true;      // Products
-
-                button5.Visible = false;     // Inventory
-                button6.Visible = false;     // Review
-                BranchBtn.Visible = false;   // Branches
-
+                button4.Visible = true;
+                CompanyBtn.Visible = true;
+                EmployeeBtn.Visible = true;
+                button7.Visible = true;
+                button5.Visible = false;
+                button6.Visible = false;
+                BranchBtn.Visible = false;
+                ProductsBtn.Visible = false;
+                ItemsBtn.Visible = false;
                 button4.PerformClick();
             }
             else if (_role == "Company Manager")
             {
-                // Managers see Inventory + Branch
                 button4.Visible = false;
                 CompanyBtn.Visible = false;
                 EmployeeBtn.Visible = false;
                 button7.Visible = false;
                 button6.Visible = false;
-
-                button5.Visible = true;      // Inventory
-                BranchBtn.Visible = true;    // Branch
-
+                ProductsBtn.Visible = false;
+                ItemsBtn.Visible = false;
+                button5.Visible = true;
+                BranchBtn.Visible = true;
                 button5.PerformClick();
             }
-            else
+            else if (_role == "Customer")
             {
-                // Default fallback: only inventory
                 button4.Visible = false;
                 CompanyBtn.Visible = false;
                 EmployeeBtn.Visible = false;
                 button7.Visible = false;
                 button6.Visible = false;
                 BranchBtn.Visible = false;
-
-                button5.Visible = true;
-                button5.PerformClick();
+                button5.Visible = false;
+                ProductsBtn.Text = "Purchase History";
+                ItemsBtn.Text = "Products";
+                ProductsBtn.Visible = true;
+                ItemsBtn.Visible = true;
+            }
+            else
+            {
+                button4.Visible = false;
+                CompanyBtn.Visible = false;
+                EmployeeBtn.Visible = false;
+                button7.Visible = false;
+                button6.Visible = false;
+                BranchBtn.Visible = false;
+                button5.Visible = false;
+                ProductsBtn.Visible = false;
+                ItemsBtn.Visible = false;
             }
         }
 
@@ -94,27 +105,17 @@ namespace Store
         private void EmployeeBtn_Click(object sender, EventArgs e) => LoadContent(new EmployeeManage());
         private void button4_Click(object sender, EventArgs e) => MessageBox.Show("Dashboard placeholder.");
         private void button2_Click(object sender, EventArgs e) => MessageBox.Show("VIP Customers module not implemented yet.");
-
-        // Inventory button
-        private void button5_Click(object sender, EventArgs e)
-        {
-            // Pass companyId to InventoryManage if needed
-            LoadContent(new InventoryManage(_companyId));
-        }
-
-        private void BranchBtn_Click(object sender, EventArgs e)
-        {
-            LoadContent(new BranchManage(_companyId));
-        }
-
-        private void button1_Click(object sender, EventArgs e) // Logout
+        private void button5_Click(object sender, EventArgs e) => LoadContent(new InventoryManage(_companyId));
+        private void BranchBtn_Click(object sender, EventArgs e) => LoadContent(new BranchManage(_companyId));
+        private void button1_Click(object sender, EventArgs e)
         {
             var loginForm = new LoginForm();
             loginForm.Show();
             this.Hide();
         }
-
         private void label1_Click(object sender, EventArgs e) { }
         private void CompanyBtn_Click(object sender, EventArgs e) => LoadContent(new CompanyManage());
+        private void ProductsBtn_Click(object sender, EventArgs e) => MessageBox.Show("Purchase history will be added soon.");
+        private void ItemsBtn_Click(object sender, EventArgs e) => MessageBox.Show("Products will be added soon.");
     }
 }

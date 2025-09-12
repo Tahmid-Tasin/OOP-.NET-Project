@@ -66,7 +66,7 @@ namespace Store.Repository
         {
             string sql = @"SELECT 1 
                            FROM dbo.customer
-                           WHERE full_name = @fn AND password = @pw;";
+                           WHERE email = @fn AND password = @pw;";
 
             SqlConnection con = _factory.Create();
             SqlCommand cmd = new SqlCommand(sql, con);

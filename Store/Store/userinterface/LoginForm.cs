@@ -29,7 +29,6 @@ namespace Store
 
         private void UserComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void CreateAccountBtn_Click(object sender, EventArgs e)
@@ -49,9 +48,13 @@ namespace Store
                 bool ok = _customerService.VerifyLogin(user, pass);
                 if (ok)
                 {
-                    MessageBox.Show("Login Successful");
+                    var customer = _customerService.GetByUserName(user);
+                    string displayName = customer != null
+                        ? customer.FullName
+                        : user;
+
                     this.Hide();
-                    new CustomerView().Show();
+                    new AdminView(displayName, "Customer").Show();
                 }
                 else MessageBox.Show("Invalid username or password");
             }
@@ -76,13 +79,11 @@ namespace Store
                 if (ok)
                 {
                     var emp = _employeeService.GetByEmail(user);
-
                     string displayName  = emp?.NAME ?? user;
                     string companyName  = emp?.Company?.Name ?? "Company";
                     int companyId       = emp?.CompanyId ?? 0;
 
                     this.Hide();
-                    // Pass companyId into AdminView
                     new AdminView(displayName, "Company Manager", companyName, companyId).Show();
                 }
                 else
@@ -90,7 +91,6 @@ namespace Store
                     MessageBox.Show("Invalid email or password");
                 }
             }
-
             else
             {
                 MessageBox.Show("Please select a user type");
