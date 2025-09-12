@@ -19,6 +19,8 @@ namespace Store.userinterface
         private System.Windows.Forms.ComboBox cbCategory;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.FlowLayoutPanel flowProducts;
+        private System.Windows.Forms.ComboBox cbCompany;
+        private System.Windows.Forms.ComboBox cbBranch;
 
         protected override void Dispose(bool disposing)
         {
@@ -32,6 +34,9 @@ namespace Store.userinterface
             this.cbFilterToggle = new System.Windows.Forms.ComboBox();
             this.btnResetSearch = new System.Windows.Forms.Button();
             this.lblCart = new System.Windows.Forms.Label();
+            this.cbCompany = new System.Windows.Forms.ComboBox();
+            this.cbBranch = new System.Windows.Forms.ComboBox();
+
             this.filterPanel = new System.Windows.Forms.Panel();
             this.txtSearchName = new System.Windows.Forms.TextBox();
             this.txtSearchBrand = new System.Windows.Forms.TextBox();
@@ -41,13 +46,14 @@ namespace Store.userinterface
             this.lblBarcode = new System.Windows.Forms.Label();
             this.cbCategory = new System.Windows.Forms.ComboBox();
             this.btnSearch = new System.Windows.Forms.Button();
+
             this.flowProducts = new System.Windows.Forms.FlowLayoutPanel();
 
             this.headerBar.SuspendLayout();
             this.filterPanel.SuspendLayout();
             this.SuspendLayout();
 
-            // CustomerCartView
+            // Form
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.WhiteSmoke;
@@ -62,17 +68,19 @@ namespace Store.userinterface
             this.headerBar.Controls.Add(this.cbFilterToggle);
             this.headerBar.Controls.Add(this.btnResetSearch);
             this.headerBar.Controls.Add(this.lblCart);
+            this.headerBar.Controls.Add(this.cbCompany);
+            this.headerBar.Controls.Add(this.cbBranch);
 
             // cbFilterToggle
             this.cbFilterToggle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbFilterToggle.Items.AddRange(new object[] { "Hide Filters", "Show Filters" });
             this.cbFilterToggle.Location = new System.Drawing.Point(12, 16);
-            this.cbFilterToggle.Size = new System.Drawing.Size(140, 21);
+            this.cbFilterToggle.Size = new System.Drawing.Size(120, 21);
             this.cbFilterToggle.SelectedIndexChanged += new System.EventHandler(this.cbFilterToggle_SelectedIndexChanged);
 
             // btnResetSearch
-            this.btnResetSearch.Location = new System.Drawing.Point(160, 15);
-            this.btnResetSearch.Size = new System.Drawing.Size(90, 24);
+            this.btnResetSearch.Location = new System.Drawing.Point(140, 15);
+            this.btnResetSearch.Size = new System.Drawing.Size(70, 24);
             this.btnResetSearch.Text = "Reset";
             this.btnResetSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnResetSearch.Click += new System.EventHandler(this.btnResetSearch_Click);
@@ -81,9 +89,20 @@ namespace Store.userinterface
             this.lblCart.AutoSize = true;
             this.lblCart.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             this.lblCart.ForeColor = Color.Black;
-            this.lblCart.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.lblCart.Location = new System.Drawing.Point(1080, 18);
             this.lblCart.Text = "Cart: 0";
+
+            // cbCompany
+            this.cbCompany.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbCompany.Location = new System.Drawing.Point(230, 15);
+            this.cbCompany.Size = new System.Drawing.Size(200, 22);
+            this.cbCompany.SelectedIndexChanged += new System.EventHandler(this.cbCompany_SelectedIndexChanged);
+
+            // cbBranch
+            this.cbBranch.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbBranch.Location = new System.Drawing.Point(440, 15);
+            this.cbBranch.Size = new System.Drawing.Size(200, 22);
+            this.cbBranch.SelectedIndexChanged += new System.EventHandler(this.cbBranch_SelectedIndexChanged);
 
             // filterPanel
             this.filterPanel.BackColor = Color.White;
@@ -105,34 +124,34 @@ namespace Store.userinterface
 
             // txtSearchName
             this.txtSearchName.Location = new System.Drawing.Point(65, 22);
-            this.txtSearchName.Size = new System.Drawing.Size(160, 22);
+            this.txtSearchName.Size = new System.Drawing.Size(140, 22);
 
             // lblBrand
-            this.lblBrand.Location = new System.Drawing.Point(235, 24);
+            this.lblBrand.Location = new System.Drawing.Point(215, 24);
             this.lblBrand.Size = new System.Drawing.Size(44, 20);
             this.lblBrand.Text = "Brand";
 
             // txtSearchBrand
-            this.txtSearchBrand.Location = new System.Drawing.Point(285, 22);
-            this.txtSearchBrand.Size = new System.Drawing.Size(160, 22);
+            this.txtSearchBrand.Location = new System.Drawing.Point(265, 22);
+            this.txtSearchBrand.Size = new System.Drawing.Size(140, 22);
 
             // lblBarcode
-            this.lblBarcode.Location = new System.Drawing.Point(455, 24);
+            this.lblBarcode.Location = new System.Drawing.Point(415, 24);
             this.lblBarcode.Size = new System.Drawing.Size(56, 20);
             this.lblBarcode.Text = "Barcode";
 
             // txtSearchBarcode
-            this.txtSearchBarcode.Location = new System.Drawing.Point(515, 22);
-            this.txtSearchBarcode.Size = new System.Drawing.Size(160, 22);
+            this.txtSearchBarcode.Location = new System.Drawing.Point(475, 22);
+            this.txtSearchBarcode.Size = new System.Drawing.Size(120, 22);
 
             // cbCategory
             this.cbCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbCategory.Location = new System.Drawing.Point(685, 22);
-            this.cbCategory.Size = new System.Drawing.Size(160, 22);
+            this.cbCategory.Location = new System.Drawing.Point(605, 22);
+            this.cbCategory.Size = new System.Drawing.Size(120, 22);
 
             // btnSearch
-            this.btnSearch.Location = new System.Drawing.Point(855, 20);
-            this.btnSearch.Size = new System.Drawing.Size(96, 26);
+            this.btnSearch.Location = new System.Drawing.Point(735, 20);
+            this.btnSearch.Size = new System.Drawing.Size(80, 26);
             this.btnSearch.Text = "Search";
             this.btnSearch.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -146,7 +165,7 @@ namespace Store.userinterface
             this.flowProducts.AutoScrollMargin = new Size(20, 20);
             this.flowProducts.BackColor = Color.WhiteSmoke;
 
-            // add to form
+            // Add controls to form
             this.Controls.Add(this.flowProducts);
             this.Controls.Add(this.filterPanel);
             this.Controls.Add(this.headerBar);

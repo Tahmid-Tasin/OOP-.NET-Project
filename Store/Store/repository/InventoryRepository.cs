@@ -7,16 +7,10 @@ namespace Store.Repository
     public class InventoryRepository
     {
         private readonly SqlConnectionFactory _factory;
-        private readonly CompanyRepository _companyRepo;
-        private readonly BranchRepository _branchRepo;
-        private readonly ProductRepository _productRepo;
 
         public InventoryRepository()
         {
             _factory = new SqlConnectionFactory();
-            _companyRepo = new CompanyRepository();
-            _branchRepo = new BranchRepository();
-            _productRepo = new ProductRepository();
         }
 
         public int Upsert(Inventory inv)
@@ -63,7 +57,17 @@ WHEN NOT MATCHED THEN
 
         public Inventory Get(int id)
         {
-            const string sql = @"SELECT * FROM dbo.inventory WHERE id = @id;";
+            string sql = @"
+SELECT i.id, i.company_id, i.branch_id, i.product_id, i.quantity, i.updated_at,
+       c.id AS comp_id, c.name AS comp_name,
+       b.id AS branch_id, b.name AS branch_name,
+       p.id AS prod_id, p.name AS prod_name, p.brand, p.description, p.price, p.image_path
+FROM dbo.inventory i
+JOIN dbo.company c ON i.company_id = c.id
+JOIN dbo.branch b  ON i.branch_id = b.id
+JOIN dbo.product p ON i.product_id = p.id
+WHERE i.id = @id;";
+
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
             {
@@ -72,7 +76,7 @@ WHEN NOT MATCHED THEN
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
                     if (rd.Read())
-                        return MapInventory(rd);
+                        return MapJoined(rd);
                 }
             }
             return null;
@@ -80,9 +84,18 @@ WHEN NOT MATCHED THEN
 
         public List<Inventory> GetAll()
         {
-            const string sql = @"SELECT * FROM dbo.inventory ORDER BY id DESC;";
-            var list = new List<Inventory>();
+            string sql = @"
+SELECT i.id, i.company_id, i.branch_id, i.product_id, i.quantity, i.updated_at,
+       c.id AS comp_id, c.name AS comp_name,
+       b.id AS branch_id, b.name AS branch_name,
+       p.id AS prod_id, p.name AS prod_name, p.brand, p.description, p.price, p.image_path
+FROM dbo.inventory i
+JOIN dbo.company c ON i.company_id = c.id
+JOIN dbo.branch b  ON i.branch_id = b.id
+JOIN dbo.product p ON i.product_id = p.id
+ORDER BY i.id DESC;";
 
+            var list = new List<Inventory>();
             using (SqlConnection con = _factory.Create())
             using (SqlCommand cmd = new SqlCommand(sql, con))
             {
@@ -90,7 +103,7 @@ WHEN NOT MATCHED THEN
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
-                        list.Add(MapInventory(rd));
+                        list.Add(MapJoined(rd));
                 }
             }
             return list;
@@ -100,36 +113,46 @@ WHEN NOT MATCHED THEN
                                       int? productId = null, decimal? minQty = null, decimal? maxQty = null)
         {
             var results = new List<Inventory>();
-            var sql = "SELECT * FROM dbo.inventory WHERE 1=1 ";
+            string sql = @"
+SELECT i.id, i.company_id, i.branch_id, i.product_id, i.quantity, i.updated_at,
+       c.id AS comp_id, c.name AS comp_name,
+       b.id AS branch_id, b.name AS branch_name,
+       p.id AS prod_id, p.name AS prod_name, p.brand, p.description, p.price, p.image_path
+FROM dbo.inventory i
+JOIN dbo.company c ON i.company_id = c.id
+JOIN dbo.branch b  ON i.branch_id = b.id
+JOIN dbo.product p ON i.product_id = p.id
+WHERE 1=1";
+
             var cmd = new SqlCommand();
 
             if (companyId.HasValue)
             {
-                sql += " AND company_id = @cid ";
+                sql += " AND i.company_id = @cid ";
                 cmd.Parameters.AddWithValue("@cid", companyId.Value);
             }
             if (branchId.HasValue)
             {
-                sql += " AND branch_id = @bid ";
+                sql += " AND i.branch_id = @bid ";
                 cmd.Parameters.AddWithValue("@bid", branchId.Value);
             }
             if (productId.HasValue)
             {
-                sql += " AND product_id = @pid ";
+                sql += " AND i.product_id = @pid ";
                 cmd.Parameters.AddWithValue("@pid", productId.Value);
             }
             if (minQty.HasValue)
             {
-                sql += " AND quantity >= @min ";
+                sql += " AND i.quantity >= @min ";
                 cmd.Parameters.AddWithValue("@min", minQty.Value);
             }
             if (maxQty.HasValue)
             {
-                sql += " AND quantity <= @max ";
+                sql += " AND i.quantity <= @max ";
                 cmd.Parameters.AddWithValue("@max", maxQty.Value);
             }
 
-            sql += " ORDER BY id DESC;";
+            sql += " ORDER BY i.id DESC;";
             cmd.CommandText = sql;
 
             using (SqlConnection con = _factory.Create())
@@ -139,29 +162,43 @@ WHEN NOT MATCHED THEN
                 using (SqlDataReader rd = cmd.ExecuteReader())
                 {
                     while (rd.Read())
-                        results.Add(MapInventory(rd));
+                        results.Add(MapJoined(rd));
                 }
             }
             return results;
         }
 
-        private Inventory MapInventory(SqlDataReader rd)
+        private Inventory MapJoined(SqlDataReader rd)
         {
-            var inv = new Inventory
+            return new Inventory
             {
                 Id = (int)rd["id"],
                 CompanyId = (int)rd["company_id"],
                 BranchId = (int)rd["branch_id"],
                 ProductId = (int)rd["product_id"],
                 Quantity = (decimal)rd["quantity"],
-                UpdatedAt = (DateTime)rd["updated_at"]
+                UpdatedAt = (DateTime)rd["updated_at"],
+
+                Company = new Company
+                {
+                    Id = (int)rd["comp_id"],
+                    Name = rd["comp_name"].ToString()
+                },
+                Branch = new Branch
+                {
+                    Id = (int)rd["branch_id"],
+                    Name = rd["branch_name"].ToString()
+                },
+                Product = new Product
+                {
+                    ID = (int)rd["prod_id"],
+                    NAME = rd["prod_name"].ToString(),
+                    BRAND = rd["brand"].ToString(),
+                    DESCRIPTION = rd["description"].ToString(),
+                    PRICE = (decimal)rd["price"],
+                    IMAGE_PATH = rd["image_path"].ToString()
+                }
             };
-
-            inv.Company = _companyRepo.Get(inv.CompanyId);
-            inv.Branch = _branchRepo.Get(inv.BranchId);
-            inv.Product = _productRepo.Get(inv.ProductId);
-
-            return inv;
         }
     }
 }

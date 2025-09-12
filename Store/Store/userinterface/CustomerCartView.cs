@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+
 using Store.Repository;
 using Store.service;
 
@@ -12,16 +13,54 @@ namespace Store.userinterface
     {
         private readonly ProductService _productService;
         private readonly CategoryRepository _categoryRepository;
-        private readonly Dictionary<int, int> _cart = new Dictionary<int, int>();
+        private readonly CompanyService _companyService;
+        private readonly BranchService _branchService;
+
+        // Key: (CompanyId, BranchId, ProductId)
+// Key: (CompanyId, BranchId, ProductId)
+        private readonly Dictionary<Tuple<int, int, int>, int> _cart = 
+            new Dictionary<Tuple<int, int, int>, int>();
+
+
+        private int _selectedCompanyId = 0;
+        private int _selectedBranchId = 0;
 
         public CustomerCartView()
         {
             InitializeComponent();
             _productService = new ProductService();
             _categoryRepository = new CategoryRepository();
+            _companyService = new CompanyService();
+            _branchService = new BranchService();
+
+            LoadCompanies();
             LoadCategories();
-            cbFilterToggle.SelectedIndex = 1;
-            LoadProducts();
+
+            cbFilterToggle.SelectedIndex = 0; // Hide filters by default
+        }
+
+        private void LoadCompanies()
+        {
+            var companies = _companyService.GetAll();
+            cbCompany.Items.Clear();
+            cbCompany.Items.Add(new ComboBoxItem(0, "Select Company"));
+            foreach (var c in companies)
+            {
+                cbCompany.Items.Add(new ComboBoxItem(c.Id, c.Name));
+            }
+            cbCompany.SelectedIndex = 0;
+        }
+
+        private void LoadBranches(int companyId)
+        {
+            var branches = _branchService.GetByCompany(companyId);
+            cbBranch.Items.Clear();
+            cbBranch.Items.Add(new ComboBoxItem(0, "Select Branch"));
+            foreach (var b in branches)
+            {
+                cbBranch.Items.Add(new ComboBoxItem(b.Id, b.Name));
+            }
+            cbBranch.SelectedIndex = 0;
         }
 
         private void LoadCategories()
@@ -36,35 +75,37 @@ namespace Store.userinterface
 
         private void LoadProducts()
         {
+            if (_selectedCompanyId == 0 || _selectedBranchId == 0)
+            {
+                flowProducts.Controls.Clear();
+                return;
+            }
+
             flowProducts.SuspendLayout();
             flowProducts.Controls.Clear();
 
-            string name = txtSearchName.Text.Trim();
-            string brand = txtSearchBrand.Text.Trim();
-            string barcode = txtSearchBarcode.Text.Trim();
-            int selId = cbCategory.SelectedValue is int v ? v : 0;
-            int? categoryId = selId == 0 ? (int?)null : selId;
-
-            var items = _productService.Search(
-                string.IsNullOrWhiteSpace(name) ? null : name,
-                string.IsNullOrWhiteSpace(brand) ? null : brand,
-                string.IsNullOrWhiteSpace(barcode) ? null : barcode,
-                null, null, categoryId
+            // Fetch inventory items for this company + branch
+            var inventories = new InventoryService().Search(
+                companyId: _selectedCompanyId,
+                branchId: _selectedBranchId
             );
 
-            foreach (var p in items)
+            foreach (var inv in inventories)
             {
+                var product = inv.Product; // Product comes from Inventory
+                var key = Tuple.Create(_selectedCompanyId, _selectedBranchId, product.ID);
+
                 var card = new ProductCardControl();
-                card.Bind(p, _cart.TryGetValue(p.ID, out var q) ? q : 0);
+                card.Bind(product, _cart.TryGetValue(key, out var q) ? q : 0);
                 card.QuantityChanged += (s, qty) =>
                 {
                     if (qty <= 0)
                     {
-                        if (_cart.ContainsKey(p.ID)) _cart.Remove(p.ID);
+                        if (_cart.ContainsKey(key)) _cart.Remove(key);
                     }
                     else
                     {
-                        _cart[p.ID] = qty;
+                        _cart[key] = qty;
                     }
                     UpdateCartBadge();
                 };
@@ -73,6 +114,7 @@ namespace Store.userinterface
 
             flowProducts.ResumeLayout();
         }
+
 
         private void UpdateCartBadge()
         {
@@ -97,6 +139,50 @@ namespace Store.userinterface
             txtSearchBarcode.Text = "";
             cbCategory.SelectedValue = 0;
             LoadProducts();
+        }
+
+        private void cbCompany_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbCompany.SelectedItem is ComboBoxItem selected && selected.Id > 0)
+            {
+                _selectedCompanyId = selected.Id;
+                LoadBranches(_selectedCompanyId);
+            }
+            else
+            {
+                _selectedCompanyId = 0;
+                cbBranch.Items.Clear();
+                flowProducts.Controls.Clear();
+            }
+        }
+
+        private void cbBranch_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbBranch.SelectedItem is ComboBoxItem selected && selected.Id > 0)
+            {
+                _selectedBranchId = selected.Id;
+                LoadProducts();
+            }
+            else
+            {
+                _selectedBranchId = 0;
+                flowProducts.Controls.Clear();
+            }
+        }
+
+        // helper for ComboBox
+        private class ComboBoxItem
+        {
+            public int Id { get; }
+            public string Name { get; }
+
+            public ComboBoxItem(int id, string name)
+            {
+                Id = id;
+                Name = name;
+            }
+
+            public override string ToString() => Name;
         }
     }
 }

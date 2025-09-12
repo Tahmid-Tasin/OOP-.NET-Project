@@ -16,6 +16,8 @@ namespace Store.userinterface
         public ProductCardControl()
         {
             InitializeComponent();
+            // reduce flicker when inside FlowLayoutPanel
+            this.DoubleBuffered = true;
         }
 
         public void Bind(Product product, int qty = 0)
@@ -23,28 +25,27 @@ namespace Store.userinterface
             _product = product;
             _quantity = qty;
 
-            lblName.Text = product.NAME;
-            lblPrice.Text = $"৳ {product.PRICE:N2}";
-            lblWeight.Text = string.IsNullOrWhiteSpace(product.DESCRIPTION) ? "" : product.DESCRIPTION;
-            qtyLabel.Text = qty.ToString();
+            lblName.Text   = product?.NAME ?? "";
+            lblPrice.Text  = product != null ? $"৳ {product.PRICE:N2}" : "";
+            lblWeight.Text = string.IsNullOrWhiteSpace(product?.DESCRIPTION) ? "" : product.DESCRIPTION;
+            qtyLabel.Text  = qty.ToString();
 
-            if (!string.IsNullOrWhiteSpace(product.IMAGE_PATH) && File.Exists(product.IMAGE_PATH))
+            // load image (no file lock)
+            pic.Image = null;
+            if (!string.IsNullOrWhiteSpace(product?.IMAGE_PATH) && File.Exists(product.IMAGE_PATH))
             {
                 try
                 {
                     using (var fs = new FileStream(product.IMAGE_PATH, FileMode.Open, FileAccess.Read))
+                    using (var bmp = new Bitmap(fs))
                     {
-                        pic.Image = new Bitmap(fs);
+                        pic.Image = new Bitmap(bmp);
                     }
                 }
                 catch
                 {
                     pic.Image = null;
                 }
-            }
-            else
-            {
-                pic.Image = null;
             }
 
             UpdateCartUI();
