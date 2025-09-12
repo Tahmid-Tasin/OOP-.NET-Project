@@ -126,65 +126,59 @@
     <Compile Include="service\CompanyService.cs" />
     <Compile Include="service\InventoryService.cs" />
     <Compile Include="service\ProductService.cs" />
-    <Compile Include="userinterface\BranchEditForm.cs" />
-    <Compile Include="userinterface\BranchEditForm.Designer.cs" />
-    <Compile Include="userinterface\BranchManage.cs" />
-    <Compile Include="userinterface\BranchManage.Designer.cs" />
-    <Compile Include="userinterface\CustomerCreateForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="userinterface\CustomerCreateForm.Designer.cs">
-      <DependentUpon>CustomerCreateForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="userinterface\branchmanagement\BranchEditForm.cs" />
+    <Compile Include="userinterface\branchmanagement\BranchEditForm.Designer.cs" />
+    <Compile Include="userinterface\branchmanagement\BranchManage.cs" />
+    <Compile Include="userinterface\branchmanagement\BranchManage.Designer.cs" />
+    <Compile Include="userinterface\companymanagement\CompanyEditForm.cs" />
+    <Compile Include="userinterface\companymanagement\CompanyEditForm.Designer.cs" />
+    <Compile Include="userinterface\companymanagement\CompanyManage.cs" />
+    <Compile Include="userinterface\companymanagement\CompanyManage.Designer.cs" />
     <Compile Include="userinterface\AdminView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="userinterface\AdminView.Designer.cs">
       <DependentUpon>AdminView.cs</DependentUpon>
     </Compile>
-    <Compile Include="userinterface\CustomerView.cs">
+    <Compile Include="userinterface\companymanagermanagement\EmployeeEditForm.cs" />
+    <Compile Include="userinterface\companymanagermanagement\EmployeeEditForm.Designer.cs" />
+    <Compile Include="userinterface\companymanagermanagement\EmployeeManage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="userinterface\CustomerView.Designer.cs">
-      <DependentUpon>CustomerView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="userinterface\EmployeeEditForm.cs" />
-    <Compile Include="userinterface\EmployeeEditForm.Designer.cs" />
-    <Compile Include="userinterface\EmployeeManage.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="userinterface\EmployeeManage.Designer.cs">
+    <Compile Include="userinterface\companymanagermanagement\EmployeeManage.Designer.cs">
       <DependentUpon>EmployeeManage.cs</DependentUpon>
     </Compile>
-    <Compile Include="userinterface\InventoryEditForm.cs" />
-    <Compile Include="userinterface\InventoryEditForm.Designer.cs" />
-    <Compile Include="userinterface\InventoryManage.cs" />
-    <Compile Include="userinterface\InventoryManage.Designer.cs" />
-    <Compile Include="userinterface\InventoryViewForm.cs" />
-    <Compile Include="userinterface\InventoryViewForm.Designer.cs" />
+    <Compile Include="userinterface\customermanagement\CustomerCreateForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="userinterface\customermanagement\CustomerCreateForm.Designer.cs">
+      <DependentUpon>CustomerCreateForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="userinterface\customermanagement\CustomerView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="userinterface\customermanagement\CustomerView.Designer.cs">
+      <DependentUpon>CustomerView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="userinterface\inventorymanagement\InventoryEditForm.cs" />
+    <Compile Include="userinterface\inventorymanagement\InventoryEditForm.Designer.cs" />
+    <Compile Include="userinterface\inventorymanagement\InventoryManage.cs" />
+    <Compile Include="userinterface\inventorymanagement\InventoryManage.Designer.cs" />
+    <Compile Include="userinterface\inventorymanagement\InventoryViewForm.cs" />
+    <Compile Include="userinterface\inventorymanagement\InventoryViewForm.Designer.cs" />
     <Compile Include="userinterface\LoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="userinterface\CompanyEditForm.cs" />
-    <Compile Include="userinterface\CompanyEditForm.Designer.cs" />
-    <Compile Include="userinterface\CompanyManage.cs" />
-    <Compile Include="userinterface\CompanyManage.Designer.cs" />
-    <Compile Include="userinterface\ProductEditForm.cs" />
-    <Compile Include="userinterface\ProductEditForm.Designer.cs" />
-    <Compile Include="userinterface\ProductManageView.cs">
+    <Compile Include="userinterface\productmanagement\ProductEditForm.cs" />
+    <Compile Include="userinterface\productmanagement\ProductEditForm.Designer.cs" />
+    <Compile Include="userinterface\productmanagement\ProductManageView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="userinterface\ProductManageView.Designer.cs">
+    <Compile Include="userinterface\productmanagement\ProductManageView.Designer.cs">
       <DependentUpon>ProductManageView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="userinterface\StockView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="userinterface\StockView.Designer.cs">
-      <DependentUpon>StockView.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -195,26 +189,23 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="userinterface\CustomerCreateForm.resx">
-      <DependentUpon>CustomerCreateForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="userinterface\AdminView.resx">
       <DependentUpon>AdminView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="userinterface\CustomerView.resx">
-      <DependentUpon>CustomerView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="userinterface\EmployeeManage.resx">
+    <EmbeddedResource Include="userinterface\companymanagermanagement\EmployeeManage.resx">
       <DependentUpon>EmployeeManage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="userinterface\customermanagement\CustomerCreateForm.resx">
+      <DependentUpon>CustomerCreateForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="userinterface\customermanagement\CustomerView.resx">
+      <DependentUpon>CustomerView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="userinterface\LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="userinterface\ProductManageView.resx">
+    <EmbeddedResource Include="userinterface\productmanagement\ProductManageView.resx">
       <DependentUpon>ProductManageView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="userinterface\StockView.resx">
-      <DependentUpon>StockView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
