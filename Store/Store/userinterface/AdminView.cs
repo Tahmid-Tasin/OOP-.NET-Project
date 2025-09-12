@@ -71,10 +71,15 @@ namespace Store
                 button6.Visible = false;
                 BranchBtn.Visible = false;
                 button5.Visible = false;
+
                 ProductsBtn.Text = "Purchase History";
                 ItemsBtn.Text = "Products";
+
                 ProductsBtn.Visible = true;
                 ItemsBtn.Visible = true;
+
+                // Auto-load customer products
+                ItemsBtn.PerformClick();
             }
             else
             {
@@ -115,7 +120,17 @@ namespace Store
         }
         private void label1_Click(object sender, EventArgs e) { }
         private void CompanyBtn_Click(object sender, EventArgs e) => LoadContent(new CompanyManage());
-        private void ProductsBtn_Click(object sender, EventArgs e) => MessageBox.Show("Purchase history will be added soon.");
-        private void ItemsBtn_Click(object sender, EventArgs e) => MessageBox.Show("Products will be added soon.");
+
+        // Purchase history (for now just placeholder)
+        private void ProductsBtn_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Purchase history will be added soon.");
+        }
+
+        // Load customer product/cart view
+        private void ItemsBtn_Click(object sender, EventArgs e)
+        {
+            LoadContent(new CustomerCartView());
+        }
     }
 }

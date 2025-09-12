@@ -148,6 +148,8 @@
     <Compile Include="userinterface\companymanagermanagement\EmployeeManage.Designer.cs">
       <DependentUpon>EmployeeManage.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\CustomerCartView.cs" />
+    <Compile Include="userinterface\CustomerCartView.Designer.cs" />
     <Compile Include="userinterface\customermanagement\CustomerCreateForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -172,6 +174,8 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\ProductCardControl.cs" />
+    <Compile Include="userinterface\ProductCardControl.Designer.cs" />
     <Compile Include="userinterface\productmanagement\ProductEditForm.cs" />
     <Compile Include="userinterface\productmanagement\ProductEditForm.Designer.cs" />
     <Compile Include="userinterface\productmanagement\ProductManageView.cs">
