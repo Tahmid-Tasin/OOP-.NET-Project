@@ -11,13 +11,13 @@ namespace Store.userinterface
         private Product _product;
         private int _quantity;
 
+        public int ProductId { get { return _product != null ? _product.ID : 0; } }
+
         public event EventHandler<int> QuantityChanged;
 
         public ProductCardControl()
         {
             InitializeComponent();
-            // reduce flicker when inside FlowLayoutPanel
-            this.DoubleBuffered = true;
         }
 
         public void Bind(Product product, int qty = 0)
@@ -25,21 +25,18 @@ namespace Store.userinterface
             _product = product;
             _quantity = qty;
 
-            lblName.Text   = product?.NAME ?? "";
-            lblPrice.Text  = product != null ? $"৳ {product.PRICE:N2}" : "";
-            lblWeight.Text = string.IsNullOrWhiteSpace(product?.DESCRIPTION) ? "" : product.DESCRIPTION;
-            qtyLabel.Text  = qty.ToString();
+            lblName.Text = product.NAME;
+            lblPrice.Text = $"৳ {product.PRICE:N2}";
+            lblWeight.Text = string.IsNullOrWhiteSpace(product.DESCRIPTION) ? "" : product.DESCRIPTION;
+            qtyLabel.Text = qty.ToString();
 
-            // load image (no file lock)
-            pic.Image = null;
-            if (!string.IsNullOrWhiteSpace(product?.IMAGE_PATH) && File.Exists(product.IMAGE_PATH))
+            if (!string.IsNullOrWhiteSpace(product.IMAGE_PATH) && File.Exists(product.IMAGE_PATH))
             {
                 try
                 {
                     using (var fs = new FileStream(product.IMAGE_PATH, FileMode.Open, FileAccess.Read))
-                    using (var bmp = new Bitmap(fs))
                     {
-                        pic.Image = new Bitmap(bmp);
+                        pic.Image = new Bitmap(fs);
                     }
                 }
                 catch
@@ -47,8 +44,19 @@ namespace Store.userinterface
                     pic.Image = null;
                 }
             }
+            else
+            {
+                pic.Image = null;
+            }
 
             UpdateCartUI();
+        }
+
+        public void SetQuantity(int qty)
+        {
+            _quantity = Math.Max(0, qty);
+            UpdateCartUI();
+            QuantityChanged?.Invoke(this, _quantity);
         }
 
         private void plusBtn_Click(object sender, EventArgs e)
@@ -77,6 +85,11 @@ namespace Store.userinterface
             {
                 bottomBar.Visible = false;
             }
+
+            // ensure layout refresh when content changes
+            this.mainPanel.PerformLayout();
+            this.PerformLayout();
         }
+
     }
 }

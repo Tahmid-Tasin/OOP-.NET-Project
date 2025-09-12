@@ -130,6 +130,8 @@
     <Compile Include="userinterface\branchmanagement\BranchEditForm.Designer.cs" />
     <Compile Include="userinterface\branchmanagement\BranchManage.cs" />
     <Compile Include="userinterface\branchmanagement\BranchManage.Designer.cs" />
+    <Compile Include="userinterface\CartRowControl.cs" />
+    <Compile Include="userinterface\CartRowControl.Designer.cs" />
     <Compile Include="userinterface\companymanagement\CompanyEditForm.cs" />
     <Compile Include="userinterface\companymanagement\CompanyEditForm.Designer.cs" />
     <Compile Include="userinterface\companymanagement\CompanyManage.cs" />
