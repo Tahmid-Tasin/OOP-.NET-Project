@@ -16,20 +16,17 @@ namespace Store.service
 
         public Employee GetById(int id) => _repo.Get(id);
 
-        public bool VerifyLogin(string mobile, string password) => _repo.Verify(mobile, password);
+        public Employee GetByEmail(string email) => _repo.GetByEmail(email);   // 👈 NEW
+
+        public bool VerifyLogin(string email, string password) => _repo.Verify(email, password);
 
         public List<Employee> GetAll() => _repo.GetAll();
-        
-        public List<Employee> Search(string name, string mobile) => _repo.Search(name, mobile);
-        
-        public int Update(Employee e)
-        {
-            return _repo.UpdateNoPassword(e);
-        }
 
-        public int Delete(int id)
-        {
-            return _repo.Delete(id);
-        }
+        public List<Employee> Search(string name, string mobile, int? companyId = null)
+            => _repo.Search(name, mobile, companyId);
+
+        public int Update(Employee e) => _repo.UpdateNoPassword(e);
+
+        public int Delete(int id) => _repo.Delete(id);
     }
 }

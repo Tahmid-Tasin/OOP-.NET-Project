@@ -10,75 +10,90 @@ namespace Store
     {
         private readonly CustomerService _customerService;
         private readonly AdminService _adminService;
+        private readonly EmployeeService _employeeService;
+
         public LoginForm()
         {
             InitializeComponent();
             _customerService = new CustomerService();
             _adminService = new AdminService();
+            _employeeService = new EmployeeService(); 
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             UserComboBox.Items.Add("Admin");
-            UserComboBox.Items.Add("Manager");
+            UserComboBox.Items.Add("Company Manager");
             UserComboBox.Items.Add("Customer");
         }
 
         private void UserComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-
         }
 
         private void CreateAccountBtn_Click(object sender, EventArgs e)
         {
-            CustomerCreateForm frm = new CustomerCreateForm();
+            var frm = new CustomerCreateForm();
             frm.Show();
             Visible = false;
-
         }
 
         private void LoginBtn_Click(object sender, EventArgs e)
         {
+            string user = UserNameBox.Text.Trim();
+            string pass = pwBox.Text;
+
             if (UserComboBox.Text == "Customer")
             {
-                string user = UserNameBox.Text.Trim();
-                string pass = pwBox.Text;
-
                 bool ok = _customerService.VerifyLogin(user, pass);
                 if (ok)
                 {
-                    MessageBox.Show("Login Successful");
-                    this.Hide();
-                    CustomerView ad = new CustomerView();
-                    ad.Show();
-                }
-                else
-                {
-                    MessageBox.Show("Invalid username or password");
-                }
-            }
+                    var customer = _customerService.GetByUserName(user);
+                    string displayName = customer != null
+                        ? customer.FullName
+                        : user;
 
+                    this.Hide();
+                    new AdminView(displayName, "Customer").Show();
+                }
+                else MessageBox.Show("Invalid username or password");
+            }
             else if (UserComboBox.Text == "Admin")
             {
-                string us = UserNameBox.Text.Trim();
-                string pa = pwBox.Text;
-                bool ok = _adminService.VerifyLogin(us, pa);
+                bool ok = _adminService.VerifyLogin(user, pass);
                 if (ok)
                 {
-                    MessageBox.Show("Login Successful");
+                    var admin = _adminService.GetByUserName(user);
+                    string displayName = admin != null
+                        ? $"{(admin.FirstName ?? "").Trim()} {(admin.LastName ?? "").Trim()}".Trim()
+                        : user;
+
                     this.Hide();
-                    AdminView cs = new AdminView();
-                    cs.Show();
+                    new AdminView(displayName, "Admin").Show();
+                }
+                else MessageBox.Show("Invalid username or password");
+            }
+            else if (UserComboBox.Text == "Company Manager")
+            {
+                bool ok = _employeeService.VerifyLogin(user, pass);
+                if (ok)
+                {
+                    var emp = _employeeService.GetByEmail(user);
+                    string displayName  = emp?.NAME ?? user;
+                    string companyName  = emp?.Company?.Name ?? "Company";
+                    int companyId       = emp?.CompanyId ?? 0;
+
+                    this.Hide();
+                    new AdminView(displayName, "Company Manager", companyName, companyId).Show();
                 }
                 else
                 {
-                    MessageBox.Show("Invalid username or password");
+                    MessageBox.Show("Invalid email or password");
                 }
             }
-
             else
             {
-                MessageBox.Show("Please select an user type");
+                MessageBox.Show("Please select a user type");
             }
         }
     }

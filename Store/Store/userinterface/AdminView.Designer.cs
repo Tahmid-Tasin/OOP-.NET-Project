@@ -1,211 +1,191 @@
+using System.Drawing;
+
 namespace Store
 {
     partial class AdminView
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
+            if (disposing && (components != null)) components.Dispose();
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminView));
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.sideMenuPanel = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.EmployeeBtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.OutletBtn = new System.Windows.Forms.Button();
+            this.CompanyBtn = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.BranchBtn = new System.Windows.Forms.Button();
+            this.ProductsBtn = new System.Windows.Forms.Button();
+            this.ItemsBtn = new System.Windows.Forms.Button();
+            this.rightContainer = new System.Windows.Forms.Panel();
+            this.contentPanel = new System.Windows.Forms.Panel();
+            this.headerPanel = new System.Windows.Forms.Panel();
+            this.userRightFlow = new System.Windows.Forms.FlowLayoutPanel();
+            this.lblUserName = new System.Windows.Forms.Label();
+            this.lblUserRole = new System.Windows.Forms.Label();
+            this.headerIcon = new System.Windows.Forms.PictureBox();
+            this.lblCompanyName = new System.Windows.Forms.Label();
+            this.sideMenuPanel.SuspendLayout();
+            this.rightContainer.SuspendLayout();
+            this.headerPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.headerIcon)).BeginInit();
             this.SuspendLayout();
-            // 
-            // panel2
-            // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(175)))), ((int)(((byte)(76)))), ((int)(((byte)(15)))));
-            this.panel2.AutoScroll = true;
-            this.panel2.Controls.Add(this.label1);
-            this.panel2.Controls.Add(this.button4);
-            this.panel2.Controls.Add(this.EmployeeBtn);
-            this.panel2.Controls.Add(this.button5);
-            this.panel2.Controls.Add(this.OutletBtn);
-            this.panel2.Controls.Add(this.button7);
-            this.panel2.Controls.Add(this.button6);
-            this.panel2.Controls.Add(this.button2);
-            this.panel2.Controls.Add(this.button1);
-            this.panel2.Location = new System.Drawing.Point(-3, 0);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1351, 729);
-            this.panel2.TabIndex = 1;
-            // 
-            // label1
-            // 
-            this.label1.Font = new System.Drawing.Font("Showcard Gothic", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(595, 33);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(195, 47);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "MENU BAR";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // button4
-            // 
-            this.button4.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.button4.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button4.Location = new System.Drawing.Point(0, 120);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(1351, 87);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "DashBoard";
-            this.button4.UseVisualStyleBackColor = false;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // EmployeeBtn
-            // 
-            this.EmployeeBtn.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.EmployeeBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.EmployeeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.EmployeeBtn.Location = new System.Drawing.Point(0, 207);
-            this.EmployeeBtn.Name = "EmployeeBtn";
-            this.EmployeeBtn.Size = new System.Drawing.Size(1351, 87);
-            this.EmployeeBtn.TabIndex = 2;
-            this.EmployeeBtn.Text = "Employee";
-            this.EmployeeBtn.UseVisualStyleBackColor = false;
-            this.EmployeeBtn.Click += new System.EventHandler(this.EmployeeBtn_Click);
-            // 
-            // button5
-            // 
-            this.button5.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.button5.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button5.Location = new System.Drawing.Point(0, 294);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(1351, 87);
-            this.button5.TabIndex = 4;
-            this.button5.Text = "Stock";
-            this.button5.UseVisualStyleBackColor = false;
-            // 
-            // OutletBtn (NEW)
-            // 
-            this.OutletBtn.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.OutletBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.OutletBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.OutletBtn.Location = new System.Drawing.Point(0, 381);
-            this.OutletBtn.Name = "OutletBtn";
-            this.OutletBtn.Size = new System.Drawing.Size(1351, 87);
-            this.OutletBtn.TabIndex = 8;
-            this.OutletBtn.Text = "Outlet";
-            this.OutletBtn.UseVisualStyleBackColor = false;
-            this.OutletBtn.Click += new System.EventHandler(this.OutletBtn_Click);
-            // 
-            // button7 (Products)
-            // 
-            this.button7.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.button7.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button7.Location = new System.Drawing.Point(0, 468);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(1351, 87);
-            this.button7.TabIndex = 6;
-            this.button7.Text = "Products";
-            this.button7.UseVisualStyleBackColor = false;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button6 (Review)
-            // 
-            this.button6.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.button6.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button6.Location = new System.Drawing.Point(0, 555);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(1351, 87);
-            this.button6.TabIndex = 5;
-            this.button6.Text = "Review";
-            this.button6.UseVisualStyleBackColor = false;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button2 (VIP Customers)
-            // 
-            this.button2.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.button2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button2.Location = new System.Drawing.Point(0, 642);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(1351, 87);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "VIP Customers";
-            this.button2.UseVisualStyleBackColor = false;
-            // 
-            // button1 (Logout)
-            // 
-            this.button1.BackColor = System.Drawing.Color.FromArgb(197, 164, 133);
-            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold);
-            this.button1.Location = new System.Drawing.Point(0, 729);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(1351, 87);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Logout";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Location = new System.Drawing.Point(1203, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(145, 113);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
-            // AdminView
-            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 729);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.panel2);
             this.Name = "AdminView";
             this.Text = "AdminView";
             this.Load += new System.EventHandler(this.AdminView_Load);
-            this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.sideMenuPanel.BackColor = System.Drawing.Color.FromArgb(175, 76, 15);
+            this.sideMenuPanel.Controls.Add(this.label1);
+            this.sideMenuPanel.Controls.Add(this.button4);
+            this.sideMenuPanel.Controls.Add(this.EmployeeBtn);
+            this.sideMenuPanel.Controls.Add(this.button5);
+            this.sideMenuPanel.Controls.Add(this.CompanyBtn);
+            this.sideMenuPanel.Controls.Add(this.button7);
+            this.sideMenuPanel.Controls.Add(this.button6);
+            this.sideMenuPanel.Controls.Add(this.BranchBtn);
+            this.sideMenuPanel.Controls.Add(this.ProductsBtn);
+            this.sideMenuPanel.Controls.Add(this.ItemsBtn);
+            this.sideMenuPanel.Controls.Add(this.button2);
+            this.sideMenuPanel.Controls.Add(this.button1);
+            this.sideMenuPanel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.sideMenuPanel.Location = new System.Drawing.Point(0, 0);
+            this.sideMenuPanel.Name = "sideMenuPanel";
+            this.sideMenuPanel.Size = new System.Drawing.Size(200, 729);
+            this.sideMenuPanel.TabIndex = 1;
+            this.label1.Font = new System.Drawing.Font("Showcard Gothic", 16F, System.Drawing.FontStyle.Bold);
+            this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label1.Location = new System.Drawing.Point(10, 10);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(180, 40);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "MENU BAR";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.button4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button4.Text = "Dashboard";
+            this.button4.Height = 50;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.EmployeeBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.EmployeeBtn.Text = "Company Managers";
+            this.EmployeeBtn.Height = 50;
+            this.EmployeeBtn.Click += new System.EventHandler(this.EmployeeBtn_Click);
+            this.button5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button5.Text = "Stock";
+            this.button5.Height = 50;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.CompanyBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.CompanyBtn.Text = "Company";
+            this.CompanyBtn.Height = 50;
+            this.CompanyBtn.Click += new System.EventHandler(this.CompanyBtn_Click);
+            this.button7.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button7.Text = "Products";
+            this.button7.Height = 50;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button6.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button6.Text = "Review";
+            this.button6.Height = 50;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.BranchBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BranchBtn.Text = "Branches";
+            this.BranchBtn.Height = 50;
+            this.BranchBtn.Click += new System.EventHandler(this.BranchBtn_Click);
+            this.ProductsBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ProductsBtn.Text = "Products (Customer)";
+            this.ProductsBtn.Height = 50;
+            this.ProductsBtn.Click += new System.EventHandler(this.ProductsBtn_Click);
+            this.ItemsBtn.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ItemsBtn.Text = "Items (Customer)";
+            this.ItemsBtn.Height = 50;
+            this.ItemsBtn.Click += new System.EventHandler(this.ItemsBtn_Click);
+            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button2.Text = "VIP Customers";
+            this.button2.Height = 50;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button1.Text = "Logout";
+            this.button1.Height = 50;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.rightContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rightContainer.Location = new System.Drawing.Point(200, 0);
+            this.rightContainer.Name = "rightContainer";
+            this.rightContainer.Size = new System.Drawing.Size(1150, 729);
+            this.rightContainer.TabIndex = 2;
+            this.rightContainer.Controls.Add(this.contentPanel);
+            this.rightContainer.Controls.Add(this.headerPanel);
+            this.contentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentPanel.Location = new System.Drawing.Point(0, 60);
+            this.contentPanel.Name = "contentPanel";
+            this.contentPanel.Size = new System.Drawing.Size(1150, 669);
+            this.contentPanel.TabIndex = 1;
+            this.headerPanel.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.headerPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.headerPanel.Location = new System.Drawing.Point(0, 0);
+            this.headerPanel.Name = "headerPanel";
+            this.headerPanel.Size = new System.Drawing.Size(1150, 60);
+            this.headerPanel.TabIndex = 0;
+            this.headerPanel.Controls.Add(this.userRightFlow);
+            this.headerPanel.Controls.Add(this.lblCompanyName);
+            this.lblCompanyName.AutoSize = true;
+            this.lblCompanyName.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
+            this.lblCompanyName.ForeColor = System.Drawing.Color.Black;
+            this.lblCompanyName.Location = new System.Drawing.Point(12, 20);
+            this.lblCompanyName.Name = "lblCompanyName";
+            this.lblCompanyName.Text = "Company Name";
+            this.userRightFlow.AutoSize = true;
+            this.userRightFlow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.userRightFlow.Dock = System.Windows.Forms.DockStyle.Right;
+            this.userRightFlow.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
+            this.userRightFlow.WrapContents = false;
+            this.userRightFlow.Padding = new System.Windows.Forms.Padding(0, 16, 12, 0);
+            this.userRightFlow.Controls.Add(this.lblUserName);
+            this.userRightFlow.Controls.Add(this.lblUserRole);
+            this.userRightFlow.Controls.Add(this.headerIcon);
+            this.lblUserName.AutoSize = true;
+            this.lblUserName.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.lblUserName.ForeColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            this.lblUserName.Margin = new System.Windows.Forms.Padding(0, 0, 8, 0);
+            this.lblUserName.Text = "Unknown";
+            this.lblUserRole.AutoSize = true;
+            this.lblUserRole.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblUserRole.ForeColor = System.Drawing.Color.DimGray;
+            this.lblUserRole.Margin = new System.Windows.Forms.Padding(0, 0, 12, 0);
+            this.lblUserRole.Text = "User";
+            this.headerIcon.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.headerIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.headerIcon.Size = new System.Drawing.Size(36, 36);
+            this.headerIcon.TabStop = false;
+            this.Controls.Add(this.rightContainer);
+            this.Controls.Add(this.sideMenuPanel);
+            this.sideMenuPanel.ResumeLayout(false);
+            this.rightContainer.ResumeLayout(false);
+            this.headerPanel.ResumeLayout(false);
+            this.headerPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.headerIcon)).EndInit();
             this.ResumeLayout(false);
-
         }
-
         #endregion
-        private System.Windows.Forms.Panel panel2;
+
+        private System.Windows.Forms.Panel sideMenuPanel;
+        private System.Windows.Forms.Panel rightContainer;
+        private System.Windows.Forms.Panel headerPanel;
+        private System.Windows.Forms.Panel contentPanel;
+        private System.Windows.Forms.FlowLayoutPanel userRightFlow;
+        private System.Windows.Forms.Label lblUserName;
+        private System.Windows.Forms.Label lblUserRole;
+        private System.Windows.Forms.PictureBox headerIcon;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
@@ -214,7 +194,10 @@ namespace Store
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button OutletBtn;
+        private System.Windows.Forms.Button CompanyBtn;
+        private System.Windows.Forms.Label lblCompanyName;
+        private System.Windows.Forms.Button BranchBtn;
+        private System.Windows.Forms.Button ProductsBtn;
+        private System.Windows.Forms.Button ItemsBtn;
     }
 }
