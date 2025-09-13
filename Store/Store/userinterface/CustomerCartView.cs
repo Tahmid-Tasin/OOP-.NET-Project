@@ -345,13 +345,26 @@ namespace Store.userinterface
             }
             ToggleCart(false);
         }
-
+        
         private void BtnPlaceOrder_Click(object sender, EventArgs e)
         {
-            // placeholder — will be replaced in Step 06 (DB-backed order)
-            MessageBox.Show("Place Order is not implemented yet.", "Info",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Take a snapshot of the cart to avoid live mutations during checkout
+            var snapshot = Cart.ToDictionary(k => k.Key, v => v.Value);
+            if (snapshot.Count == 0)
+            {
+                MessageBox.Show("Your cart is empty.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            using (var dlg = new OrderSummaryForm(snapshot))
+            {
+                var result = dlg.ShowDialog(this);
+                UpdateCartBadge();
+                RenderCart();
+                if (CartStore.IsEmpty && _cartOpen) ToggleCart(false);
+            }
         }
+
 
         private void cbFilterToggle_SelectedIndexChanged(object sender, EventArgs e)
         {

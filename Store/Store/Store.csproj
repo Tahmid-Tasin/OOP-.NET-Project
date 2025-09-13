@@ -106,6 +106,7 @@
     <Compile Include="model\Employee.cs" />
     <Compile Include="model\Company.cs" />
     <Compile Include="model\Inventory.cs" />
+    <Compile Include="model\OrderHistory.cs" />
     <Compile Include="model\Product.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="repository\InventoryRepository.cs" />
     <Compile Include="repository\ISqlConnectionFactory.cs" />
     <Compile Include="repository\CompanyRepository.cs" />
+    <Compile Include="repository\OrderHistoryRepository.cs" />
     <Compile Include="repository\ProductRepository.cs" />
     <Compile Include="service\AdminService.cs" />
     <Compile Include="service\auth\UserSession.cs" />
@@ -127,6 +129,7 @@
     <Compile Include="service\EmployeeService.cs" />
     <Compile Include="service\CompanyService.cs" />
     <Compile Include="service\InventoryService.cs" />
+    <Compile Include="service\OrderHistoryService.cs" />
     <Compile Include="service\ProductService.cs" />
     <Compile Include="userinterface\branchmanagement\BranchEditForm.cs" />
     <Compile Include="userinterface\branchmanagement\BranchEditForm.Designer.cs" />
@@ -178,6 +181,8 @@
     <Compile Include="userinterface\LoginForm.Designer.cs">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\OrderSummaryForm.cs" />
+    <Compile Include="userinterface\OrderSummaryForm.Designer.cs" />
     <Compile Include="userinterface\ProductCardControl.cs" />
     <Compile Include="userinterface\ProductCardControl.Designer.cs" />
     <Compile Include="userinterface\productmanagement\ProductEditForm.cs" />
@@ -188,6 +193,8 @@
     <Compile Include="userinterface\productmanagement\ProductManageView.Designer.cs">
       <DependentUpon>ProductManageView.cs</DependentUpon>
     </Compile>
+    <Compile Include="userinterface\PurchaseHistoryForm.cs" />
+    <Compile Include="userinterface\PurchaseHistoryForm.Designer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

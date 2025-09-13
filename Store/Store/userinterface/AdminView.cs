@@ -154,8 +154,21 @@ namespace Store
 
         private void label1_Click(object sender, EventArgs e) { }
         private void CompanyBtn_Click(object sender, EventArgs e) => LoadContent(new CompanyManage());
+        
+        private void ProductsBtn_Click(object sender, EventArgs e)
+        {
+            var id = UserSession.Current;
+            if (id != null && id.Role == UserRole.Customer && id.UserId.HasValue)
+            {
+                LoadContent(new PurchaseHistoryForm(id.UserId.Value));
+            }
+            else
+            {
+                MessageBox.Show("Only customers can view purchase history.", "Access denied",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
-        private void ProductsBtn_Click(object sender, EventArgs e) => MessageBox.Show("Purchase history will be added soon.");
         private void ItemsBtn_Click(object sender, EventArgs e) => LoadContent(new CustomerCartView());
 
         protected override void OnFormClosed(FormClosedEventArgs e)
