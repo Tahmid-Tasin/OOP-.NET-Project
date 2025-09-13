@@ -5,13 +5,13 @@ using System.Windows.Forms;
 
 namespace Store.userinterface
 {
-    // A reusable UserControl that shows a product card with image, info, and cart controls
     public partial class ProductCardControl : UserControl
     {
         private Product _product;
         private int _quantity;
+        private decimal _availableStock;
 
-        public int ProductId { get { return _product != null ? _product.ID : 0; } }
+        public int ProductId => _product?.ID ?? 0;
 
         public event EventHandler<int> QuantityChanged;
 
@@ -20,11 +20,14 @@ namespace Store.userinterface
             InitializeComponent();
         }
 
-        public void Bind(Product product, int qty = 0)
+        /// <summary>
+        /// Bind product info + initial qty + available stock.
+        /// </summary>
+        public void Bind(Product product, int qty = 0, decimal availableStock = 0)
         {
             _product = product;
             _quantity = qty;
-
+            _availableStock = availableStock;
             lblName.Text = product.NAME;
             lblPrice.Text = $"৳ {product.PRICE:N2}";
             lblWeight.Text = string.IsNullOrWhiteSpace(product.DESCRIPTION) ? "" : product.DESCRIPTION;
@@ -54,6 +57,13 @@ namespace Store.userinterface
 
         public void SetQuantity(int qty)
         {
+            if (qty > _availableStock) // ✅ prevent exceeding stock
+            {
+                MessageBox.Show($"Only {_availableStock} left in stock.", "Stock limit",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                qty = (int)_availableStock;
+            }
+
             _quantity = Math.Max(0, qty);
             UpdateCartUI();
             QuantityChanged?.Invoke(this, _quantity);
@@ -61,9 +71,17 @@ namespace Store.userinterface
 
         private void plusBtn_Click(object sender, EventArgs e)
         {
-            _quantity++;
-            UpdateCartUI();
-            QuantityChanged?.Invoke(this, _quantity);
+            if (_quantity < _availableStock) // ✅ limit check
+            {
+                _quantity++;
+                UpdateCartUI();
+                QuantityChanged?.Invoke(this, _quantity);
+            }
+            else
+            {
+                MessageBox.Show($"Stock limit reached. Only {_availableStock} available.",
+                    "Out of Stock", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void minusBtn_Click(object sender, EventArgs e)
@@ -90,6 +108,5 @@ namespace Store.userinterface
             this.mainPanel.PerformLayout();
             this.PerformLayout();
         }
-
     }
 }

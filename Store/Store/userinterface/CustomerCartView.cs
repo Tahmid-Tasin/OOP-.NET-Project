@@ -114,72 +114,78 @@ namespace Store.userinterface
             cbCategory.SelectedValue = 0;
         }
 
-        private void LoadProducts()
+private void LoadProducts()
+{
+    if (_selectedCompanyId == 0 || _selectedBranchId == 0)
+    {
+        flowProducts.Controls.Clear();
+        return;
+    }
+
+    flowProducts.SuspendLayout();
+    flowProducts.Controls.Clear();
+
+    // Search inputs
+    string name = txtSearchName.Text.Trim();
+    string brand = txtSearchBrand.Text.Trim();
+    string barcode = txtSearchBarcode.Text.Trim();
+    int selId = cbCategory.SelectedValue is int v ? v : 0;
+    int? categoryId = selId == 0 ? (int?)null : selId;
+
+    // Fetch inventory items for this company + branch
+    var inventories = _inventoryService.Search(
+        companyId: _selectedCompanyId,
+        branchId: _selectedBranchId
+    );
+
+    // apply optional client-side filters by product attributes, if provided
+    if (!string.IsNullOrWhiteSpace(name))
+        inventories = inventories.Where(i => i.Product?.NAME?.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+    if (!string.IsNullOrWhiteSpace(brand))
+        inventories = inventories.Where(i => i.Product?.BRAND?.IndexOf(brand, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+    if (!string.IsNullOrWhiteSpace(barcode))
+        inventories = inventories.Where(i => i.Product?.BARCODE?.IndexOf(barcode, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
+
+    if (categoryId.HasValue)
+        inventories = inventories.Where(i => i.Product?.CATEGORY_ID == categoryId.Value).ToList();
+
+    foreach (var inv in inventories)
+    {
+        var product = inv.Product;
+        if (product == null) continue;
+
+        // ✅ skip out-of-stock
+        if (inv.Quantity <= 0) continue;
+
+        var key = Tuple.Create(_selectedCompanyId, _selectedBranchId, product.ID);
+
+        var card = new ProductCardControl();
+        card.Bind(product, Cart.TryGetValue(key, out var q) ? q : 0, inv.Quantity);
+        card.Tag = key; // keep key for sync
+
+        card.QuantityChanged += (s, qty) =>
         {
-            if (_selectedCompanyId == 0 || _selectedBranchId == 0)
-            {
-                flowProducts.Controls.Clear();
-                return;
-            }
+            var k = (Tuple<int, int, int>)card.Tag;
+            CartStore.SetQuantity(k, qty);  // global change
 
-            flowProducts.SuspendLayout();
-            flowProducts.Controls.Clear();
+            // local UI updates are triggered by CartStore_Changed; keep below for immediate feel
+            UpdateCartBadge();
+            RenderCart();
 
-            // Search inputs
-            string name = txtSearchName.Text.Trim();
-            string brand = txtSearchBrand.Text.Trim();
-            string barcode = txtSearchBarcode.Text.Trim();
-            int selId = cbCategory.SelectedValue is int v ? v : 0;
-            int? categoryId = selId == 0 ? (int?)null : selId;
+            if (Cart.Count > 0 && !_cartOpen)
+                ToggleCart(true);
+            if (Cart.Count == 0 && _cartOpen)
+                ToggleCart(false);
+        };
 
-            // Fetch inventory items for this company + branch
-            var inventories = _inventoryService.Search(
-                companyId: _selectedCompanyId,
-                branchId: _selectedBranchId
-            );
+        flowProducts.Controls.Add(card);
+    }
 
-            // apply optional client-side filters by product attributes, if provided
-            if (!string.IsNullOrWhiteSpace(name))
-                inventories = inventories.Where(i => i.Product != null && i.Product.NAME != null &&
-                                                     i.Product.NAME.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-            if (!string.IsNullOrWhiteSpace(brand))
-                inventories = inventories.Where(i => i.Product != null && i.Product.BRAND != null &&
-                                                     i.Product.BRAND.IndexOf(brand, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-            if (!string.IsNullOrWhiteSpace(barcode))
-                inventories = inventories.Where(i => i.Product != null && i.Product.BARCODE != null &&
-                                                     i.Product.BARCODE.IndexOf(barcode, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
-            if (categoryId.HasValue)
-                inventories = inventories.Where(i => i.Product != null && i.Product.CATEGORY_ID == categoryId.Value).ToList();
+    flowProducts.ResumeLayout();
+}
 
-            foreach (var inv in inventories)
-            {
-                var product = inv.Product;
-                if (product == null) continue;
-
-                var key = Tuple.Create(_selectedCompanyId, _selectedBranchId, product.ID);
-
-                var card = new ProductCardControl();
-                card.Bind(product, Cart.TryGetValue(key, out var q) ? q : 0);
-                card.Tag = key; // keep key for sync
-                card.QuantityChanged += (s, qty) =>
-                {
-                    var k = (Tuple<int, int, int>)card.Tag;
-                    CartStore.SetQuantity(k, qty);  // global change
-                    // local UI updates are triggered by CartStore_Changed; keep below for immediate feel
-                    UpdateCartBadge();
-                    RenderCart();
-
-                    if (Cart.Count > 0 && !_cartOpen)
-                        ToggleCart(true);
-                    if (Cart.Count == 0 && _cartOpen)
-                        ToggleCart(false);
-                };
-
-                flowProducts.Controls.Add(card);
-            }
-
-            flowProducts.ResumeLayout();
-        }
 
         private void UpdateCartBadge()
         {
@@ -430,5 +436,26 @@ namespace Store.userinterface
 
             public override string ToString() { return Name; }
         }
+        
+        public void ResetAllProductCards()
+        {
+            // Force clear cart state first
+            CartStore.Clear();
+
+            // Reload products fresh from inventory
+            LoadProducts();
+        }
+
+
+// PUBLIC: allow external calls to refresh badge + cart
+        public void RefreshCartUI()
+        {
+            UpdateCartBadge();
+            RenderCart();
+            if (CartStore.IsEmpty && _cartOpen)
+                ToggleCart(false);
+        }
+
+
     }
 }

@@ -110,8 +110,16 @@ namespace Store.userinterface
 
                 _orderService.SaveCartSnapshot(snapshot);
 
-                // Reset the global cart and close
+                // ✅ Reset the global cart
                 CartStore.Clear();
+
+                // ✅ Ask CustomerCartView to reset product cards & UI
+                if (Owner is CustomerCartView cartView)
+                {
+                    cartView.ResetAllProductCards();
+                    cartView.RefreshCartUI();
+                }
+
                 this.DialogResult = DialogResult.OK;
                 Close();
             }
@@ -121,6 +129,9 @@ namespace Store.userinterface
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
 
         private class CartLine
         {

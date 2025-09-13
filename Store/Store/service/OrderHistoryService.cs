@@ -1,4 +1,3 @@
-// NEW: Store/service/OrderHistoryService.cs
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +9,18 @@ namespace Store.service
     {
         private readonly OrderHistoryRepository _repo;
         private readonly ProductService _productService;
+        private readonly InventoryService _inventoryService;
 
         public OrderHistoryService()
         {
             _repo = new OrderHistoryRepository();
             _productService = new ProductService();
+            _inventoryService = new InventoryService();
         }
 
         /// <summary>
-        /// Saves the provided cart snapshot into dbo.order_history.
+        /// Saves the provided cart snapshot into dbo.order_history
+        /// and updates inventory (decreases stock).
         /// </summary>
         public void SaveCartSnapshot(Dictionary<Tuple<int,int,int>, int> cart)
         {
@@ -37,6 +39,7 @@ namespace Store.service
                 var p = _productService.GetById(productId);
                 if (p == null || qty <= 0) continue;
 
+                // ✅ build order row
                 rows.Add(new OrderHistory
                 {
                     CompanyId   = companyId,
@@ -46,22 +49,25 @@ namespace Store.service
                     Quantity    = qty,
                     UnitPrice   = p.PRICE,
                     CreatedAt   = DateTime.UtcNow,
-                    CustomerId  = currentUser?.UserId   // ✅ logged in customer
+                    CustomerId  = currentUser?.UserId
                 });
+                
+                var inv = _inventoryService.Search(companyId, branchId, productId).FirstOrDefault();
+                if (inv != null)
+                {
+                    inv.Quantity -= qty;
+                    if (inv.Quantity < 0) inv.Quantity = 0;
+                    _inventoryService.AddOrUpdate(inv);
+                }
             }
 
             if (rows.Count > 0)
                 _repo.InsertBulk(rows);
         }
 
-        
-        // File: Store/service/OrderHistoryService.cs
         public List<OrderHistory> GetHistoryForCustomer(int customerId)
         {
             return _repo.GetByCustomer(customerId);
         }
-
-        
-        
     }
 }
