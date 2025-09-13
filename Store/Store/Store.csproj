@@ -120,6 +120,7 @@
     <Compile Include="repository\ProductRepository.cs" />
     <Compile Include="service\AdminService.cs" />
     <Compile Include="service\BranchService.cs" />
+    <Compile Include="service\CartStore.cs" />
     <Compile Include="service\CustomerService.cs" />
     <Compile Include="service\EmailSender.cs" />
     <Compile Include="service\EmployeeService.cs" />

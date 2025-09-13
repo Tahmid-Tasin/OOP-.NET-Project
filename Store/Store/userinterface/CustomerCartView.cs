@@ -1,3 +1,4 @@
+// UPDATED: Store/userinterface/CustomerCartView.cs  (copy-ready)
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,9 +18,8 @@ namespace Store.userinterface
         private readonly BranchService _branchService;
         private readonly InventoryService _inventoryService;
 
-        // Key: (CompanyId, BranchId, ProductId)  -> Quantity
-        private readonly Dictionary<Tuple<int, int, int>, int> _cart =
-            new Dictionary<Tuple<int, int, int>, int>();
+        // Alias to the global cart
+        private Dictionary<Tuple<int, int, int>, int> Cart => CartStore.Items;
 
         private int _selectedCompanyId = 0;
         private int _selectedBranchId = 0;
@@ -60,6 +60,24 @@ namespace Store.userinterface
 
             // keep row width responsive
             cartItemsFlow.Resize += (s, e) => ResizeCartRows();
+
+            // listen to global cart changes (so other forms changing the cart auto-refresh this view)
+            CartStore.Changed += CartStore_Changed;
+
+            // initial badge
+            UpdateCartBadge();
+        }
+
+        private void CartStore_Changed(object sender, EventArgs e)
+        {
+            if (!IsHandleCreated) return;
+            BeginInvoke(new Action(() =>
+            {
+                UpdateCartBadge();
+                RenderCart();
+                if (!CartStore.IsEmpty && !_cartOpen) ToggleCart(true);
+                if (CartStore.IsEmpty && _cartOpen) ToggleCart(false);
+            }));
         }
 
         private void LoadCompanies()
@@ -141,26 +159,19 @@ namespace Store.userinterface
                 var key = Tuple.Create(_selectedCompanyId, _selectedBranchId, product.ID);
 
                 var card = new ProductCardControl();
-                card.Bind(product, _cart.TryGetValue(key, out var q) ? q : 0);
+                card.Bind(product, Cart.TryGetValue(key, out var q) ? q : 0);
                 card.Tag = key; // keep key for sync
                 card.QuantityChanged += (s, qty) =>
                 {
                     var k = (Tuple<int, int, int>)card.Tag;
-                    if (qty <= 0)
-                    {
-                        if (_cart.ContainsKey(k)) _cart.Remove(k);
-                    }
-                    else
-                    {
-                        _cart[k] = qty;
-                    }
-
+                    CartStore.SetQuantity(k, qty);  // global change
+                    // local UI updates are triggered by CartStore_Changed; keep below for immediate feel
                     UpdateCartBadge();
                     RenderCart();
 
-                    if (_cart.Count > 0 && !_cartOpen)
+                    if (Cart.Count > 0 && !_cartOpen)
                         ToggleCart(true);
-                    if (_cart.Count == 0 && _cartOpen)
+                    if (Cart.Count == 0 && _cartOpen)
                         ToggleCart(false);
                 };
 
@@ -172,11 +183,11 @@ namespace Store.userinterface
 
         private void UpdateCartBadge()
         {
-            int total = _cart.Values.Sum();
+            int total = Cart.Values.Sum();
             lblCart.Text = "Cart: " + total;
 
             decimal grand = 0m;
-            foreach (var kv in _cart)
+            foreach (var kv in Cart)
             {
                 var pid = kv.Key.Item3;
                 var qty = kv.Value;
@@ -194,7 +205,7 @@ namespace Store.userinterface
             decimal subtotal = 0m;
             int totalItems = 0;
 
-            foreach (var kv in _cart)
+            foreach (var kv in Cart)
             {
                 var compId = kv.Key.Item1;
                 var brId = kv.Key.Item2;
@@ -243,12 +254,12 @@ namespace Store.userinterface
 
             row.RemoveRequested += () =>
             {
-                if (_cart.ContainsKey(key)) _cart.Remove(key);
+                CartStore.Remove(key);   // global remove
                 UpdateCartBadge();
                 RenderCart();
                 SyncVisibleCardsForKey(key);
 
-                if (_cart.Count == 0) ToggleCart(false);
+                if (Cart.Count == 0) ToggleCart(false);
             };
 
             return row;
@@ -324,7 +335,7 @@ namespace Store.userinterface
 
         private void BtnClearCart_Click(object sender, EventArgs e)
         {
-            _cart.Clear();
+            CartStore.Clear();       // global clear
             UpdateCartBadge();
             RenderCart();
             // reset visible product cards
