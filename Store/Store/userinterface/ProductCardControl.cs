@@ -28,6 +28,7 @@ namespace Store.userinterface
             _product = product;
             _quantity = qty;
             _availableStock = availableStock;
+
             lblName.Text = product.NAME;
             lblPrice.Text = $"৳ {product.PRICE:N2}";
             lblWeight.Text = string.IsNullOrWhiteSpace(product.DESCRIPTION) ? "" : product.DESCRIPTION;
@@ -54,6 +55,18 @@ namespace Store.userinterface
 
             UpdateCartUI();
         }
+
+// Replace your ResetQuantity() with this:
+        public void ResetQuantity()
+        {
+            _quantity = 0;
+            UpdateCartUI();
+
+            // ✅ notify listeners (CustomerCartView subscribed) so any
+            // outer UI also re-syncs and repaints immediately
+            QuantityChanged?.Invoke(this, _quantity);
+        }
+
 
         public void SetQuantity(int qty)
         {
@@ -94,6 +107,7 @@ namespace Store.userinterface
         private void UpdateCartUI()
         {
             qtyLabel.Text = _quantity.ToString();
+
             if (_quantity > 0)
             {
                 lblInBag.Text = $"{_quantity} in bag";
@@ -101,12 +115,13 @@ namespace Store.userinterface
             }
             else
             {
+                lblInBag.Text = "";
                 bottomBar.Visible = false;
             }
 
-            // ensure layout refresh when content changes
-            this.mainPanel.PerformLayout();
-            this.PerformLayout();
+            qtyLabel.Invalidate();
+            qtyLabel.Refresh();
+            this.Refresh();
         }
     }
 }

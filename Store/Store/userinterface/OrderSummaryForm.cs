@@ -117,9 +117,8 @@ namespace Store.userinterface
                 if (Owner is CustomerCartView cartView)
                 {
                     cartView.ResetAllProductCards();
-                    cartView.RefreshCartUI();
+                    cartView.RefreshProducts();
                 }
-
                 this.DialogResult = DialogResult.OK;
                 Close();
             }

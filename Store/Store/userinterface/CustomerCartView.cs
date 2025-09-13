@@ -354,7 +354,6 @@ private void LoadProducts()
         
         private void BtnPlaceOrder_Click(object sender, EventArgs e)
         {
-            // Take a snapshot of the cart to avoid live mutations during checkout
             var snapshot = Cart.ToDictionary(k => k.Key, v => v.Value);
             if (snapshot.Count == 0)
             {
@@ -364,12 +363,21 @@ private void LoadProducts()
 
             using (var dlg = new OrderSummaryForm(snapshot))
             {
-                var result = dlg.ShowDialog(this);
-                UpdateCartBadge();
-                RenderCart();
-                if (CartStore.IsEmpty && _cartOpen) ToggleCart(false);
+                // ShowDialog(this) sets Owner = this (good)
+                if (dlg.ShowDialog(this) == DialogResult.OK)
+                {
+                    // ✅ dialog already cleared CartStore, now reset the visible cards
+                    ResetAllProductCards();
+
+                    // ✅ reload products so out-of-stock items disappear / quantities update
+                    RefreshProducts();
+                }
+
+                // keep the side-cart/badge in sync
+                RefreshCartUI();
             }
         }
+
 
 
         private void cbFilterToggle_SelectedIndexChanged(object sender, EventArgs e)
@@ -437,14 +445,26 @@ private void LoadProducts()
             public override string ToString() { return Name; }
         }
         
+// Replace the whole method with this:
         public void ResetAllProductCards()
         {
-            // Force clear cart state first
-            CartStore.Clear();
+            flowProducts.SuspendLayout();
+            foreach (Control c in flowProducts.Controls)
+            {
+                if (c is ProductCardControl card)
+                    card.ResetQuantity();   // now fires QuantityChanged -> immediate repaint
+            }
+            flowProducts.ResumeLayout(true);
+            flowProducts.PerformLayout();
+        }
 
-            // Reload products fresh from inventory
+
+// Optional: refresh the product grid (e.g., after inventory changes post-checkout)
+        public void RefreshProducts()
+        {
             LoadProducts();
         }
+
 
 
 // PUBLIC: allow external calls to refresh badge + cart
