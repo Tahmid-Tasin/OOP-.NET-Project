@@ -76,6 +76,8 @@ namespace Store.service
 
         public static void SignOut()
         {
+            try { CartStore.Clear(); } catch {}
+
             Current = UserIdentity.Guest();
             OnChanged?.Invoke();
         }
