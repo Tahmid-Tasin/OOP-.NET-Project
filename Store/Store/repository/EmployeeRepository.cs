@@ -1,3 +1,4 @@
+// File: Repository/EmployeeRepository.cs
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -14,14 +15,13 @@ namespace Store.Repository
             _factory = new SqlConnectionFactory();
         }
 
-        // ✅ Insert new employee
         public int Insert(Employee e)
         {
-            string sql = @"INSERT INTO dbo.employee (name, mobile, email, password, address, company_id)
+            const string sql = @"INSERT INTO dbo.employee (name, mobile, email, password, address, company_id)
                            VALUES (@nm, @mo, @em, @pw, @ad, @companyId);";
 
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
                 cmd.Parameters.AddWithValue("@nm", e.NAME ?? "");
                 cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
@@ -29,122 +29,122 @@ namespace Store.Repository
                 cmd.Parameters.AddWithValue("@pw", e.PASSWORD ?? "");
                 cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
                 cmd.Parameters.AddWithValue("@companyId", (object)e.CompanyId ?? DBNull.Value);
-
                 con.Open();
                 return cmd.ExecuteNonQuery();
             }
         }
 
-        // ✅ Get single employee by ID
         public Employee Get(int id)
         {
-            string sql = @"
+            const string sql = @"
                 SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.company_id,
                        c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
                 FROM dbo.employee e
                 LEFT JOIN dbo.company c ON e.company_id = c.id
                 WHERE e.id = @id;";
 
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 con.Open();
-
-                using (SqlDataReader rd = cmd.ExecuteReader())
+                using (var rd = cmd.ExecuteReader())
                 {
-                    if (rd.Read())
-                    {
-                        return new Employee
-                        {
-                            ID = (int)rd["id"],
-                            NAME = rd["name"].ToString(),
-                            MOBILE = rd["mobile"].ToString(),
-                            EMAIL = rd["email"].ToString(),
-                            PASSWORD = rd["password"].ToString(),
-                            ADDRESS = rd["address"].ToString(),
-                            CompanyId = rd["company_id"] as int?,
-                            Company = rd["CompanyId"] != DBNull.Value ? new Company
-                            {
-                                Id = (int)rd["CompanyId"],
-                                Name = rd["CompanyName"].ToString(),
-                                AddressLine1 = rd["address_line1"].ToString(),
-                                City = rd["city"].ToString()
-                            } : null
-                        };
-                    }
+                    return rd.Read() ? Map(rd) : null;
                 }
             }
-
-            return null;
         }
 
-        // ✅ NEW: Get employee by Email (for login → header + company name)
         public Employee GetByEmail(string email)
         {
-            string sql = @"
+            const string sql = @"
                 SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.company_id,
                        c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
                 FROM dbo.employee e
                 LEFT JOIN dbo.company c ON e.company_id = c.id
-                WHERE e.email = @em;";
+                WHERE LTRIM(RTRIM(e.email)) = LTRIM(RTRIM(@em));";
 
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
-                cmd.Parameters.AddWithValue("@em", email);
+                cmd.Parameters.AddWithValue("@em", email ?? "");
                 con.Open();
-
-                using (SqlDataReader rd = cmd.ExecuteReader())
+                using (var rd = cmd.ExecuteReader())
                 {
-                    if (rd.Read())
-                    {
-                        return new Employee
-                        {
-                            ID = (int)rd["id"],
-                            NAME = rd["name"].ToString(),
-                            MOBILE = rd["mobile"].ToString(),
-                            EMAIL = rd["email"].ToString(),
-                            PASSWORD = rd["password"].ToString(),
-                            ADDRESS = rd["address"].ToString(),
-                            CompanyId = rd["company_id"] as int?,
-                            Company = rd["CompanyId"] != DBNull.Value ? new Company
-                            {
-                                Id = (int)rd["CompanyId"],
-                                Name = rd["CompanyName"].ToString(),
-                                AddressLine1 = rd["address_line1"].ToString(),
-                                City = rd["city"].ToString()
-                            } : null
-                        };
-                    }
+                    return rd.Read() ? Map(rd) : null;
                 }
             }
-
-            return null;
         }
 
-        // ✅ Verify login (email + password)
-        public bool Verify(string email, string password)
+        public Employee GetByName(string name)
         {
-            string sql = @"SELECT 1
-                           FROM dbo.employee
-                           WHERE email = @em AND password = @pw;";
+            const string sql = @"
+                SELECT e.id, e.name, e.mobile, e.email, e.password, e.address, e.company_id,
+                       c.id AS CompanyId, c.name AS CompanyName, c.address_line1, c.city
+                FROM dbo.employee e
+                LEFT JOIN dbo.company c ON e.company_id = c.id
+                WHERE LTRIM(RTRIM(e.name)) = LTRIM(RTRIM(@nm));";
 
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
-                cmd.Parameters.AddWithValue("@em", email);
-                cmd.Parameters.AddWithValue("@pw", password);
-
+                cmd.Parameters.AddWithValue("@nm", name ?? "");
                 con.Open();
-                using (SqlDataReader rd = cmd.ExecuteReader())
+                using (var rd = cmd.ExecuteReader())
                 {
-                    return rd.Read();
+                    return rd.Read() ? Map(rd) : null;
                 }
             }
         }
 
-        // ✅ Get all employees
+        public Employee GetByLoginKey(string userOrEmail)
+        {
+            if (!string.IsNullOrWhiteSpace(userOrEmail) && userOrEmail.Contains("@"))
+                return GetByEmail(userOrEmail);
+            var e = GetByName(userOrEmail);
+            return e ?? GetByEmail(userOrEmail);
+        }
+
+        public bool VerifyByEmail(string email, string password)
+        {
+            const string sql = @"SELECT TOP 1 1
+                           FROM dbo.employee
+                           WHERE LTRIM(RTRIM(email)) = LTRIM(RTRIM(@em)) AND password = @pw;";
+
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@em", email ?? "");
+                cmd.Parameters.AddWithValue("@pw", password ?? "");
+                con.Open();
+                using (var rd = cmd.ExecuteReader()) return rd.Read();
+            }
+        }
+
+        public bool VerifyByName(string name, string password)
+        {
+            const string sql = @"SELECT TOP 1 1
+                           FROM dbo.employee
+                           WHERE LTRIM(RTRIM(name)) = LTRIM(RTRIM(@nm)) AND password = @pw;";
+
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@nm", name ?? "");
+                cmd.Parameters.AddWithValue("@pw", password ?? "");
+                con.Open();
+                using (var rd = cmd.ExecuteReader()) return rd.Read();
+            }
+        }
+
+        public bool VerifyFlexible(string userOrEmail, string password)
+        {
+            if (string.IsNullOrWhiteSpace(userOrEmail)) return false;
+            if (userOrEmail.Contains("@") && VerifyByEmail(userOrEmail, password)) return true;
+            if (VerifyByName(userOrEmail, password)) return true;
+            return VerifyByEmail(userOrEmail, password);
+        }
+
         public List<Employee> GetAll()
         {
             const string sql = @"
@@ -155,39 +155,18 @@ namespace Store.Repository
                 ORDER BY e.id DESC;";
 
             var list = new List<Employee>();
-
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
                 con.Open();
-                using (SqlDataReader rd = cmd.ExecuteReader())
+                using (var rd = cmd.ExecuteReader())
                 {
-                    while (rd.Read())
-                    {
-                        list.Add(new Employee
-                        {
-                            ID = (int)rd["id"],
-                            NAME = rd["name"].ToString(),
-                            MOBILE = rd["mobile"].ToString(),
-                            EMAIL = rd["email"].ToString(),
-                            ADDRESS = rd["address"].ToString(),
-                            CompanyId = rd["company_id"] as int?,
-                            Company = rd["CompanyId"] != DBNull.Value ? new Company
-                            {
-                                Id = (int)rd["CompanyId"],
-                                Name = rd["CompanyName"].ToString(),
-                                AddressLine1 = rd["address_line1"].ToString(),
-                                City = rd["city"].ToString()
-                            } : null
-                        });
-                    }
+                    while (rd.Read()) list.Add(Map(rd));
                 }
             }
-
             return list;
         }
 
-        // ✅ Search employees by name, mobile, or company
         public List<Employee> Search(string namePart, string mobilePart, int? companyId = null)
         {
             var results = new List<Employee>();
@@ -199,8 +178,8 @@ namespace Store.Repository
                 LEFT JOIN dbo.company c ON e.company_id = c.id
                 WHERE 1=1 ");
 
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand())
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand())
             {
                 cmd.Connection = con;
 
@@ -226,34 +205,14 @@ namespace Store.Repository
                 cmd.CommandText = sb.ToString();
 
                 con.Open();
-                using (SqlDataReader rd = cmd.ExecuteReader())
+                using (var rd = cmd.ExecuteReader())
                 {
-                    while (rd.Read())
-                    {
-                        results.Add(new Employee
-                        {
-                            ID = (int)rd["id"],
-                            NAME = rd["name"].ToString(),
-                            MOBILE = rd["mobile"].ToString(),
-                            EMAIL = rd["email"].ToString(),
-                            ADDRESS = rd["address"].ToString(),
-                            CompanyId = rd["company_id"] as int?,
-                            Company = rd["CompanyId"] != DBNull.Value ? new Company
-                            {
-                                Id = (int)rd["CompanyId"],
-                                Name = rd["CompanyName"].ToString(),
-                                AddressLine1 = rd["address_line1"].ToString(),
-                                City = rd["city"].ToString()
-                            } : null
-                        });
-                    }
+                    while (rd.Read()) results.Add(Map(rd));
                 }
             }
-
             return results;
         }
 
-        // ✅ Update employee (without changing password)
         public int UpdateNoPassword(Employee e)
         {
             const string sql = @"
@@ -261,8 +220,8 @@ namespace Store.Repository
                 SET name = @nm, mobile = @mo, email = @em, address = @ad, company_id = @companyId
                 WHERE id = @id;";
 
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
                 cmd.Parameters.AddWithValue("@nm", e.NAME ?? "");
                 cmd.Parameters.AddWithValue("@mo", e.MOBILE ?? "");
@@ -270,24 +229,48 @@ namespace Store.Repository
                 cmd.Parameters.AddWithValue("@ad", e.ADDRESS ?? "");
                 cmd.Parameters.AddWithValue("@companyId", (object)e.CompanyId ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@id", e.ID);
-
                 con.Open();
                 return cmd.ExecuteNonQuery();
             }
         }
 
-        // ✅ Delete employee
         public int Delete(int id)
         {
             const string sql = @"DELETE FROM dbo.employee WHERE id = @id;";
-
-            using (SqlConnection con = _factory.Create())
-            using (SqlCommand cmd = new SqlCommand(sql, con))
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
                 cmd.Parameters.AddWithValue("@id", id);
                 con.Open();
                 return cmd.ExecuteNonQuery();
             }
+        }
+
+        private Employee Map(SqlDataReader rd)
+        {
+            var emp = new Employee
+            {
+                ID = Convert.ToInt32(rd["id"]),
+                NAME = rd["name"].ToString(),
+                MOBILE = rd["mobile"].ToString(),
+                EMAIL = rd["email"].ToString(),
+                ADDRESS = rd["address"].ToString(),
+                // Correct DBNull-safe cast:
+                CompanyId = rd["company_id"] == DBNull.Value ? (int?)null : Convert.ToInt32(rd["company_id"]),
+            };
+
+            if (rd["CompanyId"] != DBNull.Value)
+            {
+                emp.Company = new Company
+                {
+                    Id = Convert.ToInt32(rd["CompanyId"]),
+                    Name = rd["CompanyName"].ToString(),
+                    AddressLine1 = rd["address_line1"].ToString(),
+                    City = rd["city"].ToString()
+                };
+            }
+
+            return emp;
         }
     }
 }

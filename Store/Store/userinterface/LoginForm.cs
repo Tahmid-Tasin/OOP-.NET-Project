@@ -1,6 +1,6 @@
+// File: userinterface/LoginForm.cs
 using System;
 using System.Windows.Forms;
-
 using Store.service;
 using Store.userinterface;
 
@@ -17,19 +17,51 @@ namespace Store
             InitializeComponent();
             _customerService = new CustomerService();
             _adminService = new AdminService();
-            _employeeService = new EmployeeService(); 
+            _employeeService = new EmployeeService();
+
+            try
+            {
+                if (pwBox.Multiline) pwBox.Multiline = false;
+                pwBox.UseSystemPasswordChar = true;
+            }
+            catch { }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            UserComboBox.Items.Clear();
             UserComboBox.Items.Add("Admin");
             UserComboBox.Items.Add("Company Manager");
             UserComboBox.Items.Add("Customer");
+            ApplyDefaultRoleSelection();
+            ResetInputs();
         }
 
-        private void UserComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void ApplyDefaultRoleSelection()
         {
+            string wanted = UserSession.LastLoginUserType ?? "Customer";
+            int idx = -1;
+            for (int i = 0; i < UserComboBox.Items.Count; i++)
+            {
+                if (string.Equals(UserComboBox.Items[i].ToString(), wanted, StringComparison.OrdinalIgnoreCase))
+                { idx = i; break; }
+            }
+            if (idx >= 0) UserComboBox.SelectedIndex = idx;
+            else if (UserComboBox.Items.Count > 0)
+            {
+                int def = UserComboBox.Items.IndexOf("Customer");
+                UserComboBox.SelectedIndex = def >= 0 ? def : 0;
+            }
         }
+
+        private void ResetInputs()
+        {
+            UserNameBox.Clear();
+            pwBox.Clear();
+            UserNameBox.Focus();
+        }
+
+        private void UserComboBox_SelectedIndexChanged(object sender, EventArgs e) { }
 
         private void CreateAccountBtn_Click(object sender, EventArgs e)
         {
@@ -40,60 +72,76 @@ namespace Store
 
         private void LoginBtn_Click(object sender, EventArgs e)
         {
-            string user = UserNameBox.Text.Trim();
-            string pass = pwBox.Text;
+            string user = (UserNameBox.Text ?? "").Trim();
+            string pass = (pwBox.Text ?? "").Trim();
+            string selected = (UserComboBox.Text ?? "").Trim();
 
-            if (UserComboBox.Text == "Customer")
+            if (string.IsNullOrWhiteSpace(selected))
             {
-                bool ok = _customerService.VerifyLogin(user, pass);
-                if (ok)
-                {
-                    var customer = _customerService.GetByUserName(user);
-                    string displayName = customer != null
-                        ? customer.FullName
-                        : user;
-
-                    this.Hide();
-                    new AdminView(displayName, "Customer").Show();
-                }
-                else MessageBox.Show("Invalid username or password");
+                MessageBox.Show("Please select a user type");
+                return;
             }
-            else if (UserComboBox.Text == "Admin")
+            if (string.IsNullOrWhiteSpace(user) || string.IsNullOrWhiteSpace(pass))
             {
-                bool ok = _adminService.VerifyLogin(user, pass);
-                if (ok)
-                {
-                    var admin = _adminService.GetByUserName(user);
-                    string displayName = admin != null
-                        ? $"{(admin.FirstName ?? "").Trim()} {(admin.LastName ?? "").Trim()}".Trim()
-                        : user;
-
-                    this.Hide();
-                    new AdminView(displayName, "Admin").Show();
-                }
-                else MessageBox.Show("Invalid username or password");
+                MessageBox.Show("Please enter username/email and password");
+                return;
             }
-            else if (UserComboBox.Text == "Company Manager")
-            {
-                bool ok = _employeeService.VerifyLogin(user, pass);
-                if (ok)
-                {
-                    var emp = _employeeService.GetByEmail(user);
-                    string displayName  = emp?.NAME ?? user;
-                    string companyName  = emp?.Company?.Name ?? "Company";
-                    int companyId       = emp?.CompanyId ?? 0;
 
-                    this.Hide();
-                    new AdminView(displayName, "Company Manager", companyName, companyId).Show();
-                }
-                else
+            UserSession.LastLoginUserType = selected;
+
+            try
+            {
+                if (selected == "Customer")
                 {
-                    MessageBox.Show("Invalid email or password");
+                    if (_customerService.VerifyLogin(user, pass))
+                    {
+                        var c = _customerService.GetByLoginKey(user);
+                        UserSession.SignIn(UserIdentity.FromCustomer(c));
+                        AfterSuccessfulLogin();
+                        return;
+                    }
                 }
+                else if (selected == "Admin")
+                {
+                    if (_adminService.VerifyLogin(user, pass))
+                    {
+                        var a = _adminService.GetByUserName(user);
+                        UserSession.SignIn(UserIdentity.FromAdmin(a, email: null));
+                        AfterSuccessfulLogin();
+                        return;
+                    }
+                }
+                else if (selected == "Company Manager")
+                {
+                    if (_employeeService.VerifyLoginFlexible(user, pass))
+                    {
+                        var emp = _employeeService.GetByLoginKey(user);
+                        UserSession.SignIn(UserIdentity.FromManager(emp));
+                        AfterSuccessfulLogin();
+                        return;
+                    }
+                }
+
+                MessageBox.Show("Invalid username or password");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Login failed: " + ex.Message);
+            }
+        }
+
+        private void AfterSuccessfulLogin()
+        {
+            // If opened by AdminView during logout:
+            if (this.Owner is AdminView)
+            {
+                this.DialogResult = DialogResult.OK;
+                Close();
             }
             else
             {
-                MessageBox.Show("Please select a user type");
+                this.Hide();
+                new AdminView().Show();
             }
         }
     }

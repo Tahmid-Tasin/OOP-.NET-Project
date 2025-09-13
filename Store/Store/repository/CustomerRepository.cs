@@ -1,3 +1,5 @@
+// File: Repository/CustomerRepository.cs
+using System;
 using System.Data.SqlClient;
 
 namespace Store.Repository
@@ -13,73 +15,121 @@ namespace Store.Repository
 
         public int Insert(Customer a)
         {
-            string sql = @"INSERT INTO dbo.customer 
-                           (full_name, mobile,email,address, password)
+            const string sql = @"INSERT INTO dbo.customer 
+                           (full_name, mobile, email, address, password)
                            VALUES (@fn, @mb, @em, @ad, @pw);";
 
-            SqlConnection con = _factory.Create();
-            SqlCommand cmd = new SqlCommand(sql, con);
-
-            cmd.Parameters.AddWithValue("@fn", a.FullName ?? "");
-            cmd.Parameters.AddWithValue("@mb", a.Mobile ?? "");
-            cmd.Parameters.AddWithValue("@em", a.Email ?? "");
-            cmd.Parameters.AddWithValue("@ad", a.Address ?? "");
-            cmd.Parameters.AddWithValue("@pw", a.Password ?? "");
-
-            con.Open();
-            int rows = cmd.ExecuteNonQuery();
-            con.Close();
-
-            return rows;
-        }
-
-        public Customer Get(string full_name)
-        {
-            string sql = @"SELECT TOP 1 id, full_name, mobile, email, address, password
-                           FROM dbo.customer
-                           WHERE full_name = @fn;";
-
-            SqlConnection con = _factory.Create();
-            SqlCommand cmd = new SqlCommand(sql, con);
-            cmd.Parameters.AddWithValue("@fn", full_name);
-
-            con.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-
-            Customer customer = null;
-            if (rd.Read())
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
             {
-                customer = new Customer();
-                customer.Id = (int)rd["id"];
-                customer.FullName = rd["full_name"].ToString();
-                customer.Mobile = rd["mobile"].ToString();
-                customer.Email = rd["email"].ToString();
-                customer.Address = rd["address"].ToString();
-                customer.Password = rd["password"].ToString();
+                cmd.Parameters.AddWithValue("@fn", a.FullName ?? "");
+                cmd.Parameters.AddWithValue("@mb", a.Mobile ?? "");
+                cmd.Parameters.AddWithValue("@em", a.Email ?? "");
+                cmd.Parameters.AddWithValue("@ad", a.Address ?? "");
+                cmd.Parameters.AddWithValue("@pw", a.Password ?? "");
+                con.Open();
+                return cmd.ExecuteNonQuery();
             }
-
-            con.Close();
-            return customer;
         }
 
-        public bool Verify(string fullName, string password)
+        public Customer GetByFullName(string fullName)
         {
-            string sql = @"SELECT 1 
+            const string sql = @"SELECT TOP 1 id, full_name, mobile, email, address, password
                            FROM dbo.customer
-                           WHERE email = @fn AND password = @pw;";
+                           WHERE LTRIM(RTRIM(full_name)) = LTRIM(RTRIM(@fn));";
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@fn", fullName ?? "");
+                con.Open();
+                using (var rd = cmd.ExecuteReader())
+                {
+                    return rd.Read() ? Map(rd) : null;
+                }
+            }
+        }
 
-            SqlConnection con = _factory.Create();
-            SqlCommand cmd = new SqlCommand(sql, con);
-            cmd.Parameters.AddWithValue("@fn", fullName);
-            cmd.Parameters.AddWithValue("@pw", password);
+        public Customer GetByEmail(string email)
+        {
+            const string sql = @"SELECT TOP 1 id, full_name, mobile, email, address, password
+                           FROM dbo.customer
+                           WHERE LTRIM(RTRIM(email)) = LTRIM(RTRIM(@em));";
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@em", email ?? "");
+                con.Open();
+                using (var rd = cmd.ExecuteReader())
+                {
+                    return rd.Read() ? Map(rd) : null;
+                }
+            }
+        }
 
-            con.Open();
-            SqlDataReader rd = cmd.ExecuteReader();
-            bool found = rd.Read();
-            con.Close();
+        public Customer GetByLoginKey(string userOrEmail)
+        {
+            // Prefer email if looks like email; else try full_name, then email fallback.
+            if (!string.IsNullOrWhiteSpace(userOrEmail) && userOrEmail.Contains("@"))
+                return GetByEmail(userOrEmail);
 
-            return found;
+            var c = GetByFullName(userOrEmail);
+            if (c != null) return c;
+
+            return GetByEmail(userOrEmail);
+        }
+
+        public bool VerifyByEmail(string email, string password)
+        {
+            const string sql = @"SELECT TOP 1 1 
+                           FROM dbo.customer
+                           WHERE LTRIM(RTRIM(email)) = LTRIM(RTRIM(@em)) AND password = @pw;";
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@em", email ?? "");
+                cmd.Parameters.AddWithValue("@pw", password ?? "");
+                con.Open();
+                using (var rd = cmd.ExecuteReader()) return rd.Read();
+            }
+        }
+
+        public bool VerifyByFullName(string fullName, string password)
+        {
+            const string sql = @"SELECT TOP 1 1 
+                           FROM dbo.customer
+                           WHERE LTRIM(RTRIM(full_name)) = LTRIM(RTRIM(@fn)) AND password = @pw;";
+            using (var con = _factory.Create())
+            using (var cmd = new SqlCommand(sql, con))
+            {
+                cmd.Parameters.AddWithValue("@fn", fullName ?? "");
+                cmd.Parameters.AddWithValue("@pw", password ?? "");
+                con.Open();
+                using (var rd = cmd.ExecuteReader()) return rd.Read();
+            }
+        }
+
+        public bool VerifyFlexible(string userOrEmail, string password)
+        {
+            if (string.IsNullOrWhiteSpace(userOrEmail)) return false;
+            // Try email first if it looks like one
+            if (userOrEmail.Contains("@") && VerifyByEmail(userOrEmail, password)) return true;
+            // Try full name
+            if (VerifyByFullName(userOrEmail, password)) return true;
+            // Fallback: opposite attempt
+            return VerifyByEmail(userOrEmail, password);
+        }
+
+        private Customer Map(SqlDataReader rd)
+        {
+            return new Customer
+            {
+                Id = Convert.ToInt32(rd["id"]),
+                FullName = rd["full_name"].ToString(),
+                Mobile = rd["mobile"].ToString(),
+                Email = rd["email"].ToString(),
+                Address = rd["address"].ToString(),
+                Password = rd["password"].ToString()
+            };
         }
     }
 }
-

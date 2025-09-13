@@ -1,97 +1,105 @@
+// File: userinterface/AdminView.cs
 using System;
 using System.Windows.Forms;
+using Store.service;
 using Store.userinterface;
 
 namespace Store
 {
     public partial class AdminView : Form
     {
-        private readonly string _displayName;
-        private readonly string _role;
-        private readonly string _companyName;
-        private readonly int _companyId;
+        private bool _initialized;
 
-        public AdminView() : this("Unknown", "User", "", 0) { }
-
-        public AdminView(string displayName, string role, string companyName = "", int companyId = 0)
+        public AdminView()
         {
-            _displayName = string.IsNullOrWhiteSpace(displayName) ? "Unknown" : displayName;
-            _role = string.IsNullOrWhiteSpace(role) ? "User" : role;
-            _companyName = companyName ?? "";
-            _companyId = companyId;
             InitializeComponent();
+            this.Shown += AdminView_Shown;
+            UserSession.OnChanged += HandleSessionChanged;
+            HideAllRoleMenus();
         }
 
-        private void AdminView_Load(object sender, EventArgs e)
+        private void AdminView_Shown(object sender, EventArgs e)
         {
-            lblUserName.Text = _displayName;
-            lblUserRole.Text = _role;
+            if (_initialized) return;
+            _initialized = true;
 
-            if (_role == "Company Manager")
+            if (!(UserSession.Current?.IsAuthenticated ?? false))
             {
-                lblCompanyName.Text = _companyName;
-            }
-            else
-            {
-                lblCompanyName.Visible = false;
+                using (var login = new LoginForm())
+                {
+                    Hide();
+                    login.ShowDialog(this);
+                }
+                if (!(UserSession.Current?.IsAuthenticated ?? false))
+                {
+                    Close();
+                    return;
+                }
+                Show();
             }
 
-            if (_role == "Admin")
-            {
-                button4.Visible = true;
-                CompanyBtn.Visible = true;
-                EmployeeBtn.Visible = true;
-                button7.Visible = true;
-                button5.Visible = false;
-                button6.Visible = false;
-                BranchBtn.Visible = false;
-                ProductsBtn.Visible = false;
-                ItemsBtn.Visible = false;
-                button4.PerformClick();
-            }
-            else if (_role == "Company Manager")
-            {
-                button4.Visible = false;
-                CompanyBtn.Visible = false;
-                EmployeeBtn.Visible = false;
-                button7.Visible = false;
-                button6.Visible = false;
-                ProductsBtn.Visible = false;
-                ItemsBtn.Visible = false;
-                button5.Visible = true;
-                BranchBtn.Visible = true;
-                button5.PerformClick();
-            }
-            else if (_role == "Customer")
-            {
-                button4.Visible = false;
-                CompanyBtn.Visible = false;
-                EmployeeBtn.Visible = false;
-                button7.Visible = false;
-                button6.Visible = false;
-                BranchBtn.Visible = false;
-                button5.Visible = false;
+            InitForCurrentUser();
+        }
 
-                ProductsBtn.Text = "Purchase History";
-                ItemsBtn.Text = "Products";
+        private void AdminView_Load(object sender, EventArgs e) { }
 
-                ProductsBtn.Visible = true;
-                ItemsBtn.Visible = true;
+        private void HandleSessionChanged()
+        {
+            if (InvokeRequired) { BeginInvoke((Action)HandleSessionChanged); return; }
+            InitForCurrentUser();
+        }
 
-                // Auto-load customer products
-                ItemsBtn.PerformClick();
-            }
-            else
+        private void InitForCurrentUser()
+        {
+            var id = UserSession.Current ?? UserIdentity.Guest();
+
+            lblUserName.Text = id.DisplayName;
+            lblUserRole.Text = id.Role == UserRole.Manager ? "Company Manager" : id.Role.ToString();
+
+            lblCompanyName.Visible = (id.Role == UserRole.Manager);
+            if (lblCompanyName.Visible) lblCompanyName.Text = id.CompanyName ?? "Company";
+
+            ApplyRoleVisibility(id.Role);
+
+            if (id.Role == UserRole.Admin)            button4.PerformClick();
+            else if (id.Role == UserRole.Manager)     button5.PerformClick();
+            else if (id.Role == UserRole.Customer)    ItemsBtn.PerformClick();
+        }
+
+        private void HideAllRoleMenus()
+        {
+            button4.Visible = false;   // Dashboard
+            CompanyBtn.Visible = false;
+            EmployeeBtn.Visible = false;
+            button7.Visible = false;   // Products (admin)
+            button6.Visible = false;   // Review
+            BranchBtn.Visible = false;
+            button5.Visible = false;   // Stock
+            ProductsBtn.Visible = false; // Purchase History (customer)
+            ItemsBtn.Visible = false;    // Products (customer)
+        }
+
+        private void ApplyRoleVisibility(UserRole role)
+        {
+            HideAllRoleMenus();
+            switch (role)
             {
-                button4.Visible = false;
-                CompanyBtn.Visible = false;
-                EmployeeBtn.Visible = false;
-                button7.Visible = false;
-                button6.Visible = false;
-                BranchBtn.Visible = false;
-                button5.Visible = false;
-                ProductsBtn.Visible = false;
-                ItemsBtn.Visible = false;
+                case UserRole.Admin:
+                    button4.Visible = true;
+                    CompanyBtn.Visible = true;
+                    EmployeeBtn.Visible = true;
+                    button7.Visible = true;
+                    break;
+                case UserRole.Manager:
+                    button5.Visible = true;
+                    BranchBtn.Visible = true;
+                    break;
+                case UserRole.Customer:
+                    ProductsBtn.Text = "Purchase History";
+                    ItemsBtn.Text = "Products";
+                    ProductsBtn.Visible = true;
+                    ItemsBtn.Visible = true;
+                    break;
             }
         }
 
@@ -110,27 +118,50 @@ namespace Store
         private void EmployeeBtn_Click(object sender, EventArgs e) => LoadContent(new EmployeeManage());
         private void button4_Click(object sender, EventArgs e) => MessageBox.Show("Dashboard placeholder.");
         private void button2_Click(object sender, EventArgs e) => MessageBox.Show("VIP Customers module not implemented yet.");
-        private void button5_Click(object sender, EventArgs e) => LoadContent(new InventoryManage(_companyId));
-        private void BranchBtn_Click(object sender, EventArgs e) => LoadContent(new BranchManage(_companyId));
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var id = UserSession.Current;
+            int companyId = id?.CompanyId ?? 0;
+            LoadContent(new InventoryManage(companyId));
+        }
+
+        private void BranchBtn_Click(object sender, EventArgs e)
+        {
+            var id = UserSession.Current;
+            int companyId = id?.CompanyId ?? 0;
+            LoadContent(new BranchManage(companyId));
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            var loginForm = new LoginForm();
-            loginForm.Show();
-            this.Hide();
+            UserSession.SignOut();
+            using (var login = new LoginForm())
+            {
+                Hide();
+                login.ShowDialog(this);
+            }
+            if (UserSession.Current?.IsAuthenticated == true)
+            {
+                Show();
+                InitForCurrentUser();
+            }
+            else
+            {
+                Close();
+            }
         }
+
         private void label1_Click(object sender, EventArgs e) { }
         private void CompanyBtn_Click(object sender, EventArgs e) => LoadContent(new CompanyManage());
 
-        // Purchase history (for now just placeholder)
-        private void ProductsBtn_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Purchase history will be added soon.");
-        }
+        private void ProductsBtn_Click(object sender, EventArgs e) => MessageBox.Show("Purchase history will be added soon.");
+        private void ItemsBtn_Click(object sender, EventArgs e) => LoadContent(new CustomerCartView());
 
-        // Load customer product/cart view
-        private void ItemsBtn_Click(object sender, EventArgs e)
+        protected override void OnFormClosed(FormClosedEventArgs e)
         {
-            LoadContent(new CustomerCartView());
+            UserSession.OnChanged -= HandleSessionChanged;
+            base.OnFormClosed(e);
         }
     }
 }
