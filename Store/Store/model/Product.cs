@@ -11,5 +11,9 @@ namespace Store
         public string BARCODE { get; set; }
         public string IMAGE_PATH { get; set; }
         public bool IS_ACTIVE { get; set; }
+        public decimal Buying_Price
+        {
+            get; set;
+        }
     }
 }

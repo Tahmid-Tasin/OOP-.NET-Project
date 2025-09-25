@@ -1,7 +1,7 @@
 // UPDATED: Store/userinterface/CustomerCartView.cs  (copy-ready)
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+//using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -475,6 +475,19 @@ private void LoadProducts()
             if (CartStore.IsEmpty && _cartOpen)
                 ToggleCart(false);
         }
+
+      //  private void InitializeComponent()
+      //  {
+      //      this.SuspendLayout();
+            // 
+            // CustomerCartView
+            // 
+      //      this.ClientSize = new System.Drawing.Size(284, 261);
+//this.Name = "CustomerCartView";
+      //      this.Load += new System.EventHandler(this.CustomerCartView_Load);
+       //     this.ResumeLayout(false);
+
+      //  }
 
 
     }
