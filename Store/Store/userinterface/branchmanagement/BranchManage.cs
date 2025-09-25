@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using Store.service;
-using Store.Repository; // <-- for Branch model (adjust if your model namespace differs)
+//using Store.Repository; // <-- for Branch model (adjust if your model namespace differs)
 
 namespace Store.userinterface
 {

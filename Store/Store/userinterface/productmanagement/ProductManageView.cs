@@ -3,6 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Store.service;
+using Store.model;
 // using Store.Repository; // not needed here
 
 namespace Store.userinterface
@@ -10,6 +11,7 @@ namespace Store.userinterface
     public partial class ProductManageView : Form
     {
         private readonly ProductService _productService;
+        private double _price;
 
         public ProductManageView()
         {
@@ -36,12 +38,14 @@ namespace Store.userinterface
             btnResetSearch.Visible = false; // only shows after searching
         }
 
+
+
         private Control CreateCard(Product p)
         {
             var card = new Panel
             {
                 Width = 220,
-                Height = 320,
+                Height = 350,
                 BorderStyle = BorderStyle.FixedSingle,
                 Margin = new Padding(10),
                 BackColor = Color.White
@@ -83,6 +87,17 @@ namespace Store.userinterface
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold)
             };
 
+            var name2 = new Label
+            {
+                Text = "Buying Price",
+                AutoSize = false,
+                Width = 150,
+                Height = 24,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Location = new Point(3, 280),
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold)
+            };
+
             var price = new Label
             {
                 Text = $"৳ {p.PRICE}",
@@ -95,9 +110,22 @@ namespace Store.userinterface
                 Location = new Point(10, 206)
             };
 
+            var price2 = new Label
+            {
+                Text = $"৳ {p.Buying_Price}",
+                AutoSize = false,
+                Width = 150,
+                Height = 22,
+                ForeColor = Color.Red,
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                TextAlign = ContentAlignment.MiddleCenter,
+                Location = new Point(6, 320)
+            };
+
             var viewBtn = new Button { Text = "View", Location = new Point(10, 245), Width = 60 };
             var editBtn = new Button { Text = "Edit", Location = new Point(80, 245), Width = 60 };
             var delBtn  = new Button { Text = "Delete", Location = new Point(150, 245), Width = 60 };
+            var setbuyBtn  = new Button { Text = "Set", Location = new Point(150, 320), Width = 60 };
 
             viewBtn.Click += (s, e) =>
             {
@@ -126,12 +154,26 @@ namespace Store.userinterface
                 }
             };
 
+            setbuyBtn.Click += (s, e) =>
+            {
+                using (var sbp = new SetBuyPrice(p))
+                {
+                    if (sbp.ShowDialog(this) == DialogResult.OK)
+                    {
+                        price2.Text = $"৳ {p.Buying_Price}";
+                    }
+                }
+            };
+
             card.Controls.Add(pic);
             card.Controls.Add(name);
             card.Controls.Add(price);
             card.Controls.Add(viewBtn);
             card.Controls.Add(editBtn);
             card.Controls.Add(delBtn);
+            card.Controls.Add(setbuyBtn);
+            card.Controls.Add(name2);
+            card.Controls.Add(price2);
 
             return card;
         }

@@ -61,8 +61,8 @@ namespace Store
 
             ApplyRoleVisibility(id.Role);
 
-            if (id.Role == UserRole.Admin)            button4.PerformClick();
-            else if (id.Role == UserRole.Manager)     button5.PerformClick();
+           // if (id.Role == UserRole.Admin)            button4.PerformClick();
+            if (id.Role == UserRole.Manager)     button5.PerformClick();
             else if (id.Role == UserRole.Customer)    ItemsBtn.PerformClick();
         }
 
@@ -72,7 +72,7 @@ namespace Store
             CompanyBtn.Visible = false;
             EmployeeBtn.Visible = false;
             button7.Visible = false;   // Products (admin)
-            button6.Visible = false;   // Review
+            reviewbtn.Visible = false;   // Review
             BranchBtn.Visible = false;
             button5.Visible = false;   // Stock
             ProductsBtn.Visible = false; // Purchase History (customer)
@@ -89,6 +89,7 @@ namespace Store
                     CompanyBtn.Visible = true;
                     EmployeeBtn.Visible = true;
                     button7.Visible = true;
+                    reviewbtn.Visible = true;
                     break;
                 case UserRole.Manager:
                     button5.Visible = true;
@@ -99,6 +100,7 @@ namespace Store
                     ItemsBtn.Text = "Products";
                     ProductsBtn.Visible = true;
                     ItemsBtn.Visible = true;
+                    reviewbtn.Visible = true;
                     break;
             }
         }
@@ -114,9 +116,9 @@ namespace Store
         }
 
         private void button7_Click(object sender, EventArgs e) => LoadContent(new ProductManageView());
-        private void button6_Click(object sender, EventArgs e) => MessageBox.Show("Review module not implemented yet.");
+       
         private void EmployeeBtn_Click(object sender, EventArgs e) => LoadContent(new EmployeeManage());
-        private void button4_Click(object sender, EventArgs e) => MessageBox.Show("Dashboard placeholder.");
+       // private void button4_Click(object sender, EventArgs e) => MessageBox.Show("Dashboard placeholder.");
         private void button2_Click(object sender, EventArgs e) => MessageBox.Show("VIP Customers module not implemented yet.");
 
         private void button5_Click(object sender, EventArgs e)
@@ -169,6 +171,25 @@ namespace Store
             }
         }
 
+        private void reviewbtn_Click(object sender, EventArgs e)
+        {
+            var id = UserSession.Current;
+            if (id != null && id.Role == UserRole.Customer && id.UserId.HasValue)
+            {
+               // LoadContent(new PurchaseHistoryForm(id.UserId.Value));
+               ReviewScene rs = new ReviewScene();
+                rs.Show();
+                this.Visible = false;
+            }
+            else
+            {
+
+                AdminReviewPage ad = new AdminReviewPage();
+                this.Visible = false;
+                ad.Show();
+            }
+        }
+
         private void ItemsBtn_Click(object sender, EventArgs e) => LoadContent(new CustomerCartView());
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -176,5 +197,20 @@ namespace Store
             UserSession.OnChanged -= HandleSessionChanged;
             base.OnFormClosed(e);
         }
+
+        private void contentPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+
+            Dashboard da = new Dashboard();
+            da.Show();
+            this.Close();
+        }
+
+
     }
 }

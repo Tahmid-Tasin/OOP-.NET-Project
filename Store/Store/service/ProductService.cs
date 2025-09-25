@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Store.Repository;
-
-
+using Store.model;
 
 namespace Store.service
 {
@@ -23,13 +22,18 @@ namespace Store.service
         public Product GetById(int id) => _repo.Get(id);
 
         public List<Product> GetAll() => _repo.GetAll();
-        
-        public List<Product> Search(string name, string brand, string barcode, 
+
+        public List<Product> Search(string name, string brand, string barcode,
             decimal? minPrice, decimal? maxPrice, int? categoryId)
         {
             return _repo.Search(name, brand, barcode, minPrice, maxPrice, categoryId);
         }
 
+        // --------------------- NEW METHOD ---------------------
+        // Save or update the buying price for a product
+        public int SaveBuyingPrice(int productId, decimal buyingPrice)
+        {
+            return _repo.SaveBuyingPrice(productId, buyingPrice);
+        }
     }
 }
-
